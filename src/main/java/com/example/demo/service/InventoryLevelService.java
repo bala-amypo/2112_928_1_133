@@ -5,13 +5,11 @@ import java.util.List;
 
 public interface InventoryLevelService {
 
+    List<InventoryLevel> getInventoryByProductId(Long productId);
+
     InventoryLevel save(InventoryLevel inventoryLevel);
 
     List<InventoryLevel> getAll();
-
-    InventoryLevel getById(Long id);
-
-    List<InventoryLevel> getInventoryByProductId(Long productId);
 
     void delete(Long id);
 }

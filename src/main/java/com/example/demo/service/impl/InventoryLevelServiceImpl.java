@@ -25,4 +25,14 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
     public InventoryLevel save(InventoryLevel inventoryLevel) {
         return repository.save(inventoryLevel);
     }
+
+    @Override
+    public List<InventoryLevel> getAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }

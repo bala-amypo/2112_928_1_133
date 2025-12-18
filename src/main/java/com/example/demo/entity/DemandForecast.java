@@ -1,39 +1,23 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "demand_forecast")
+@Getter @Setter
 public class DemandForecast {
 
     @Id
-    private Long productId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private int forecastQuantity;
+    @ManyToOne
+    private Store store;
 
-    public DemandForecast() {
-    }
+    @ManyToOne
+    private Product product;
 
-    public DemandForecast(Long productId, int forecastQuantity) {
-        this.productId = productId;
-        this.forecastQuantity = forecastQuantity;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public int getForecastQuantity() {
-        return forecastQuantity;
-    }
-
-    public void setForecastQuantity(int forecastQuantity) {
-        this.forecastQuantity = forecastQuantity;
-    }
+    private LocalDate forecastDate;
+    private Integer predictedDemand;
 }

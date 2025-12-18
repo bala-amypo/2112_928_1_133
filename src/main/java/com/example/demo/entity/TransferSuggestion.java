@@ -1,31 +1,28 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Getter @Setter
 public class TransferSuggestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long fromStoreId;
-    private Long toStoreId;
-    private Long productId;
-    private int quantity;
+    @ManyToOne
+    private Store sourceStore;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @ManyToOne
+    private Store targetStore;
 
-    public Long getFromStoreId() { return fromStoreId; }
-    public void setFromStoreId(Long fromStoreId) { this.fromStoreId = fromStoreId; }
+    @ManyToOne
+    private Product product;
 
-    public Long getToStoreId() { return toStoreId; }
-    public void setToStoreId(Long toStoreId) { this.toStoreId = toStoreId; }
-
-    public Long getProductId() { return productId; }
-    public void setProductId(Long productId) { this.productId = productId; }
-
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    private Integer quantity;
+    private String priority;
+    private String status = "PENDING";
+    private LocalDateTime suggestedAt = LocalDateTime.now();
 }

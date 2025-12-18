@@ -9,3 +9,5 @@ public interface ProductService {
     Product getById(Long id);
     void delete(Long id);
 }
+
+}

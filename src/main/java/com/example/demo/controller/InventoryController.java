@@ -1,3 +1,11 @@
+package com.example.demo.controller;
+
+import com.example.demo.entity.InventoryLevel;
+import com.example.demo.service.InventoryService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/inventory")
 public class InventoryController {
@@ -24,7 +32,8 @@ public class InventoryController {
     }
 
     @PutMapping("/{id}")
-    public InventoryLevel update(@PathVariable Long id, @RequestBody InventoryLevel inventory) {
+    public InventoryLevel update(@PathVariable Long id,
+                                 @RequestBody InventoryLevel inventory) {
         inventory.setId(id);
         return service.save(inventory);
     }

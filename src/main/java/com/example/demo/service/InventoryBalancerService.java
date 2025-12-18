@@ -1,9 +1,9 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.entity.TransferSuggestion;
-import java.util.List;
+// import com.example.demo.entity.TransferSuggestion;
+// import java.util.List;
 
-public interface InventoryBalancerService {
+// public interface InventoryBalancerService {
 
-    List<TransferSuggestion> balanceInventory();
-}
+//     List<TransferSuggestion> balanceInventory();
+// }

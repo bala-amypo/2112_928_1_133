@@ -1,15 +1,15 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.entity.Store;
-import java.util.List;
+// import com.example.demo.entity.Store;
+// import java.util.List;
 
-public interface StoreService {
+// public interface StoreService {
 
-    Store save(Store store);
+//     Store save(Store store);
 
-    List<Store> getAll();
+//     List<Store> getAll();
 
-    Store getById(Long id);
+//     Store getById(Long id);
 
-    void delete(Long id);
-}
+//     void delete(Long id);
+//}

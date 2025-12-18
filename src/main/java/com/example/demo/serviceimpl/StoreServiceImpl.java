@@ -17,32 +17,20 @@ public class StoreServiceImpl implements StoreService {
         this.repo = repo;
     }
 
-    @Override
-    public Store createStore(Store store) {
+    public Store save(Store store) {
         return repo.save(store);
     }
 
-    @Override
-    public Store getStoreById(Long id) {
+    public List<Store> getAll() {
+        return repo.findAll();
+    }
+
+    public Store getById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
     }
 
-    @Override
-    public List<Store> getAllStores() {
-        return repo.findAll();
-    }
-
-    @Override
-    public Store updateStore(Long id, Store store) {
-        Store existing = getStoreById(id);
-        existing.setStoreName(store.getStoreName());
-        existing.setLocation(store.getLocation());
-        return repo.save(existing);
-    }
-
-    @Override
-    public void deleteStore(Long id) {
+    public void delete(Long id) {
         repo.deleteById(id);
     }
 }

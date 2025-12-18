@@ -17,31 +17,20 @@ public class InventoryServiceImpl implements InventoryService {
         this.repo = repo;
     }
 
-    @Override
-    public InventoryLevel addInventory(InventoryLevel inventory) {
+    public InventoryLevel save(InventoryLevel inventory) {
         return repo.save(inventory);
     }
 
-    @Override
-    public InventoryLevel getInventoryById(Long id) {
+    public List<InventoryLevel> getAll() {
+        return repo.findAll();
+    }
+
+    public InventoryLevel getById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Inventory not found"));
     }
 
-    @Override
-    public List<InventoryLevel> getAllInventory() {
-        return repo.findAll();
-    }
-
-    @Override
-    public InventoryLevel updateInventory(Long id, InventoryLevel inventory) {
-        InventoryLevel existing = getInventoryById(id);
-        existing.setQuantity(inventory.getQuantity());
-        return repo.save(existing);
-    }
-
-    @Override
-    public void deleteInventory(Long id) {
+    public void delete(Long id) {
         repo.deleteById(id);
     }
 }

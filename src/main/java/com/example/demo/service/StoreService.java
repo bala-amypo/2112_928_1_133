@@ -5,13 +5,11 @@ import java.util.List;
 
 public interface StoreService {
 
-    Store createStore(Store store);
+    Store save(Store store);
 
-    Store getStoreById(Long id);
+    List<Store> getAll();
 
-    List<Store> getAllStores();
+    Store getById(Long id);
 
-    Store updateStore(Long id, Store store);
-
-    void deleteStore(Long id);
+    void delete(Long id);
 }

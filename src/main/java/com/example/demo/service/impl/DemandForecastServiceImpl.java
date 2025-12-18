@@ -1,4 +1,4 @@
-package com.example.demo.serviceimpl;
+package com.example.demo.service.impl;
 
 import com.example.demo.service.DemandForecastService;
 import org.springframework.stereotype.Service;

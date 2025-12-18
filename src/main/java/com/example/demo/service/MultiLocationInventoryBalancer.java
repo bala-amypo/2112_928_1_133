@@ -19,7 +19,6 @@ public class MultiLocationInventoryBalancer {
     }
 
     public void balanceInventory(Long productId) {
-
         List<InventoryLevel> levels =
                 inventoryLevelService.getInventoryByProductId(productId);
 
@@ -28,11 +27,11 @@ public class MultiLocationInventoryBalancer {
         }
 
         int demand = demandForecastService.getForecastForProduct(productId);
-
         if (demand <= 0) {
             return;
         }
 
+        // Simple rebalance: just persist current state
         for (InventoryLevel level : levels) {
             inventoryLevelService.save(level);
         }

@@ -3,37 +3,32 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Store;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.service.StoreService;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class StoreServiceImpl implements StoreService {
 
-    private final StoreRepository storeRepository;
+    private final StoreRepository repo;
 
-    public StoreServiceImpl(StoreRepository storeRepository) {
-        this.storeRepository = storeRepository;
+    public StoreServiceImpl(StoreRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public Store createStore(Store store) {
-        if (storeRepository.findByStoreName(store.getStoreName()).isPresent()) {
-            throw new BadRequestException("Store name already exists");
-        }
-        return storeRepository.save(store);
+    public Store save(Store store) {
+        return repo.save(store);
     }
 
     @Override
-    public Store getStoreById(Long id) {
-        return storeRepository.findById(id)
+    public Store getById(Long id) {
+        return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("not found"));
     }
 
     @Override
-    public List<Store> getAllStores() {
-        return storeRepository.findAll();
+    public List<Store> getAll() {
+        return repo.findAll();
     }
 }

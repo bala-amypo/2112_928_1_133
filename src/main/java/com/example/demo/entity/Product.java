@@ -1,26 +1,20 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String sku;
 
     private String name;
     private String category;
-    private Boolean active = true;
+    private Boolean active;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public String getSku() { return sku; }
-    public void setSku(String sku) { this.sku = sku; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

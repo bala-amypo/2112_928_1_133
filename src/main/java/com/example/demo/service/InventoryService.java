@@ -1,17 +1,15 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Inventory;
+import com.example.demo.entity.InventoryLevel;
 import java.util.List;
 
 public interface InventoryService {
 
-    Inventory save(Inventory inventory);
+    InventoryLevel save(InventoryLevel inventory);
 
-    Inventory getById(Long id);
+    List<InventoryLevel> getAll();
 
-    List<Inventory> getAll();
+    InventoryLevel getById(Long id);
 
-    Inventory update(Long id, Inventory inventory);
-
-    void delete(Long id);   // 👈 THIS METHOD MUST EXIST
+    void delete(Long id);
 }

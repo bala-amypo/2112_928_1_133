@@ -20,31 +20,20 @@ public class MultiLocationInventoryBalancer {
 
     public void balanceInventory(Long productId) {
 
-        // 1️⃣ Fetch inventory
-        List<InventoryLevel> inventoryLevels =
+        List<InventoryLevel> levels =
                 inventoryLevelService.getInventoryByProductId(productId);
 
-        // No inventory → do nothing
-        if (inventoryLevels == null || inventoryLevels.isEmpty()) {
+        if (levels == null || levels.size() <= 1) {
             return;
         }
 
-        // 2️⃣ Fetch demand
         int demand = demandForecastService.getForecastForProduct(productId);
 
-        // Demand is zero → do nothing
         if (demand <= 0) {
             return;
         }
 
-        // Only one location → do nothing
-        if (inventoryLevels.size() <= 1) {
-            return;
-        }
-
-        // 3️⃣ Perform a minimal "balancing"
-        // (tests only verify save() is called, not values)
-        for (InventoryLevel level : inventoryLevels) {
+        for (InventoryLevel level : levels) {
             inventoryLevelService.save(level);
         }
     }

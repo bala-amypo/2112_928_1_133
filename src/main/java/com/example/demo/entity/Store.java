@@ -10,8 +10,7 @@ public class Store {
     private Long id;
 
     private String storeName;
-    private String address;
-    private String region;
+    private String location;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -19,9 +18,6 @@ public class Store {
     public String getStoreName() { return storeName; }
     public void setStoreName(String storeName) { this.storeName = storeName; }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-
-    public String getRegion() { return region; }
-    public void setRegion(String region) { this.region = region; }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 }

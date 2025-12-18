@@ -1,8 +1,11 @@
 package com.example.demo.repository;
 
+import com.example.demo.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.demo.entity.DemandForecast;
+import java.time.LocalDate;
+import java.util.List;
 
-public interface DemandForecastRepository
-        extends JpaRepository<DemandForecast, Long> {
+public interface DemandForecastRepository extends JpaRepository<DemandForecast, Long> {
+    List<DemandForecast> findByStoreAndProductAndForecastDateAfter(
+            Store store, Product product, LocalDate date);
 }

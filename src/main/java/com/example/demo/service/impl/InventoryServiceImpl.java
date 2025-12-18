@@ -1,39 +1,35 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.InventoryLevel;
-import com.example.demo.repository.InventoryRepository;
-import com.example.demo.service.InventoryService;
+import com.example.demo.repository.InventoryLevelRepository;
+import com.example.demo.service.InventoryLevelService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class InventoryServiceImpl implements InventoryService {
+@Transactional
+public class InventoryLevelServiceImpl implements InventoryLevelService {
 
-    private final InventoryRepository repository;
+    private final InventoryLevelRepository repository;
 
-    public InventoryServiceImpl(InventoryRepository repository) {
+    public InventoryLevelServiceImpl(InventoryLevelRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public InventoryLevel save(InventoryLevel inventory) {
-        return repository.save(inventory);
+    public InventoryLevel save(InventoryLevel inventoryLevel) {
+        return repository.save(inventoryLevel);
+    }
+
+    @Override
+    public List<InventoryLevel> getInventoryByProductId(Long productId) {
+        return repository.findByProductId(productId);
     }
 
     @Override
     public List<InventoryLevel> getAll() {
         return repository.findAll();
-    }
-
-    @Override
-    public InventoryLevel getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Inventory not found"));
-    }
-
-    @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
     }
 }

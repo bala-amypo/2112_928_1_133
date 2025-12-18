@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.InventoryLevel;
-import com.example.demo.service.InventoryService;
-import jakarta.validation.Valid;
+import com.example.demo.service.InventoryLevelService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,29 +10,24 @@ import java.util.List;
 @RequestMapping("/inventory")
 public class InventoryController {
 
-    private final InventoryService service;
+    private final InventoryLevelService service;
 
-    public InventoryController(InventoryService service) {
+    public InventoryController(InventoryLevelService service) {
         this.service = service;
     }
 
     @PostMapping
-    public InventoryLevel save(@Valid @RequestBody InventoryLevel inventory) {
-        return service.save(inventory);
-        }
+    public InventoryLevel create(@RequestBody InventoryLevel inventoryLevel) {
+        return service.save(inventoryLevel);
+    }
 
-        @GetMapping
-        public List<InventoryLevel> getAll() {
-            return service.getAll();
-        }
+    @GetMapping
+    public List<InventoryLevel> getAll() {
+        return service.getAll();
+    }
 
-        @GetMapping("/{id}")
-        public InventoryLevel get(@PathVariable Long id) {
-            return service.getById(id);
-            }
-
-            @DeleteMapping("/{id}")
-            public void delete(@PathVariable Long id) {
-                service.delete(id);
-            }
+    @GetMapping("/{productId}")
+    public List<InventoryLevel> getByProduct(@PathVariable Long productId) {
+        return service.getInventoryByProductId(productId);
+    }
 }

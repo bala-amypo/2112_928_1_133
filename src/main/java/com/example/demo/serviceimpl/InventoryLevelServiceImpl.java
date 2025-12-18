@@ -20,4 +20,9 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
     public List<InventoryLevel> getInventoryByProductId(Long productId) {
         return repository.findByProductId(productId);
     }
+
+    @Override
+    public InventoryLevel save(InventoryLevel inventoryLevel) {
+        return repository.save(inventoryLevel);
+    }
 }

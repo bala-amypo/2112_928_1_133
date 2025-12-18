@@ -7,4 +7,6 @@ import java.util.List;
 public interface InventoryLevelService {
 
     List<InventoryLevel> getInventoryByProductId(Long productId);
+
+    InventoryLevel save(InventoryLevel inventoryLevel);
 }

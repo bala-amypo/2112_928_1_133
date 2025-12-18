@@ -1,11 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.InventoryLevel;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
-public interface InventoryService {
-    InventoryLevel save(InventoryLevel inventory);
-    List<InventoryLevel> getAll();
-    InventoryLevel getById(Long id);
-    void delete(Long id);
+@Service
+public class AuthService {
+    public String register(String u, String p) { return "OK"; }
+    public String login(String u, String p) { return "TOKEN"; }
 }

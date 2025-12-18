@@ -3,7 +3,6 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "inventory_levels")
 public class InventoryLevel {
 
     @Id
@@ -14,9 +13,7 @@ public class InventoryLevel {
 
     private int quantity;
 
-    public InventoryLevel() {
-    }
-
+    // getters & setters
     public Long getId() {
         return id;
     }

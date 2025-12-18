@@ -1,18 +1,18 @@
-/* package com.example.demo.service;
+// /* package com.example.demo.service;
 
-import com.example.demo.entity.InventoryLevel;
-import java.util.List;
+// import com.example.demo.entity.InventoryLevel;
+// import java.util.List;
 
-public interface InventoryService {
+// public interface InventoryService {
 
-    InventoryLevel create(InventoryLevel inventoryLevel);
+//     InventoryLevel create(InventoryLevel inventoryLevel);
 
-    InventoryLevel getById(Long id);
+//     InventoryLevel getById(Long id);
 
-    List<InventoryLevel> getAll();
+//     List<InventoryLevel> getAll();
 
-    InventoryLevel update(Long id, InventoryLevel inventoryLevel);
+//     InventoryLevel update(Long id, InventoryLevel inventoryLevel);
 
-    void delete(Long id);
-}
- */
+//     void delete(Long id);
+//}
+// */

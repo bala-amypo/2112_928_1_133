@@ -15,22 +15,28 @@ public class InventoryServiceImpl implements InventoryService {
 
     public InventoryServiceImpl(InventoryRepository repository) {
         this.repository = repository;
-    }
-
-    public InventoryLevel save(InventoryLevel inventory) {
-        return repository.save(inventory);
-    }
-
-    public List<InventoryLevel> getAll() {
-        return repository.findAll9);
-    }
-
-    public InventoryLevel getById(Long id) {
-        return repository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Inventory not found with id " + id));
         }
 
-        public void delete(Long id) {
-            repository.deleteById(id);
-        }
+        @Override
+        public InventoryLevel save(InventoryLevel inventory) {
+            return repository.save(inventory);
+            }
+
+            @Override
+            public List<InventoryLevel> getAll() {
+                return repository.findAll();
+                }
+
+                @Override
+                public InventoryLevel getById(Long id) {
+                    return repository.findById(id)
+                    .orElseThrow(() ->
+                    new ResourceNotFoundException("Inventory not found with id " + id)
+                    );
+                }
+                
+                @Override
+                public void delete(Long id) {
+                    repository.deleteById(id);
+                    }
 }

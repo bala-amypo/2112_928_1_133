@@ -12,12 +12,12 @@ public class StoreController {
 
     private final StoreService service;
 
-    public StoreController(StoreService service) {
+    public StoreCONTROLLER(StoreService service) {
         this.service = service;
     }
 
     @PostMapping
-    public Store create(@RequestBody Store store) {
+    public Store save(@RequestBody Store store) {
         return service.save(store);
     }
 
@@ -27,14 +27,8 @@ public class StoreController {
     }
 
     @GetMapping("/{id}")
-    public Store getById(@PathVariable Long id) {
+    public Store get(@PathVariable Long id) {
         return service.getById(id);
-    }
-
-    @PutMapping("/{id}")
-    public Store update(@PathVariable Long id, @RequestBody Store store) {
-        store.setId(id);
-        return service.save(store);
     }
 
     @DeleteMapping("/{id}")

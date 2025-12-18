@@ -8,7 +8,11 @@ public interface InventoryLevelService {
 
     InventoryLevel save(InventoryLevel inventoryLevel);
 
-    List<InventoryLevel> getInventoryByProductId(Long productId);
-
     List<InventoryLevel> getAll();
+
+    InventoryLevel getById(Long id);
+
+    void delete(Long id);
+
+    List<InventoryLevel> getInventoryByProductId(Long productId);
 }

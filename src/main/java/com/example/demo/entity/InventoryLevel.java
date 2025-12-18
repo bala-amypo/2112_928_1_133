@@ -3,20 +3,16 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "inventory_levels")
+@Table(name = "inventory_level")
 public class InventoryLevel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private Long productId;
 
-    @Column(nullable = false)
-    private Integer quantity;
-
-    public InventoryLevel() {}
+    private int quantity;
 
     public Long getId() {
         return id;
@@ -34,11 +30,11 @@ public class InventoryLevel {
         this.productId = productId;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 }

@@ -4,12 +4,10 @@ import com.example.demo.entity.InventoryLevel;
 import com.example.demo.repository.InventoryLevelRepository;
 import com.example.demo.service.InventoryLevelService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
 public class InventoryLevelServiceImpl implements InventoryLevelService {
 
     private final InventoryLevelRepository repository;
@@ -24,12 +22,22 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
     }
 
     @Override
-    public List<InventoryLevel> getInventoryByProductId(Long productId) {
-        return repository.findByProductId(productId);
+    public List<InventoryLevel> getAll() {
+        return repository.findAll();
     }
 
     @Override
-    public List<InventoryLevel> getAll() {
-        return repository.findAll();
+    public InventoryLevel getById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public List<InventoryLevel> getInventoryByProductId(Long productId) {
+        return repository.findByProductId(productId);
     }
 }

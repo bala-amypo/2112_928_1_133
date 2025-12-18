@@ -24,6 +24,4 @@ public class Store {
     
     public String getLocation() { return location; }
     public void setLOCATION(String location) { this.location = location; }
-    }
-    ]
-}
+   

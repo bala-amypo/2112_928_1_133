@@ -1,27 +1,50 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "inventory_level")
 public class InventoryLevel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long productId;
-    private Long storeId;
+
     private int quantity;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public InventoryLevel() {
+    }
 
-    public Long getProductId() { return productId; }
-    public void setProductId(Long productId) { this.productId = productId; }
+    public InventoryLevel(Long id, Long productId, int quantity) {
+        this.id = id;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
 
-    public Long getStoreId() { return storeId; }
-    public void setStoreId(Long storeId) { this.storeId = storeId; }
+    public Long getId() {
+        return id;
+    }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

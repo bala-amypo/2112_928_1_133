@@ -1,36 +1,23 @@
 package com.example.demo.serviceimpl;
 
 import com.example.demo.entity.InventoryLevel;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.InventoryRepository;
-import com.example.demo.service.InventoryService;
+import com.example.demo.repository.InventoryLevelRepository;
+import com.example.demo.service.InventoryLevelService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class InventoryServiceImpl implements InventoryService {
+public class InventoryLevelServiceImpl implements InventoryLevelService {
 
-    private final InventoryRepository repo;
+    private final InventoryLevelRepository repository;
 
-    public InventoryServiceImpl(InventoryRepository repo) {
-        this.repo = repo;
+    public InventoryLevelServiceImpl(InventoryLevelRepository repository) {
+        this.repository = repository;
     }
 
-    public InventoryLevel save(InventoryLevel inventory) {
-        return repo.save(inventory);
-    }
-
-    public List<InventoryLevel> getAll() {
-        return repo.findAll();
-    }
-
-    public InventoryLevel getById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Inventory not found"));
-    }
-
-    public void delete(Long id) {
-        repo.deleteById(id);
+    @Override
+    public List<InventoryLevel> getInventoryByProductId(Long productId) {
+        return repository.findByProductId(productId);
     }
 }

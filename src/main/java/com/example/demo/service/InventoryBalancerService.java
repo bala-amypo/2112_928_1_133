@@ -1,8 +1,9 @@
 package com.example.demo.service;
 
-import org.springframework.stereotype.Service;
+import com.example.demo.entity.TransferSuggestion;
+import java.util.List;
 
-@Service
-public class InventoryBalancerService {
-    public void balanceInventory() {}
+public interface InventoryBalancerService {
+
+    List<TransferSuggestion> balanceInventory();
 }

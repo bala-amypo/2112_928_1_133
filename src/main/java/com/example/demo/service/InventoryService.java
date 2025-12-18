@@ -1,11 +1,17 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Store;
+import com.example.demo.entity.InventoryLevel;
 import java.util.List;
 
-public interface StoreService {
-    Store save(Store store);
-    List<Store> getAll();
-    Store getById(Long id);
-    void delete(Long id);
+public interface InventoryService {
+
+    InventoryLevel addInventory(InventoryLevel inventory);
+
+    InventoryLevel getInventoryById(Long id);
+
+    List<InventoryLevel> getAllInventory();
+
+    InventoryLevel updateInventory(Long id, InventoryLevel inventory);
+
+    void deleteInventory(Long id);
 }

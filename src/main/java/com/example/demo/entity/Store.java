@@ -1,10 +1,6 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.*;
 
 @Entity
 public class Store {
@@ -13,34 +9,15 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Store name cannot be empty")
     private String storeName;
-
-    @NotBlank(message = "Location cannot be empty")
     private String location;
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getStoreName() { return storeName; }
+    public void setStoreName(String storeName) { this.storeName = storeName; }
 
-    public String getStoreName() {
-        return storeName;
-        }
-
-        public void setStoreName(String storeName) {
-            this.storeName = storeName;
-            }
-
-            public String getLocation() {
-                return location;
-            }
-
-            public void setLocation(String location) {
-                this.location = location;
-            }
-            }
-            
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+}

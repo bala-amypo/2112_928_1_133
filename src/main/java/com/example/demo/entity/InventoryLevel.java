@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 @Entity
 public class InventoryLevel {
@@ -10,27 +9,19 @@ public class InventoryLevel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @NotNull(message = "Store cannot be null")
-    private Store store;
-
-    @ManyToOne
-    @NotNull(message = "Product cannot be null")
-    private Product product;
-
-    @Min(value = 0, message = "Quantity cannot be negative")
-    private Integer quantity;
+    private Long productId;
+    private Long storeId;
+    private int quantity;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Store getStore() { return store; }
-    public void setSTORE(Store store) { this.store = store; }
+    public Long getProductId() { return productId; }
+    public void setProductId(Long productId) { this.productId = productId; }
 
-    public Product getProduct() { return product; }
-    public void setProduct(Product product) { this.product = product; }
+    public Long getStoreId() { return storeId; }
+    public void setStoreId(Long storeId) { this.storeId = storeId; }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
-    }
-    
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+}

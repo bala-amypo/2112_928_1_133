@@ -9,19 +9,23 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fromStore;
-    private String toStore;
-    private Integer quantity;
+    private Long fromStoreId;
+    private Long toStoreId;
+    private Long productId;
+    private int quantity;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getFromStore() { return fromStore; }
-    public void setFromStore(String fromStore) { this.fromStore = fromStore; }
+    public Long getFromStoreId() { return fromStoreId; }
+    public void setFromStoreId(Long fromStoreId) { this.fromStoreId = fromStoreId; }
 
-    public String getToStore() { return toStore; }
-    public void setToStore(String toStore) { this.toStore = toStore; }
+    public Long getToStoreId() { return toStoreId; }
+    public void setToStoreId(Long toStoreId) { this.toStoreId = toStoreId; }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public Long getProductId() { return productId; }
+    public void setProductId(Long productId) { this.productId = productId; }
+
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 }

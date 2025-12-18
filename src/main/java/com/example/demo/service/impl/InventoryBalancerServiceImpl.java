@@ -4,8 +4,9 @@ import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.InventoryBalancerService;
 import com.example.demo.exception.BadRequestException;
-import org.springframework.stereotype.Service;
+import com.example.demo.exception.ResourceNotFoundException;
 
+import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,35 +39,47 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
 
                 if (source.getId().equals(target.getId())) continue;
 
-                inventoryRepo.findByStoreAndProduct(source,
-                        new Product() {{ setId(productId); }})
-                        .ifPresent(inv -> {
+                inventoryRepo.findAll().forEach(inv -> {
 
-                            List<DemandForecast> forecasts =
-                                    forecastRepo.findByStoreAndProductAndForecastDateAfter(
-                                            target,
-                                            inv.getProduct(),
-                                            LocalDate.now());
+                    if (!inv.getProduct().getId().equals(productId)) return;
+                    if (!inv.getStore().getId().equals(source.getId())) return;
 
-                            if (forecasts.isEmpty()) {
-                                throw new BadRequestException("No forecast found");
-                            }
+                    List<DemandForecast> forecasts =
+                            forecastRepo.findByStoreAndProductAndForecastDateAfter(
+                                    target,
+                                    inv.getProduct(),
+                                    LocalDate.now());
 
-                            DemandForecast df = forecasts.get(0);
+                    if (forecasts.isEmpty()) {
+                        throw new BadRequestException("No forecast found");
+                    }
 
-                            if (inv.getQuantity() > df.getPredictedDemand()) {
+                    DemandForecast df = forecasts.get(0);
 
-                                TransferSuggestion ts = new TransferSuggestion();
-                                ts.setSourceStore(source);
-                                ts.setTargetStore(target);
-                                ts.setProduct(inv.getProduct());
-                                ts.setQuantity(inv.getQuantity() - df.getPredictedDemand());
-                                ts.setPriority("HIGH");
+                    if (inv.getQuantity() > df.getPredictedDemand()) {
 
-                                transferRepo.save(ts);
-                            }
-                        });
+                        TransferSuggestion ts = new TransferSuggestion();
+                        ts.setSourceStore(source);
+                        ts.setTargetStore(target);
+                        ts.setProduct(inv.getProduct());
+                        ts.setQuantity(inv.getQuantity() - df.getPredictedDemand());
+                        ts.setPriority("HIGH");
+
+                        transferRepo.save(ts);
+                    }
+                });
             }
         }
+    }
+
+    @Override
+    public List<TransferSuggestion> getSuggestionsForStore(Long storeId) {
+        return transferRepo.findBySourceStoreId(storeId);
+    }
+
+    @Override
+    public TransferSuggestion getSuggestionById(Long id) {
+        return transferRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
     }
 }

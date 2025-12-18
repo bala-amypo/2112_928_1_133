@@ -1,11 +1,9 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Getter @Setter
 public class DemandForecast {
 
     @Id
@@ -20,4 +18,19 @@ public class DemandForecast {
 
     private LocalDate forecastDate;
     private Integer predictedDemand;
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Store getStore() { return store; }
+    public void setStore(Store store) { this.store = store; }
+
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
+
+    public LocalDate getForecastDate() { return forecastDate; }
+    public void setForecastDate(LocalDate forecastDate) { this.forecastDate = forecastDate; }
+
+    public Integer getPredictedDemand() { return predictedDemand; }
+    public void setPredictedDemand(Integer predictedDemand) { this.predictedDemand = predictedDemand; }
 }

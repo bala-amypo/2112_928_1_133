@@ -32,12 +32,12 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
     }
 
     @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
+    public List<InventoryLevel> getInventoryByProductId(Long productId) {
+        return repository.findByProductId(productId);
     }
 
     @Override
-    public List<InventoryLevel> getInventoryByProductId(Long productId) {
-        return repository.findByProductId(productId);
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 }

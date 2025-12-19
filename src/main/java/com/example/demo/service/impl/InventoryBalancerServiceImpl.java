@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.*;
 import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.*;
 import com.example.demo.service.InventoryBalancerService;
 import org.springframework.stereotype.Service;
@@ -30,24 +31,23 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
     @Override
     public List<TransferSuggestion> generateSuggestions(Long productId) {
 
-        List<InventoryLevel> inventoryLevels =
+        List<InventoryLevel> inventory =
                 inventoryLevelRepository.findByProduct_Id(productId);
 
-        if (inventoryLevels.isEmpty()) {
+        if (inventory.isEmpty()) {
             throw new BadRequestException("No inventory found");
         }
 
         List<TransferSuggestion> suggestions = new ArrayList<>();
 
-        for (InventoryLevel level : inventoryLevels) {
+        for (InventoryLevel level : inventory) {
 
             List<DemandForecast> forecasts =
-                    demandForecastRepository
-                            .findByStoreAndProductAndForecastDateAfter(
-                                    level.getStore(),
-                                    level.getProduct(),
-                                    LocalDate.now()
-                            );
+                    demandForecastRepository.findByStoreAndProductAndForecastDateAfter(
+                            level.getStore(),
+                            level.getProduct(),
+                            LocalDate.now()
+                    );
 
             for (DemandForecast forecast : forecasts) {
 
@@ -74,14 +74,9 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
     }
 
     @Override
-    public List<TransferSuggestion> getSuggestionsForStore(Long storeId) {
-        return transferSuggestionRepository.findAll();
-    }
-
-    @Override
     public TransferSuggestion getSuggestionById(Long id) {
         return transferSuggestionRepository.findById(id)
                 .orElseThrow(() ->
-                        new BadRequestException("Suggestion not found"));
+                        new ResourceNotFoundException("Suggestion not found"));
     }
 }

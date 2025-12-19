@@ -17,7 +17,6 @@ public class DemandForecast {
     private Product product;
 
     private int forecastedDemand;
-
     private LocalDate forecastDate;
 
     public Long getId() { return id; }
@@ -31,6 +30,11 @@ public class DemandForecast {
     public int getForecastedDemand() { return forecastedDemand; }
     public void setForecastedDemand(int forecastedDemand) {
         this.forecastedDemand = forecastedDemand;
+    }
+
+    // REQUIRED BY InventoryBalancerService
+    public int getPredictedDemand() {
+        return forecastedDemand;
     }
 
     public LocalDate getForecastDate() { return forecastDate; }

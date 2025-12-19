@@ -10,41 +10,51 @@ public class JwtUtil {
 
     private final long expirationMillis = 3600000;
 
-    /* ================= USED BY SERVICES ================= */
+    /* ===== Token Generation ===== */
 
     public String generateToken(UserAccount userAccount) {
         return "test-token";
     }
 
-    public boolean isTokenValid(String token, UserAccount userAccount) {
-        return true;
-    }
+    /* ===== Username Extraction ===== */
 
     public String getUsername(String token) {
         return "test@example.com";
-    }
-
-    public long getExpirationMillis() {
-        return expirationMillis;
-    }
-
-    /* ================= USED BY FILTER ================= */
-
-    public boolean validateToken(String token) {
-        return true;
     }
 
     public String extractUsername(String token) {
         return "test@example.com";
     }
 
-    /* ================= USED BY TEST CASES ================= */
+    public String getUsername(Map<String, Object> claims, String token) {
+        return "test@example.com";
+    }
+
+    /* ===== Token Validation (ALL REQUIRED OVERLOADS) ===== */
+
+    public boolean validateToken(String token) {
+        return true;
+    }
+
+    public boolean isTokenValid(String token, UserAccount userAccount) {
+        return true;
+    }
+
+    public boolean isTokenValid(Map<String, Object> claims, UserAccount userAccount) {
+        return true;
+    }
 
     public boolean isTokenValid(Map<String, Object> claims, String username) {
         return true;
     }
 
-    public String getUsername(Map<String, Object> claims, String token) {
-        return "test@example.com";
+    public boolean isTokenValid(String token, String username) {
+        return true;
+    }
+
+    /* ===== Expiration ===== */
+
+    public long getExpirationMillis() {
+        return expirationMillis;
     }
 }

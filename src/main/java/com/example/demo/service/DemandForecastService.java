@@ -8,4 +8,7 @@ public interface DemandForecastService {
     DemandForecast createForecast(DemandForecast forecast);
 
     List<DemandForecast> getForecastsForStore(Long storeId);
+
+    // REQUIRED BY CONTROLLER
+    DemandForecast getForecast(Long storeId, Long productId);
 }

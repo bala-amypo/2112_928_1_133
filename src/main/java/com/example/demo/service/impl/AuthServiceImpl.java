@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new BadRequestException("Invalid credentials"));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new BadRequestException("Invalid credentials");
+            throw new BadRequestException("Invalid email or password");
         }
 
         String token = jwtUtil.generateToken(user);

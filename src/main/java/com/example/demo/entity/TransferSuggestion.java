@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "transfer_suggestions")
 public class TransferSuggestion {
 
     @Id
@@ -20,30 +21,74 @@ public class TransferSuggestion {
     private Product product;
 
     private Integer quantity;
+
     private String priority;
+
     private String status = "PENDING";
-    private LocalDateTime suggestedAt = LocalDateTime.now();
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    private LocalDateTime suggestedAt;
 
-    public Store getSourceStore() { return sourceStore; }
-    public void setSourceStore(Store sourceStore) { this.sourceStore = sourceStore; }
+    @PrePersist
+    public void prePersist() {
+        this.suggestedAt = LocalDateTime.now();
+    }
 
-    public Store getTargetStore() { return targetStore; }
-    public void setTargetStore(Store targetStore) { this.targetStore = targetStore; }
+    public TransferSuggestion() {
+    }
 
-    public Product getProduct() { return product; }
-    public void setProduct(Product product) { this.product = product; }
+    public Long getId() {
+        return id;
+    }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getPriority() { return priority; }
-    public void setPriority(String priority) { this.priority = priority; }
+    public Store getSourceStore() {
+        return sourceStore;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setSourceStore(Store sourceStore) {
+        this.sourceStore = sourceStore;
+    }
 
-    public LocalDateTime getSuggestedAt() { return suggestedAt; }
+    public Store getTargetStore() {
+        return targetStore;
+    }
+
+    public void setTargetStore(Store targetStore) {
+        this.targetStore = targetStore;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getSuggestedAt() {
+        return suggestedAt;
+    }
 }

@@ -21,6 +21,8 @@ public class TransferSuggestion {
 
     private int quantity;
 
+    private int suggestedQuantity;
+
     private String priority;
 
     private String reason;
@@ -65,6 +67,14 @@ public class TransferSuggestion {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public int getSuggestedQuantity() {
+        return suggestedQuantity;
+    }
+
+    public void setSuggestedQuantity(int suggestedQuantity) {
+        this.suggestedQuantity = suggestedQuantity;
     }
 
     public String getPriority() {

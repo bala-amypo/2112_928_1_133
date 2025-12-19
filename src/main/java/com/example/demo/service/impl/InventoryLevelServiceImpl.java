@@ -1,76 +1,85 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.InventoryLevelService;
+import com.example.demo.entity.InventoryLevel;
+import com.example.demo.entity.Product;
+import com.example.demo.entity.Store;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-
+import com.example.demo.repository.InventoryLevelRepository;
+import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.StoreRepository;
+import com.example.demo.service.InventoryLevelService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class InventoryLevelServiceImpl implements InventoryLevelService {
 
-    private final InventoryLevelRepository inventoryRepo;
-    private final StoreRepository storeRepo;
-    private final ProductRepository productRepo;
+    private final InventoryLevelRepository inventoryLevelRepository;
+    private final StoreRepository storeRepository;
+    private final ProductRepository productRepository;
 
-    public InventoryLevelServiceImpl(
-            InventoryLevelRepository inventoryRepo,
-            StoreRepository storeRepo,
-            ProductRepository productRepo) {
-        this.inventoryRepo = inventoryRepo;
-        this.storeRepo = storeRepo;
-        this.productRepo = productRepo;
+    public InventoryLevelServiceImpl(InventoryLevelRepository inventoryLevelRepository,
+                                     StoreRepository storeRepository,
+                                     ProductRepository productRepository) {
+        this.inventoryLevelRepository = inventoryLevelRepository;
+        this.storeRepository = storeRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
-    public InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity) {
+    public InventoryLevel createOrUpdateInventory(InventoryLevel inv) {
 
-        if (quantity < 0) {
+        if (inv.getQuantity() < 0) {
             throw new BadRequestException("Quantity must be >= 0");
         }
 
-        Store store = storeRepo.findById(storeId)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        Store store = storeRepository.findById(inv.getStore().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
 
-        Product product = productRepo.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        Product product = productRepository.findById(inv.getProduct().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        InventoryLevel inventory = inventoryRepo
-                .findByStoreAndProduct(store, product)
-                .orElse(new InventoryLevel());
+        InventoryLevel existing =
+                inventoryLevelRepository.findByStoreAndProduct(store, product);
 
-        inventory.setStore(store);
-        inventory.setProduct(product);
-        inventory.setQuantity(quantity);
+        if (existing != null) {
+            existing.setQuantity(inv.getQuantity());
+            return inventoryLevelRepository.save(existing);
+        }
 
-        return inventoryRepo.save(inventory);
+        inv.setStore(store);
+        inv.setProduct(product);
+        return inventoryLevelRepository.save(inv);
+    }
+
+    @Override
+    public List<InventoryLevel> getInventoryForStore(Long storeId) {
+        return inventoryLevelRepository.findByStore_Id(storeId);
+    }
+
+    @Override
+    public List<InventoryLevel> getInventoryForProduct(Long productId) {
+        return inventoryLevelRepository.findByProduct_Id(productId);
     }
 
     @Override
     public InventoryLevel getInventory(Long storeId, Long productId) {
 
-        Store store = storeRepo.findById(storeId)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
 
-        Product product = productRepo.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        return inventoryRepo.findByStoreAndProduct(store, product)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
-    }
+        InventoryLevel inv =
+                inventoryLevelRepository.findByStoreAndProduct(store, product);
 
-    @Override
-    public List<InventoryLevel> getInventoryByStore(Long storeId) {
+        if (inv == null) {
+            throw new ResourceNotFoundException("Inventory not found");
+        }
 
-        Store store = storeRepo.findById(storeId)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
-
-        return inventoryRepo.findAll()
-                .stream()
-                .filter(i -> i.getStore().getId().equals(store.getId()))
-                .toList();
+        return inv;
     }
 }

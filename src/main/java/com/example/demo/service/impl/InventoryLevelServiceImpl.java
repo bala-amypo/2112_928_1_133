@@ -18,7 +18,7 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
     }
 
     @Override
-    public InventoryLevel createInventory(InventoryLevel inventory) {
+    public InventoryLevel createOrUpdateInventory(InventoryLevel inventory) {
         return inventoryLevelRepository.save(inventory);
     }
 
@@ -39,17 +39,7 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
     }
 
     @Override
-    public InventoryLevel updateInventory(Long storeId, Long productId, int quantity) {
-
-        InventoryLevel inventory = inventoryLevelRepository
-                .findByStore_IdAndProduct_Id(storeId, productId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Inventory not found for storeId=" + storeId +
-                                " and productId=" + productId
-                        ));
-
-        inventory.setQuantity(quantity);
-        return inventoryLevelRepository.save(inventory);
+    public List<InventoryLevel> getInventoryForProduct(Long productId) {
+        return inventoryLevelRepository.findByProduct_Id(productId);
     }
 }

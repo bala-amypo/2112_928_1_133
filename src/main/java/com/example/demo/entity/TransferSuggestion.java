@@ -9,27 +9,36 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int suggestedQuantity;
+    @ManyToOne
+    private Store sourceStore;
 
-    private String reason;
+    @ManyToOne
+    private Store targetStore;
 
-    public Long getId() {
-        return id;
+    @ManyToOne
+    private Product product;
+
+    private int quantity;
+    private String priority;
+
+    public Long getId() { return id; }
+
+    public Store getSourceStore() { return sourceStore; }
+    public void setSourceStore(Store sourceStore) {
+        this.sourceStore = sourceStore;
     }
 
-    public int getSuggestedQuantity() {
-        return suggestedQuantity;
+    public Store getTargetStore() { return targetStore; }
+    public void setTargetStore(Store targetStore) {
+        this.targetStore = targetStore;
     }
 
-    public void setSuggestedQuantity(int suggestedQuantity) {
-        this.suggestedQuantity = suggestedQuantity;
-    }
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
 
-    public String getReason() {
-        return reason;
-    }
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
+    public String getPriority() { return priority; }
+    public void setPriority(String priority) { this.priority = priority; }
 }

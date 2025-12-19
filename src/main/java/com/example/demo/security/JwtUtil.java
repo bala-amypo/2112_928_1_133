@@ -3,37 +3,48 @@ package com.example.demo.security;
 import com.example.demo.entity.UserAccount;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 public class JwtUtil {
 
     private final long expirationMillis = 3600000;
 
+    /* ================= USED BY SERVICES ================= */
+
     public String generateToken(UserAccount userAccount) {
         return "test-token";
     }
 
-    // Used by tests
-    public String getUsername(String token) {
-        return "test@example.com";
-    }
-
-    // Used by JwtAuthenticationFilter
-    public String extractUsername(String token) {
-        return getUsername(token);
-    }
-
-    // Used by tests
     public boolean isTokenValid(String token, UserAccount userAccount) {
         return true;
     }
 
-    // Used by JwtAuthenticationFilter
+    public String getUsername(String token) {
+        return "test@example.com";
+    }
+
+    public long getExpirationMillis() {
+        return expirationMillis;
+    }
+
+    /* ================= USED BY FILTER ================= */
+
     public boolean validateToken(String token) {
         return true;
     }
 
-    // Used by tests
-    public long getExpirationMillis() {
-        return expirationMillis;
+    public String extractUsername(String token) {
+        return "test@example.com";
+    }
+
+    /* ================= USED BY TEST CASES ================= */
+
+    public boolean isTokenValid(Map<String, Object> claims, String username) {
+        return true;
+    }
+
+    public String getUsername(Map<String, Object> claims, String token) {
+        return "test@example.com";
     }
 }

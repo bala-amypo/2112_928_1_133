@@ -3,25 +3,17 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "stores", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "storeName")
-})
 public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
     private String storeName;
-
     private String address;
     private String region;
 
-    private Boolean active = true;
-
-    public Store() {
-    }
+    private boolean active;
 
     public Long getId() {
         return id;
@@ -55,11 +47,11 @@ public class Store {
         this.region = region;
     }
 
-    public Boolean getActive() {
+    public boolean isActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 }

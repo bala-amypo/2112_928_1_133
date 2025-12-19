@@ -11,7 +11,6 @@ public class DemandForecast {
     private Long id;
 
     private int predictedDemand;
-
     private LocalDate forecastDate;
 
     @ManyToOne
@@ -30,10 +29,6 @@ public class DemandForecast {
 
     public LocalDate getForecastDate() {
         return forecastDate;
-    }
-
-    public void setForecastDate(LocalDate forecastDate) {
-        this.forecastDate = forecastDate;
     }
 
     public Store getStore() {

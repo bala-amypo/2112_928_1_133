@@ -14,6 +14,6 @@ public interface DemandForecastRepository
     List<DemandForecast> findByStoreAndProductAndForecastDateAfter(
             Store store,
             Product product,
-            LocalDate forecastDate
+            LocalDate date
     );
 }

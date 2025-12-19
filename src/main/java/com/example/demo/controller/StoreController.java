@@ -3,30 +3,42 @@ package com.example.demo.controller;
 import com.example.demo.entity.Store;
 import com.example.demo.service.StoreService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/stores")
 public class StoreController {
 
-    private final StoreService service;
+    private final StoreService storeService;
 
-    public StoreController(StoreService service) {
-        this.service = service;
+    public StoreController(StoreService storeService) {
+        this.storeService = storeService;
     }
 
     @PostMapping
-    public Store create(@RequestBody Store store) {
-        return service.save(store);
+    public Store createStore(@RequestBody Store store) {
+        return storeService.createStore(store);
     }
 
     @GetMapping("/{id}")
-    public Store get(@PathVariable Long id) {
-        return service.getById(id);
+    public Store getStore(@PathVariable Long id) {
+        return storeService.getStoreById(id);
     }
 
     @GetMapping
-    public List<Store> all() {
-        return service.getAll();
+    public List<Store> getAllStores() {
+        return storeService.getAllStores();
+    }
+
+    @PutMapping("/{id}")
+    public Store updateStore(@PathVariable Long id,
+                             @RequestBody Store store) {
+        return storeService.updateStore(id, store);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deactivateStore(@PathVariable Long id) {
+        storeService.deactivateStore(id);
     }
 }

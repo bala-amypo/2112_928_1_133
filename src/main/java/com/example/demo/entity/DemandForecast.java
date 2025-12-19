@@ -10,46 +10,22 @@ public class DemandForecast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int predictedDemand;
+
+    private LocalDate forecastDate;
+
     @ManyToOne
     private Store store;
 
     @ManyToOne
     private Product product;
 
-    private int forecastedDemand;
-
-    private LocalDate forecastDate;
-
-    public Long getId() {
-        return id;
+    public int getPredictedDemand() {
+        return predictedDemand;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public int getForecastedDemand() {
-        return forecastedDemand;
-    }
-
-    public void setForecastedDemand(int forecastedDemand) {
-        this.forecastedDemand = forecastedDemand;
+    public void setPredictedDemand(int predictedDemand) {
+        this.predictedDemand = predictedDemand;
     }
 
     public LocalDate getForecastDate() {
@@ -58,5 +34,13 @@ public class DemandForecast {
 
     public void setForecastDate(LocalDate forecastDate) {
         this.forecastDate = forecastDate;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public Product getProduct() {
+        return product;
     }
 }

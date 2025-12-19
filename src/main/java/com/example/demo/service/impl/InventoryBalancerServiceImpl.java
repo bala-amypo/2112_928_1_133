@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.*;
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.*;
 import com.example.demo.service.InventoryBalancerService;
 import org.springframework.stereotype.Service;
@@ -14,61 +13,51 @@ import java.util.List;
 @Service
 public class InventoryBalancerServiceImpl implements InventoryBalancerService {
 
-    private final TransferSuggestionRepository transferSuggestionRepository;
     private final InventoryLevelRepository inventoryLevelRepository;
     private final DemandForecastRepository demandForecastRepository;
-    private final StoreRepository storeRepository;
+    private final TransferSuggestionRepository transferSuggestionRepository;
 
     public InventoryBalancerServiceImpl(
-            TransferSuggestionRepository transferSuggestionRepository,
             InventoryLevelRepository inventoryLevelRepository,
             DemandForecastRepository demandForecastRepository,
-            StoreRepository storeRepository) {
+            TransferSuggestionRepository transferSuggestionRepository) {
 
-        this.transferSuggestionRepository = transferSuggestionRepository;
         this.inventoryLevelRepository = inventoryLevelRepository;
         this.demandForecastRepository = demandForecastRepository;
-        this.storeRepository = storeRepository;
+        this.transferSuggestionRepository = transferSuggestionRepository;
     }
 
     @Override
     public List<TransferSuggestion> generateSuggestions(Long productId) {
 
-        List<InventoryLevel> inventory =
+        List<InventoryLevel> inventoryLevels =
                 inventoryLevelRepository.findByProduct_Id(productId);
 
-        if (inventory.isEmpty()) {
-            throw new BadRequestException("No forecast found");
+        if (inventoryLevels.isEmpty()) {
+            throw new BadRequestException("No inventory found");
         }
 
         List<TransferSuggestion> suggestions = new ArrayList<>();
 
-        for (InventoryLevel source : inventory) {
+        for (InventoryLevel level : inventoryLevels) {
 
             List<DemandForecast> forecasts =
-                    demandForecastRepository.findByStoreAndProductAndForecastDateAfter(
-                            source.getStore(),
-                            source.getProduct(),
-                            LocalDate.now()
-                    );
+                    demandForecastRepository
+                            .findByStoreAndProductAndForecastDateAfter(
+                                    level.getStore(),
+                                    level.getProduct(),
+                                    LocalDate.now()
+                            );
 
-            if (forecasts.isEmpty()) {
-                continue;
-            }
+            for (DemandForecast forecast : forecasts) {
 
-            for (InventoryLevel target : inventory) {
+                int demand = forecast.getPredictedDemand();
 
-                if (!source.getStore().getId().equals(target.getStore().getId())
-                        && source.getQuantity() > target.getQuantity()) {
+                if (level.getQuantity() < demand) {
 
                     TransferSuggestion suggestion = new TransferSuggestion();
-                    suggestion.setSourceStore(source.getStore());
-                    suggestion.setTargetStore(target.getStore());
-                    suggestion.setProduct(source.getProduct());
-                    suggestion.setQuantity(
-                            (source.getQuantity() - target.getQuantity()) / 2
-                    );
-                    suggestion.setPriority("MEDIUM");
+                    suggestion.setSuggestedQuantity(demand - level.getQuantity());
+                    suggestion.setReason("Insufficient inventory");
 
                     suggestions.add(
                             transferSuggestionRepository.save(suggestion)
@@ -86,13 +75,13 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
 
     @Override
     public List<TransferSuggestion> getSuggestionsForStore(Long storeId) {
-        return transferSuggestionRepository.findBySourceStoreId(storeId);
+        return transferSuggestionRepository.findAll();
     }
 
     @Override
     public TransferSuggestion getSuggestionById(Long id) {
         return transferSuggestionRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Suggestion not found"));
+                        new BadRequestException("Suggestion not found"));
     }
 }

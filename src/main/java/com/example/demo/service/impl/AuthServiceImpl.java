@@ -39,7 +39,15 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(dto.getEmail());
         user.setFullName(dto.getFullName());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setRole(dto.getRole());
+
+        // ✅ ROLE NORMALIZATION (CRITICAL FOR TESTS)
+        String role = dto.getRole();
+        if (role == null || role.isBlank()) {
+            role = "ROLE_USER";
+        } else if (!role.startsWith("ROLE_")) {
+            role = "ROLE_" + role.toUpperCase();
+        }
+        user.setRole(role);
 
         userAccountRepository.save(user);
     }
@@ -48,12 +56,14 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponseDto login(AuthRequestDto dto) {
 
         UserAccount user = userAccountRepository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new BadRequestException("Invalid credentials"));
+                .orElseThrow(() ->
+                        new BadRequestException("Invalid email or password"));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new BadRequestException("Invalid email or password");
         }
 
+        // ✅ SAFE JWT GENERATION
         String token = jwtUtil.generateToken(user);
 
         return new AuthResponseDto(token, LocalDateTime.now().plusHours(1));

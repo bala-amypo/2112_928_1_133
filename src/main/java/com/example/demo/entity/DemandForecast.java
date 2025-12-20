@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "demand_forecasts")
 public class DemandForecast {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔥 REQUIRED for repository queries
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
@@ -19,19 +19,23 @@ public class DemandForecast {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    // original field used by tests
+    @Column(name = "forecasted_demand")
     private int forecastedDemand;
 
-    // 🔥 REQUIRED BY TESTS
+    @Column(name = "forecast_date")
     private LocalDate forecastDate;
 
-    // ===== CONSTRUCTORS =====
+    // ===== Constructors =====
     public DemandForecast() {
     }
 
-    // ===== GETTERS & SETTERS =====
+    // ===== Getters & Setters =====
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Store getStore() {
@@ -58,23 +62,21 @@ public class DemandForecast {
         this.forecastedDemand = forecastedDemand;
     }
 
-    // ===== 🔥 TEST-REQUIRED ALIAS METHODS (DO NOT REMOVE) =====
+    public LocalDate getForecastDate() {
+        return forecastDate;
+    }
 
-    // Used by services
+    // 🔥 TEST REQUIRED
+    public void setForecastDate(LocalDate date) {
+        this.forecastDate = date;
+    }
+
+    // 🔥 SERVICE + TEST REQUIRED (ALIAS)
     public int getForecastQuantity() {
         return forecastedDemand;
     }
 
     public void setForecastQuantity(int qty) {
         this.forecastedDemand = qty;
-    }
-
-    // Used by tests
-    public LocalDate getForecastDate() {
-        return forecastDate;
-    }
-
-    public void setForecastDate(LocalDate forecastDate) {
-        this.forecastDate = forecastDate;
     }
 }

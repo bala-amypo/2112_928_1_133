@@ -4,22 +4,12 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "transfer_suggestions")
 public class TransferSuggestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // 🔥 REQUIRED BY TESTS
-    private int quantity;
-
-    private String reason;
-
-    // 🔥 REQUIRED BY TESTS
-    private String priority;
-
-    // 🔥 REQUIRED BY TESTS
-    private LocalDateTime generatedAt;
 
     @ManyToOne
     @JoinColumn(name = "source_store_id")
@@ -33,29 +23,26 @@ public class TransferSuggestion {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    // ===== CONSTRUCTORS =====
+    @Column(name = "quantity")
+    private int quantity;
+
+    @Column(name = "priority")
+    private String priority;
+
+    @Column(name = "generated_at")
+    private LocalDateTime generatedAt;
+
+    // ===== Constructors =====
     public TransferSuggestion() {
     }
 
-    // ===== GETTERS & SETTERS =====
+    // ===== Getters & Setters =====
     public Long getId() {
         return id;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Store getSourceStore() {
@@ -82,6 +69,20 @@ public class TransferSuggestion {
         this.product = product;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    // 🔥 SERVICE REQUIRED
+    public void setQuantity(int qty) {
+        this.quantity = qty;
+    }
+
+    // 🔥 TEST REQUIRED (ALIAS)
+    public void setSuggestedQuantity(int qty) {
+        this.quantity = qty;
+    }
+
     public String getPriority() {
         return priority;
     }
@@ -96,16 +97,5 @@ public class TransferSuggestion {
 
     public void setGeneratedAt(LocalDateTime generatedAt) {
         this.generatedAt = generatedAt;
-    }
-
-    // ===== 🔥 TEST-REQUIRED ALIAS METHODS =====
-
-    // Tests expect this name
-    public int getSuggestedQuantity() {
-        return this.quantity;
-    }
-
-    public void setSuggestedQuantity(int qty) {
-        this.quantity = qty;
     }
 }

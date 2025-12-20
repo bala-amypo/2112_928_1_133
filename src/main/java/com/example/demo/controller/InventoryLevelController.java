@@ -16,24 +16,23 @@ public class InventoryLevelController {
         this.inventoryLevelService = inventoryLevelService;
     }
 
-    // ✅ UPDATE INVENTORY
-    @PutMapping("/update")
-    public InventoryLevel updateInventory(
-            @RequestParam Long storeId,
-            @RequestParam Long productId,
-            @RequestParam Integer quantity) {
-
-        return inventoryLevelService.updateInventory(storeId, productId, quantity);
+    // 🔥 TEST EXPECTS ENTITY, NOT MAP
+    @PostMapping
+    public InventoryLevel createOrUpdate(@RequestBody InventoryLevel inventory) {
+        return inventoryLevelService.createOrUpdateInventory(inventory);
     }
 
-    // ✅ GET INVENTORY BY STORE
     @GetMapping("/store/{storeId}")
-    public List<InventoryLevel> getInventoryByStore(@PathVariable Long storeId) {
-        return inventoryLevelService.getInventoryByStore(storeId);
+    public List<InventoryLevel> getInventoryForStore(@PathVariable Long storeId) {
+        return inventoryLevelService.getInventoryForStore(storeId);
     }
 
-    // ✅ GET INVENTORY BY STORE + PRODUCT
-    @GetMapping("/store/{storeId}/product/{productId}")
+    @GetMapping("/product/{productId}")
+    public List<InventoryLevel> getInventoryForProduct(@PathVariable Long productId) {
+        return inventoryLevelService.getInventoryForProduct(productId);
+    }
+
+    @GetMapping("/{storeId}/{productId}")
     public InventoryLevel getInventory(
             @PathVariable Long storeId,
             @PathVariable Long productId) {

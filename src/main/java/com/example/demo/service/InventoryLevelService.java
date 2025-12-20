@@ -5,12 +5,13 @@ import java.util.List;
 
 public interface InventoryLevelService {
 
-    void updateInventory(Long storeId, Long productId, Integer quantity);
+    // 🔥 MUST RETURN InventoryLevel
+    InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity);
 
     InventoryLevel getInventory(Long storeId, Long productId);
 
     List<InventoryLevel> getInventoryByStore(Long storeId);
 
-    // required alias for tests
+    // alias used in tests
     List<InventoryLevel> getInventoryForStore(Long storeId);
 }

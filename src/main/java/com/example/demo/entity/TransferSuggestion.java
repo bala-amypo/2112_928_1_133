@@ -19,19 +19,35 @@ public class TransferSuggestion {
     @ManyToOne
     private Product product;
 
-    // ✅ REQUIRED
-    private int quantity;
+    private Integer quantity;
 
-    // ✅ REQUIRED
-    private String reason;
-
-    // ✅ REQUIRED BY TESTS
     private String priority;
 
-    // ✅ REQUIRED BY TESTS
-    private LocalDateTime generatedAt;
+    private LocalDateTime suggestedAt;
 
-    /* ===================== GETTERS ===================== */
+    private String status;
+
+    public TransferSuggestion() {
+        this.suggestedAt = LocalDateTime.now();
+        this.status = "PENDING";
+    }
+
+    // 🔥 REQUIRED METHODS BY TESTS
+    public void setSuggestedQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public LocalDateTime getGeneratedAt() {
+        return suggestedAt;
+    }
 
     public Long getId() {
         return id;
@@ -41,66 +57,43 @@ public class TransferSuggestion {
         return sourceStore;
     }
 
-    public Store getTargetStore() {
-        return targetStore;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public String getPriority() {
-        return priority;
-    }
-
-    public LocalDateTime getGeneratedAt() {
-        return generatedAt;
-    }
-
-    /* ===================== SETTERS ===================== */
-
     public void setSourceStore(Store sourceStore) {
         this.sourceStore = sourceStore;
+    }
+
+    public Store getTargetStore() {
+        return targetStore;
     }
 
     public void setTargetStore(Store targetStore) {
         this.targetStore = targetStore;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public String getPriority() {
+        return priority;
     }
 
-    // 🔥 THIS FIXES YOUR CURRENT ERROR
-    public void setPriority(String priority) {
-        this.priority = priority;
+    public LocalDateTime getSuggestedAt() {
+        return suggestedAt;
     }
 
-    public void setGeneratedAt(LocalDateTime generatedAt) {
-        this.generatedAt = generatedAt;
+    public String getStatus() {
+        return status;
     }
 
-    /* ===================== AUTO TIMESTAMP ===================== */
-
-    @PrePersist
-    public void onCreate() {
-        this.generatedAt = LocalDateTime.now();
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
-

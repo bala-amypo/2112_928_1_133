@@ -24,13 +24,14 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
             InventoryLevelRepository inventoryLevelRepository,
             StoreRepository storeRepository,
             ProductRepository productRepository) {
+
         this.inventoryLevelRepository = inventoryLevelRepository;
         this.storeRepository = storeRepository;
         this.productRepository = productRepository;
     }
 
     @Override
-    public void updateInventory(Long storeId, Long productId, Integer quantity) {
+    public InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity) {
 
         if (quantity < 0) {
             throw new BadRequestException("Quantity must be >= 0");
@@ -51,7 +52,7 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         inventoryLevel.setQuantity(quantity);
         inventoryLevel.setLastUpdated(LocalDateTime.now());
 
-        inventoryLevelRepository.save(inventoryLevel);
+        return inventoryLevelRepository.save(inventoryLevel);
     }
 
     @Override
@@ -63,7 +64,8 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("not found"));
 
-        return inventoryLevelRepository.findByStoreAndProduct(store, product)
+        return inventoryLevelRepository
+                .findByStoreAndProduct(store, product)
                 .orElseThrow(() -> new RuntimeException("not found"));
     }
 

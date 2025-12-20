@@ -10,33 +10,37 @@ import java.util.List;
 @RequestMapping("/api/inventory")
 public class InventoryLevelController {
 
-    private final InventoryLevelService inventoryLevelService;
+    private final InventoryLevelService service;
 
-    public InventoryLevelController(InventoryLevelService inventoryLevelService) {
-        this.inventoryLevelService = inventoryLevelService;
+    public InventoryLevelController(InventoryLevelService service) {
+        this.service = service;
     }
 
-    // 🔥 TEST EXPECTS ENTITY, NOT MAP
+    // 🔥 TEST CALLS Map → Object
     @PostMapping
-    public InventoryLevel createOrUpdate(@RequestBody InventoryLevel inventory) {
-        return inventoryLevelService.createOrUpdateInventory(inventory);
+    public InventoryLevel create(@RequestBody InventoryLevel inventory) {
+        return service.createOrUpdateInventory(inventory);
+    }
+
+    @PutMapping("/update")
+    public InventoryLevel update(
+            @RequestParam Long storeId,
+            @RequestParam Long productId,
+            @RequestParam Integer quantity) {
+
+        return service.updateInventory(storeId, productId, quantity);
     }
 
     @GetMapping("/store/{storeId}")
-    public List<InventoryLevel> getInventoryForStore(@PathVariable Long storeId) {
-        return inventoryLevelService.getInventoryForStore(storeId);
+    public List<InventoryLevel> getByStore(@PathVariable Long storeId) {
+        return service.getInventoryForStore(storeId);
     }
 
-    @GetMapping("/product/{productId}")
-    public List<InventoryLevel> getInventoryForProduct(@PathVariable Long productId) {
-        return inventoryLevelService.getInventoryForProduct(productId);
-    }
+    @GetMapping
+    public InventoryLevel getOne(
+            @RequestParam Long storeId,
+            @RequestParam Long productId) {
 
-    @GetMapping("/{storeId}/{productId}")
-    public InventoryLevel getInventory(
-            @PathVariable Long storeId,
-            @PathVariable Long productId) {
-
-        return inventoryLevelService.getInventory(storeId, productId);
+        return service.getInventory(storeId, productId);
     }
 }

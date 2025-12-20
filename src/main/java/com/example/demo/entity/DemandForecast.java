@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "demand_forecasts")
 public class DemandForecast {
 
     @Id
@@ -12,58 +11,23 @@ public class DemandForecast {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
     private Store store;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(name = "forecasted_demand")
     private int forecastedDemand;
 
-    @Column(name = "forecast_date")
     private LocalDate forecastDate;
 
-    // ===== Constructors =====
-    public DemandForecast() {
-    }
+    // ---------- TEST + SERVICE REQUIRED ----------
 
-    // ===== Getters & Setters =====
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public int getForecastedDemand() {
+    public int getForecastQuantity() {
         return forecastedDemand;
     }
 
-    public void setForecastedDemand(int forecastedDemand) {
-        this.forecastedDemand = forecastedDemand;
-    }
-
-    public LocalDate getForecastDate() {
-        return forecastDate;
+    public void setForecastQuantity(int qty) {
+        this.forecastedDemand = qty;
     }
 
     // 🔥 TEST REQUIRED
@@ -71,12 +35,15 @@ public class DemandForecast {
         this.forecastDate = date;
     }
 
-    // 🔥 SERVICE + TEST REQUIRED (ALIAS)
-    public int getForecastQuantity() {
-        return forecastedDemand;
+    public LocalDate getForecastDate() {
+        return forecastDate;
     }
 
-    public void setForecastQuantity(int qty) {
-        this.forecastedDemand = qty;
+    public Store getStore() {
+        return store;
+    }
+
+    public Product getProduct() {
+        return product;
     }
 }

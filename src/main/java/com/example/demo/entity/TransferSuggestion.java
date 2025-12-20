@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transfer_suggestions")
 public class TransferSuggestion {
 
     @Id
@@ -12,40 +11,26 @@ public class TransferSuggestion {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "source_store_id")
     private Store sourceStore;
 
     @ManyToOne
-    @JoinColumn(name = "target_store_id")
     private Store targetStore;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "priority")
     private String priority;
 
-    @Column(name = "reason")
-    private String reason;
+    private String reason;   // 🔥 REQUIRED BY TESTS
 
-    @Column(name = "generated_at")
     private LocalDateTime generatedAt;
 
-    // ===== Constructors =====
-    public TransferSuggestion() {
-    }
+    // ---------- GETTERS / SETTERS ----------
 
-    // ===== Getters & Setters =====
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Store getSourceStore() {
@@ -76,12 +61,12 @@ public class TransferSuggestion {
         return quantity;
     }
 
-    // 🔥 Service required
-    public void setQuantity(int qty) {
-        this.quantity = qty;
+    // 🔥 SERVICE REQUIRED
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    // 🔥 Test required alias
+    // 🔥 TEST REQUIRED (alias)
     public void setSuggestedQuantity(int qty) {
         this.quantity = qty;
     }
@@ -94,7 +79,7 @@ public class TransferSuggestion {
         this.priority = priority;
     }
 
-    // 🔥 FINAL FIX
+    // 🔥 NEW (TEST REQUIRED)
     public String getReason() {
         return reason;
     }

@@ -24,9 +24,7 @@ public class StoreServiceImpl implements StoreService {
             throw new BadRequestException("Store name already exists");
         });
 
-        // ✅ primitive boolean → no null check
         store.setActive(true);
-
         return repository.save(store);
     }
 
@@ -38,5 +36,14 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<Store> getAllStores() {
         return repository.findAll();
+    }
+
+    // 🔥 REQUIRED BY TESTS
+    @Override
+    public void deactivateStore(Long id) {
+        Store store = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Store not found"));
+        store.setActive(false);
+        repository.save(store);
     }
 }

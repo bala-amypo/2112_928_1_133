@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface InventoryLevelRepository extends JpaRepository<InventoryLevel, Long> {
 
-    // 🔥 TEST EXPECTS THESE EXACT NAMES
-    List<InventoryLevel> findByStoreId(Long storeId);
+    // 🔥 REQUIRED BY TESTS
+    List<InventoryLevel> findByStore_Id(Long storeId);
 
-    List<InventoryLevel> findByProductId(Long productId);
+    List<InventoryLevel> findByProduct_Id(Long productId);
 }

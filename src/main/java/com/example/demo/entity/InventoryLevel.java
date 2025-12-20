@@ -16,15 +16,24 @@ public class InventoryLevel {
     @ManyToOne
     private Product product;
 
-    // 🔥 MUST be Integer (tests use .equals)
+    // MUST be Integer (tests use .equals)
     private Integer quantity;
 
-    // 🔥 REQUIRED BY TESTS
     private LocalDateTime lastUpdated;
 
     // =========================
-    // TEST REQUIRED SETTERS
+    // REQUIRED BY TESTS
     // =========================
+
+    public InventoryLevel setStore(Store store) {
+        this.store = store;
+        return this;
+    }
+
+    public InventoryLevel setProduct(Product product) {
+        this.product = product;
+        return this;
+    }
 
     public void setStoreId(Long storeId) {
         if (this.store == null) {
@@ -39,10 +48,6 @@ public class InventoryLevel {
         }
         this.product.setId(productId);
     }
-
-    // =========================
-    // GETTERS / SETTERS
-    // =========================
 
     public Store getStore() {
         return store;

@@ -50,7 +50,14 @@ public class JwtUtil {
     }
 
     // =====================================================
-    // OPTIONAL (used by security filters if any)
+    // 🔥 TEST REQUIRED METHOD
+    // =====================================================
+    public long getExpirationMillis() {
+        return EXPIRATION_TIME;
+    }
+
+    // =====================================================
+    // OPTIONAL (used by security filters)
     // =====================================================
     public String extractUsername(String token) {
         return extractAllClaims(token).getSubject();
@@ -61,14 +68,15 @@ public class JwtUtil {
                 .getExpiration()
                 .before(new Date());
     }
-        public String getUsername(String token) {
+
+    public String getUsername(String token) {
         return extractUsername(token);
     }
 
     public boolean isTokenValid(String token, String username) {
-        return extractUsername(token).equals(username) && !isTokenExpired(token);
+        return extractUsername(token).equals(username)
+                && !isTokenExpired(token);
     }
-
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()

@@ -9,7 +9,7 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int suggestedQuantity;
+    private int quantity;
     private String reason;
     private String priority;
 
@@ -22,31 +22,13 @@ public class TransferSuggestion {
     @ManyToOne
     private Product product;
 
-    public TransferSuggestion() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public int getSuggestedQuantity() {
-        return suggestedQuantity;
-    }
-
-    public void setSuggestedQuantity(int suggestedQuantity) {
-        this.suggestedQuantity = suggestedQuantity;
-    }
-
-    // 🔥 REQUIRED BY InventoryBalancerServiceImpl
+    // ✅ REQUIRED
     public void setQuantity(int quantity) {
-        this.suggestedQuantity = quantity;
+        this.quantity = quantity;
     }
 
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
+    public int getQuantity() {
+        return quantity;
     }
 
     public void setSourceStore(Store sourceStore) {

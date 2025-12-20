@@ -14,41 +14,21 @@ public class UserAccount {
     private String password;
     private String role;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public UserAccount() {}
-
-    public Long getId() {
-        return id;
+    // ✅ REQUIRED BY TEST
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
-    public String getEmail() {
-        return email;
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    // 🔥 REQUIRED BY TESTS
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

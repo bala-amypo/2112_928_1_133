@@ -1,7 +1,11 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.InventoryLevel;
+import com.example.demo.entity.Product;
+import com.example.demo.entity.Store;
 import com.example.demo.repository.InventoryLevelRepository;
+import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.StoreRepository;
 import com.example.demo.service.InventoryLevelService;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +15,16 @@ import java.util.List;
 public class InventoryLevelServiceImpl implements InventoryLevelService {
 
     private final InventoryLevelRepository repository;
+    private final StoreRepository storeRepository;
+    private final ProductRepository productRepository;
 
-    public InventoryLevelServiceImpl(InventoryLevelRepository repository) {
+    public InventoryLevelServiceImpl(
+            InventoryLevelRepository repository,
+            StoreRepository storeRepository,
+            ProductRepository productRepository) {
         this.repository = repository;
+        this.storeRepository = storeRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -26,22 +37,26 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         return repository.findByProduct_Id(productId);
     }
 
-    // 🔥 REQUIRED
+    // ✅ REQUIRED
     @Override
     public List<InventoryLevel> getInventoryByStore(Long storeId) {
         return repository.findByStore_Id(storeId);
     }
 
-    // 🔥 REQUIRED
+    // ✅ REQUIRED
     @Override
     public InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity) {
-        InventoryLevel level = repository.findByStore_Id(storeId)
-                .stream()
-                .filter(i -> i.getProduct().getId().equals(productId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Inventory not found"));
+        Store store = storeRepository.findById(storeId).orElseThrow();
+        Product product = productRepository.findById(productId).orElseThrow();
 
+        InventoryLevel level = repository
+                .findByStoreAndProduct(store, product)
+                .orElse(new InventoryLevel());
+
+        level.setStore(store);
+        level.setProduct(product);
         level.setQuantity(quantity);
+
         return repository.save(level);
     }
 }

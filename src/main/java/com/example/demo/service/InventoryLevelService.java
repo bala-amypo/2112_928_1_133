@@ -9,9 +9,9 @@ public interface InventoryLevelService {
 
     List<InventoryLevel> getInventoryForProduct(Long productId);
 
-    // 🔥 REQUIRED BY CONTROLLER
+    // ✅ REQUIRED BY TEST
     List<InventoryLevel> getInventoryByStore(Long storeId);
 
-    // 🔥 REQUIRED BY CONTROLLER
+    // ✅ REQUIRED BY CONTROLLER
     InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity);
 }

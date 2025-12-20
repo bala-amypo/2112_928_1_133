@@ -1,4 +1,4 @@
-]package com.example.demo.service.impl;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.Product;
 import com.example.demo.exception.BadRequestException;
@@ -24,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
             throw new BadRequestException("SKU already exists");
         });
 
-        // ✅ primitive boolean → no null check
+        // primitive boolean → no null check
         product.setActive(true);
 
         return repository.save(product);

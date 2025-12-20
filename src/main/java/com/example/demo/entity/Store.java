@@ -14,7 +14,7 @@ public class Store {
     private String region;
     private boolean active = true;
 
-    /* ===== GETTERS ===== */
+    // ===== GETTERS =====
 
     public Long getId() {
         return id;
@@ -36,7 +36,7 @@ public class Store {
         return active;
     }
 
-    /* ===== FLUENT SETTERS (NO VOID ALLOWED) ===== */
+    // ===== FLUENT SETTERS (NO VOID ANYWHERE) =====
 
     public Store setId(Long id) {
         this.id = id;

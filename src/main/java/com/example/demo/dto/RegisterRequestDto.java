@@ -5,6 +5,7 @@ public class RegisterRequestDto {
     private String email;
     private String password;
     private String role;
+    private String fullName;
 
     public RegisterRequestDto() {}
 
@@ -32,6 +33,16 @@ public class RegisterRequestDto {
 
     public RegisterRequestDto setRole(String role) {
         this.role = role;
+        return this;
+    }
+
+    // 🔥 REQUIRED BY TEST
+    public String getFullName() {
+        return fullName;
+    }
+
+    public RegisterRequestDto setFullName(String fullName) {
+        this.fullName = fullName;
         return this;
     }
 }

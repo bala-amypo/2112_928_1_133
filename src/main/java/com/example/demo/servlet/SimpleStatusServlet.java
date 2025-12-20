@@ -8,9 +8,13 @@ import java.io.IOException;
 public class SimpleStatusServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write("OK");
-    }
+public void doGet(
+        jakarta.servlet.http.HttpServletRequest req,
+        jakarta.servlet.http.HttpServletResponse resp)
+        throws java.io.IOException {
+
+    resp.setStatus(200);
+    resp.getWriter().write("OK");
+}
+
 }

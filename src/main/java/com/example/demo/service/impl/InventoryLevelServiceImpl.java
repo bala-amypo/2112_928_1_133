@@ -1,12 +1,3 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.InventoryLevel;
-import com.example.demo.repository.InventoryLevelRepository;
-import com.example.demo.service.InventoryLevelService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
 @Service
 public class InventoryLevelServiceImpl implements InventoryLevelService {
 
@@ -22,7 +13,7 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
     }
 
     @Override
-    public List<InventoryLevel> getInventoryForStore(Long storeId) {
+    public List<InventoryLevel> getInventoryByStore(Long storeId) {
         return repository.findByStoreId(storeId);
     }
 

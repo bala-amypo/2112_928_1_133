@@ -1,33 +1,25 @@
-package com.example.demo.controller;
-
-import com.example.demo.entity.InventoryLevel;
-import com.example.demo.service.InventoryLevelService;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-@RestController
+]@RestController
 @RequestMapping("/api/inventory")
 public class InventoryLevelController {
 
-    private final InventoryLevelService service;
+    private final InventoryLevelService inventoryLevelService;
 
-    public InventoryLevelController(InventoryLevelService service) {
-        this.service = service;
+    public InventoryLevelController(InventoryLevelService inventoryLevelService) {
+        this.inventoryLevelService = inventoryLevelService;
     }
 
     @PostMapping
     public InventoryLevel create(@RequestBody InventoryLevel inventory) {
-        return service.createOrUpdateInventory(inventory);
+        return inventoryLevelService.createOrUpdateInventory(inventory);
     }
 
     @GetMapping("/store/{storeId}")
     public List<InventoryLevel> byStore(@PathVariable Long storeId) {
-        return service.getInventoryForStore(storeId);
+        return inventoryLevelService.getInventoryByStore(storeId);
     }
 
     @GetMapping("/product/{productId}")
     public List<InventoryLevel> byProduct(@PathVariable Long productId) {
-        return service.getInventoryForProduct(productId);
+        return inventoryLevelService.getInventoryForProduct(productId);
     }
 }

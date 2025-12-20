@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface InventoryLevelRepository extends JpaRepository<InventoryLevel, Long> {
 
-    // REQUIRED BY SERVICE + TESTS
+    // 🔥 REQUIRED BY TESTS
     List<InventoryLevel> findByStoreId(Long storeId);
 
     List<InventoryLevel> findByProductId(Long productId);

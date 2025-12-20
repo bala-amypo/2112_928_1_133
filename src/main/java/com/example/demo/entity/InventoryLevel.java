@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class InventoryLevel {
@@ -15,12 +16,19 @@ public class InventoryLevel {
     @ManyToOne
     private Product product;
 
-    private int quantity;
+    // 🔥 MUST BE Integer (not int)
+    private Integer quantity;
 
-    // ======================
-    // NORMAL GETTERS/SETTERS
-    // ======================
+    private LocalDateTime lastUpdated;
 
+    // ===== AUTO TIMESTAMP =====
+    @PrePersist
+    @PreUpdate
+    public void touch() {
+        this.lastUpdated = LocalDateTime.now();
+    }
+
+    // ===== GETTERS =====
     public Long getId() {
         return id;
     }
@@ -33,14 +41,15 @@ public class InventoryLevel {
         return product;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
     }
 
+    // ===== SETTERS =====
     public void setStore(Store store) {
         this.store = store;
     }
@@ -49,27 +58,7 @@ public class InventoryLevel {
         this.product = product;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    // ======================
-    // 🔥 REQUIRED BY CONTROLLER + TESTS
-    // ======================
-
-    // Controller calls inventory.setStoreId(...)
-    public void setStoreId(Long storeId) {
-        if (this.store == null) {
-            this.store = new Store();
-        }
-        this.store.setId(storeId);
-    }
-
-    // Controller calls inventory.setProductId(...)
-    public void setProductId(Long productId) {
-        if (this.product == null) {
-            this.product = new Product();
-        }
-        this.product.setId(productId);
     }
 }

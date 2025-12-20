@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.InventoryLevel;
-
 import java.util.List;
 
 public interface InventoryLevelService {
@@ -11,4 +10,9 @@ public interface InventoryLevelService {
     List<InventoryLevel> getInventoryByStore(Long storeId);
 
     List<InventoryLevel> getInventoryForProduct(Long productId);
+
+    // 🔥 TEST ALIAS — DO NOT REMOVE
+    default List<InventoryLevel> getInventoryForStore(Long storeId) {
+        return getInventoryByStore(storeId);
+    }
 }

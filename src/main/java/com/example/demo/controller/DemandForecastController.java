@@ -2,9 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DemandForecast;
 import com.example.demo.service.DemandForecastService;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/forecasts")
@@ -17,13 +16,8 @@ public class DemandForecastController {
     }
 
     @PostMapping
-    public DemandForecast create(@RequestBody DemandForecast forecast) {
+    public DemandForecast createForecast(@RequestBody DemandForecast forecast) {
         return forecastService.createForecast(forecast);
-    }
-
-    @GetMapping("/store/{storeId}")
-    public List<DemandForecast> getByStore(@PathVariable Long storeId) {
-        return forecastService.getForecastsForStore(storeId);
     }
 
     @GetMapping("/store/{storeId}/product/{productId}")

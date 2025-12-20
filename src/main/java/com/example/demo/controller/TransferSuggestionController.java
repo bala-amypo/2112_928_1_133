@@ -2,27 +2,36 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.TransferSuggestion;
 import com.example.demo.service.InventoryBalancerService;
-import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/suggestions")
 public class TransferSuggestionController {
 
-    private final InventoryBalancerService service;
+    private final InventoryBalancerService balancerService;
 
-    public TransferSuggestionController(InventoryBalancerService service) {
-        this.service = service;
+    public TransferSuggestionController(InventoryBalancerService balancerService) {
+        this.balancerService = balancerService;
     }
 
     @PostMapping("/generate/{productId}")
-    public List<TransferSuggestion> generate(@PathVariable Long productId) {
-        return service.generateSuggestions(productId);
+    public List<TransferSuggestion> generateSuggestions(
+            @PathVariable Long productId) {
+
+        return balancerService.generateSuggestions(productId);
+    }
+
+    @GetMapping("/store/{storeId}")
+    public List<TransferSuggestion> getSuggestionsForStore(
+            @PathVariable Long storeId) {
+
+        return balancerService.getSuggestionsForStore(storeId);
     }
 
     @GetMapping("/{id}")
-    public TransferSuggestion getById(@PathVariable Long id) {
-        return service.getSuggestionById(id);
+    public TransferSuggestion getSuggestionById(@PathVariable Long id) {
+        return balancerService.getSuggestionById(id);
     }
 }

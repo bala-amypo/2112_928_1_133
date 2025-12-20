@@ -2,8 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Store;
 import com.example.demo.service.StoreService;
-import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
@@ -22,23 +22,12 @@ public class StoreController {
     }
 
     @GetMapping("/{id}")
-    public Store getStore(@PathVariable Long id) {
+    public Store getStoreById(@PathVariable Long id) {
         return storeService.getStoreById(id);
     }
 
     @GetMapping
     public List<Store> getAllStores() {
         return storeService.getAllStores();
-    }
-
-    @PutMapping("/{id}")
-    public Store updateStore(@PathVariable Long id,
-                             @RequestBody Store store) {
-        return storeService.updateStore(id, store);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deactivateStore(@PathVariable Long id) {
-        storeService.deactivateStore(id);
     }
 }

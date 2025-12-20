@@ -5,78 +5,79 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.*;
 import com.example.demo.service.InventoryBalancerService;
+
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class InventoryBalancerServiceImpl implements InventoryBalancerService {
 
-    private final InventoryLevelRepository inventoryLevelRepository;
-    private final DemandForecastRepository demandForecastRepository;
-    private final TransferSuggestionRepository transferSuggestionRepository;
+    private final TransferSuggestionRepository suggestionRepo;
+    private final InventoryLevelRepository inventoryRepo;
+    private final DemandForecastRepository forecastRepo;
+    private final StoreRepository storeRepo;
 
     public InventoryBalancerServiceImpl(
-            InventoryLevelRepository inventoryLevelRepository,
-            DemandForecastRepository demandForecastRepository,
-            TransferSuggestionRepository transferSuggestionRepository) {
+            TransferSuggestionRepository suggestionRepo,
+            InventoryLevelRepository inventoryRepo,
+            DemandForecastRepository forecastRepo,
+            StoreRepository storeRepo) {
 
-        this.inventoryLevelRepository = inventoryLevelRepository;
-        this.demandForecastRepository = demandForecastRepository;
-        this.transferSuggestionRepository = transferSuggestionRepository;
+        this.suggestionRepo = suggestionRepo;
+        this.inventoryRepo = inventoryRepo;
+        this.forecastRepo = forecastRepo;
+        this.storeRepo = storeRepo;
     }
 
     @Override
     public List<TransferSuggestion> generateSuggestions(Long productId) {
 
-        List<InventoryLevel> inventory =
-                inventoryLevelRepository.findByProduct_Id(productId);
-
-        if (inventory.isEmpty()) {
-            throw new BadRequestException("No inventory found");
-        }
-
+        List<InventoryLevel> inventories = inventoryRepo.findAll();
         List<TransferSuggestion> suggestions = new ArrayList<>();
 
-        for (InventoryLevel level : inventory) {
-
-            List<DemandForecast> forecasts =
-                    demandForecastRepository.findByStoreAndProductAndForecastDateAfter(
-                            level.getStore(),
-                            level.getProduct(),
-                            LocalDate.now()
-                    );
-
-            for (DemandForecast forecast : forecasts) {
-
-                int demand = forecast.getPredictedDemand();
-
-                if (level.getQuantity() < demand) {
-
-                    TransferSuggestion suggestion = new TransferSuggestion();
-                    suggestion.setSuggestedQuantity(demand - level.getQuantity());
-                    suggestion.setReason("Insufficient inventory");
-
-                    suggestions.add(
-                            transferSuggestionRepository.save(suggestion)
-                    );
-                }
-            }
+        if (inventories.isEmpty()) {
+            throw new BadRequestException("No forecast found");
         }
 
-        if (suggestions.isEmpty()) {
-            throw new BadRequestException("No forecast found");
+        for (InventoryLevel inv : inventories) {
+
+            if (!inv.getProduct().getId().equals(productId)) {
+                continue;
+            }
+
+            forecastRepo.findByStoreAndProduct(inv.getStore(), inv.getProduct())
+                    .ifPresentOrElse(forecast -> {
+
+                        if (inv.getQuantity() > forecast.getForecastQuantity()) {
+
+                            TransferSuggestion ts = new TransferSuggestion();
+                            ts.setSourceStore(inv.getStore());
+                            ts.setTargetStore(inv.getStore()); // simple logic
+                            ts.setProduct(inv.getProduct());
+                            ts.setQuantity(inv.getQuantity() - forecast.getForecastQuantity());
+                            ts.setPriority("HIGH");
+
+                            suggestions.add(suggestionRepo.save(ts));
+                        }
+
+                    }, () -> {
+                        throw new BadRequestException("No forecast found");
+                    });
         }
 
         return suggestions;
     }
 
     @Override
+    public List<TransferSuggestion> getSuggestionsForStore(Long storeId) {
+        return suggestionRepo.findBySourceStoreIdOrTargetStoreId(storeId, storeId);
+    }
+
+    @Override
     public TransferSuggestion getSuggestionById(Long id) {
-        return transferSuggestionRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Suggestion not found"));
+        return suggestionRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
     }
 }

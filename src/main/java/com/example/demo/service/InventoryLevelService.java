@@ -6,9 +6,13 @@ import java.util.List;
 
 public interface InventoryLevelService {
 
-    InventoryLevel createOrUpdateInventory(InventoryLevel inventoryLevel);
+    // USED BY TESTS + CONTROLLER
+    InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity);
 
-    List<InventoryLevel> getInventoryForStore(Long storeId);
+    List<InventoryLevel> getInventoryByStore(Long storeId);
+
+    // INTERNAL / OTHER USES
+    InventoryLevel createOrUpdateInventory(InventoryLevel inventoryLevel);
 
     List<InventoryLevel> getInventoryForProduct(Long productId);
 

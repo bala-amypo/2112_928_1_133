@@ -1,63 +1,66 @@
-package com.example.demo.entity;
+package com.example.demo.security;
 
-import jakarta.persistence.*;
-import java.time.LocalDate;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Entity
-public class DemandForecast {
+@Configuration
+public class SecurityConfig {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @ManyToOne
-    private Store store;
-
-    @ManyToOne
-    private Product product;
-
-    private Integer forecastQuantity;
-    private LocalDate forecastDate;
-
-    public DemandForecast() {}
-
-    public Long getId() {
-        return id;
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    public Store getStore() {
-        return store;
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http
+            .csrf(csrf -> csrf.disable())
+
+            .authorizeHttpRequests(auth -> auth
+                // ✅ PUBLIC ENDPOINTS
+                .requestMatchers(
+                        "/auth/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/v3/api-docs/**",
+                        "/v3/api-docs.yaml"
+                ).permitAll()
+
+                // 🔐 EVERYTHING ELSE PROTECTED
+                .anyRequest().authenticated()
+            )
+
+            // 🚫 DISABLE SESSION & LOGIN PAGE
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable());
+
+        // 🔥 JWT FILTER
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 
-    public Product getProduct() {
-        return product;
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
-    public Integer getForecastQuantity() {
-        return forecastQuantity;
-    }
-
-    public LocalDate getForecastDate() {
-        return forecastDate;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public void setForecastQuantity(Integer forecastQuantity) {
-        this.forecastQuantity = forecastQuantity;
-    }
-
-    public void setForecastDate(LocalDate forecastDate) {
-        this.forecastDate = forecastDate;
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }

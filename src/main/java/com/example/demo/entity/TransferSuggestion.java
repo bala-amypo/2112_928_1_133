@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class TransferSuggestion {
@@ -9,18 +10,10 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int suggestedQuantity;
+    private int quantity;
     private String reason;
-    private String priority;
 
-    @ManyToOne
-    private Store sourceStore;
-
-    @ManyToOne
-    private Store targetStore;
-
-    @ManyToOne
-    private Product product;
+    private LocalDateTime generatedAt = LocalDateTime.now();
 
     public TransferSuggestion() {}
 
@@ -28,56 +21,25 @@ public class TransferSuggestion {
         return id;
     }
 
-    public int getSuggestedQuantity() {
-        return suggestedQuantity;
+    // REQUIRED
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getReason() {
         return reason;
     }
 
-    public String getPriority() {
-        return priority;
-    }
-
-    public Store getSourceStore() {
-        return sourceStore;
-    }
-
-    public Store getTargetStore() {
-        return targetStore;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    // ✅ REQUIRED BY InventoryBalancerServiceImpl
-    public void setQuantity(int quantity) {
-        this.suggestedQuantity = quantity;
-    }
-
-    public void setSuggestedQuantity(int suggestedQuantity) {
-        this.suggestedQuantity = suggestedQuantity;
-    }
-
     public void setReason(String reason) {
         this.reason = reason;
     }
 
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
-
-    public void setSourceStore(Store sourceStore) {
-        this.sourceStore = sourceStore;
-    }
-
-    public void setTargetStore(Store targetStore) {
-        this.targetStore = targetStore;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    // 🔥 REQUIRED BY TEST
+    public LocalDateTime getGeneratedAt() {
+        return generatedAt;
     }
 }

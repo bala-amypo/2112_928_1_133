@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "demand_forecast")
 public class DemandForecast {
 
     @Id
@@ -17,30 +16,18 @@ public class DemandForecast {
     @ManyToOne
     private Product product;
 
+    // main field used by DB
     private int forecastedDemand;
 
     private LocalDate forecastDate;
 
     // =========================
-    // 🔥 REQUIRED BY TESTS
+    // 🔥 GETTERS & SETTERS
     // =========================
 
-    // Used by InventoryBalancerService + tests
-    public int getForecastQuantity() {
-        return this.forecastedDemand;
+    public Long getId() {
+        return id;
     }
-
-    public void setForecastQuantity(int qty) {
-        this.forecastedDemand = qty;
-    }
-
-    public void setForecastDate(LocalDate date) {
-        this.forecastDate = date;
-    }
-
-    // =========================
-    // 🔥 REQUIRED BY SERVICES
-    // =========================
 
     public Store getStore() {
         return store;
@@ -58,11 +45,34 @@ public class DemandForecast {
         this.product = product;
     }
 
+    public int getForecastedDemand() {
+        return forecastedDemand;
+    }
+
+    public void setForecastedDemand(int forecastedDemand) {
+        this.forecastedDemand = forecastedDemand;
+    }
+
     public LocalDate getForecastDate() {
         return forecastDate;
     }
 
-    public Long getId() {
-        return id;
+    // =========================
+    // 🔥 TEST + SERVICE ALIASES
+    // (DO NOT REMOVE)
+    // =========================
+
+    // ✔ used by InventoryBalancerService + tests
+    public int getForecastQuantity() {
+        return this.forecastedDemand;
+    }
+
+    public void setForecastQuantity(int qty) {
+        this.forecastedDemand = qty;
+    }
+
+    // ✔ used by MultiLocationInventoryBalancerTest
+    public void setForecastDate(LocalDate date) {
+        this.forecastDate = date;
     }
 }

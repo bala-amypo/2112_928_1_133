@@ -4,11 +4,9 @@ import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.dto.RegisterRequestDto;
 import com.example.demo.entity.UserAccount;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.AuthService;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +17,9 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public AuthServiceImpl(
-            UserAccountRepository userRepo,
-            PasswordEncoder passwordEncoder,
-            JwtUtil jwtUtil) {
-
+    public AuthServiceImpl(UserAccountRepository userRepo,
+                           PasswordEncoder passwordEncoder,
+                           JwtUtil jwtUtil) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
@@ -32,43 +28,32 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponseDto register(RegisterRequestDto dto) {
 
-        if (userRepo.findByUsername(dto.getUsername()).isPresent()) {
-            throw new BadRequestException("User already exists");
-        }
+        userRepo.findByEmail(dto.getEmail()).ifPresent(u -> {
+            throw new RuntimeException("User already exists");
+        });
 
         UserAccount user = new UserAccount();
-        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setRole(dto.getRole());
 
         userRepo.save(user);
 
-        String token = jwtUtil.generateToken(user);
-
-        return new AuthResponseDto(
-                token,
-                user.getUsername(),
-                user.getRole()
-        );
+        String token = jwtUtil.generateToken(user.getEmail());
+        return new AuthResponseDto(token);
     }
 
     @Override
     public AuthResponseDto login(AuthRequestDto dto) {
 
-        UserAccount user = userRepo.findByUsername(dto.getUsername())
-                .orElseThrow(() ->
-                        new BadRequestException("Invalid credentials"));
+        UserAccount user = userRepo.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new BadRequestException("Invalid credentials");
+            throw new RuntimeException("Invalid credentials");
         }
 
-        String token = jwtUtil.generateToken(user);
-
-        return new AuthResponseDto(
-                token,
-                user.getUsername(),
-                user.getRole()
-        );
+        String token = jwtUtil.generateToken(user.getEmail());
+        return new AuthResponseDto(token);
     }
 }

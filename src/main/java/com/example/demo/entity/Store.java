@@ -14,9 +14,7 @@ public class Store {
     private String region;
     private boolean active = true;
 
-    /* ============================
-       GETTERS
-       ============================ */
+    /* ================= GETTERS ================= */
 
     public Long getId() {
         return id;
@@ -26,7 +24,7 @@ public class Store {
         return name;
     }
 
-    // 🔥 TEST + SERVICE REQUIRED
+    // 🔥 REQUIRED BY TESTS
     public String getStoreName() {
         return name;
     }
@@ -43,11 +41,9 @@ public class Store {
         return active;
     }
 
-    /* ============================
-       FLUENT SETTERS (VERY IMPORTANT)
-       ============================ */
+    /* ================= FLUENT SETTERS ================= */
 
-    // 🔥 REQUIRED — fixes "void cannot be converted to Store"
+    // 🔥 MUST RETURN Store (NOT void)
     public Store setId(Long id) {
         this.id = id;
         return this;
@@ -58,7 +54,7 @@ public class Store {
         return this;
     }
 
-    // 🔥 ALIAS — REQUIRED BY StoreServiceImpl + TESTS
+    // 🔥 TEST + SERVICE REQUIRE THIS NAME
     public Store setStoreName(String name) {
         this.name = name;
         return this;

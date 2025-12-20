@@ -3,10 +3,8 @@ package com.example.demo.dto;
 public class RegisterRequestDto {
 
     private String email;
-    private String username;
-    private String fullName;
     private String password;
-    private String role;   // ✅ REQUIRED
+    private String role;
 
     public RegisterRequestDto() {}
 
@@ -14,40 +12,26 @@ public class RegisterRequestDto {
         return email;
     }
 
-    public String getUsername() {
-        return username != null ? username : email;
-    }
-
-    public String getFullName() {
-        return fullName;
+    public RegisterRequestDto setEmail(String email) {
+        this.email = email;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    // ✅ REQUIRED BY AuthServiceImpl
+    public RegisterRequestDto setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
     public String getRole() {
         return role;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRole(String role) {
+    public RegisterRequestDto setRole(String role) {
         this.role = role;
+        return this;
     }
 }

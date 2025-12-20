@@ -10,14 +10,44 @@ public class Store {
     private Long id;
 
     private String name;
-    private String region;
     private String address;
+    private String region;
     private boolean active = true;
 
-    // =========================
-    // 🔥 FLUENT SETTERS (TEST REQUIRED)
-    // =========================
+    /* ============================
+       GETTERS
+       ============================ */
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    // 🔥 TEST + SERVICE REQUIRED
+    public String getStoreName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    /* ============================
+       FLUENT SETTERS (VERY IMPORTANT)
+       ============================ */
+
+    // 🔥 REQUIRED — fixes "void cannot be converted to Store"
     public Store setId(Long id) {
         this.id = id;
         return this;
@@ -28,8 +58,9 @@ public class Store {
         return this;
     }
 
-    public Store setRegion(String region) {
-        this.region = region;
+    // 🔥 ALIAS — REQUIRED BY StoreServiceImpl + TESTS
+    public Store setStoreName(String name) {
+        this.name = name;
         return this;
     }
 
@@ -38,32 +69,13 @@ public class Store {
         return this;
     }
 
-    public Store setActive(boolean active) {
-        this.active = active;
+    public Store setRegion(String region) {
+        this.region = region;
         return this;
     }
 
-    // =========================
-    // 🔥 GETTERS (TEST REQUIRED)
-    // =========================
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getStoreName() {
-        return name;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public boolean isActive() {
-        return active;
+    public Store setActive(boolean active) {
+        this.active = active;
+        return this;
     }
 }

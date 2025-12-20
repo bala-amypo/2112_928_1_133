@@ -24,12 +24,21 @@ public class TransferSuggestion {
 
     public TransferSuggestion() {}
 
+    public Long getId() {
+        return id;
+    }
+
     public int getSuggestedQuantity() {
         return suggestedQuantity;
     }
 
     public void setSuggestedQuantity(int suggestedQuantity) {
         this.suggestedQuantity = suggestedQuantity;
+    }
+
+    // 🔥 REQUIRED BY InventoryBalancerServiceImpl
+    public void setQuantity(int quantity) {
+        this.suggestedQuantity = quantity;
     }
 
     public String getReason() {
@@ -40,7 +49,6 @@ public class TransferSuggestion {
         this.reason = reason;
     }
 
-    // 🔥 REQUIRED
     public void setSourceStore(Store sourceStore) {
         this.sourceStore = sourceStore;
     }

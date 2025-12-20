@@ -27,7 +27,11 @@ public class DemandForecast {
         return forecastedDemand;
     }
 
-    // 🔥 REQUIRED BY TESTS
+    // 🔥 REQUIRED BY InventoryBalancerServiceImpl
+    public int getForecastQuantity() {
+        return forecastedDemand;
+    }
+
     public void setForecastedDemand(int forecastedDemand) {
         this.forecastedDemand = forecastedDemand;
     }

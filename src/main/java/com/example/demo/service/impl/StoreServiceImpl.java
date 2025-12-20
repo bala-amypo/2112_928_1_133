@@ -38,7 +38,19 @@ public class StoreServiceImpl implements StoreService {
         return repository.findAll();
     }
 
-    // 🔥 REQUIRED BY TESTS
+    // 🔥 REQUIRED
+    @Override
+    public void updateStore(Long id, Store store) {
+        Store existing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Store not found"));
+
+        existing.setStoreName(store.getStoreName());
+        existing.setActive(store.isActive());
+
+        repository.save(existing);
+    }
+
+    // 🔥 REQUIRED
     @Override
     public void deactivateStore(Long id) {
         Store store = repository.findById(id)

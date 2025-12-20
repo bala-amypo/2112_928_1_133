@@ -14,17 +14,12 @@ public class Store {
     private String region;
     private boolean active = true;
 
-    /* ================= GETTERS ================= */
+    /* ===== GETTERS ===== */
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    // 🔥 REQUIRED BY TESTS
     public String getStoreName() {
         return name;
     }
@@ -41,20 +36,13 @@ public class Store {
         return active;
     }
 
-    /* ================= FLUENT SETTERS ================= */
+    /* ===== FLUENT SETTERS (NO VOID ALLOWED) ===== */
 
-    // 🔥 MUST RETURN Store (NOT void)
     public Store setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public Store setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    // 🔥 TEST + SERVICE REQUIRE THIS NAME
     public Store setStoreName(String name) {
         this.name = name;
         return this;

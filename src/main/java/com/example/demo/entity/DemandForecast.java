@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 public class DemandForecast {
@@ -18,30 +17,12 @@ public class DemandForecast {
 
     private int forecastedDemand;
 
-    private LocalDate forecastDate;
+    // REQUIRED getters & setters (tests use them)
 
-    // ---------- getters ----------
     public Long getId() {
         return id;
     }
 
-    public Store getStore() {
-        return store;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public int getForecastQuantity() {
-        return forecastedDemand;
-    }
-
-    public LocalDate getForecastDate() {
-        return forecastDate;
-    }
-
-    // ---------- setters (TEST REQUIRED) ----------
     public void setStore(Store store) {
         this.store = store;
     }
@@ -50,15 +31,7 @@ public class DemandForecast {
         this.product = product;
     }
 
-    public void setForecastedDemand(int qty) {
-        this.forecastedDemand = qty;
-    }
-
-    public void setForecastQuantity(int qty) {
-        this.forecastedDemand = qty;
-    }
-
-    public void setForecastDate(LocalDate date) {
-        this.forecastDate = date;
+    public void setForecastedDemand(int forecastedDemand) {
+        this.forecastedDemand = forecastedDemand;
     }
 }

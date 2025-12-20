@@ -10,7 +10,7 @@ public class DemandForecast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int forecastQuantity;
+    private int forecastedDemand;
 
     private LocalDate forecastDate;
 
@@ -20,16 +20,20 @@ public class DemandForecast {
     @ManyToOne
     private Product product;
 
-    // ✅ REQUIRED BY TEST
-    public int getForecastQuantity() {
-        return forecastQuantity;
+    public DemandForecast() {}
+
+    public Long getId() {
+        return id;
     }
 
-    public void setForecastQuantity(int forecastQuantity) {
-        this.forecastQuantity = forecastQuantity;
+    public int getForecastedDemand() {
+        return forecastedDemand;
     }
 
-    // ✅ REQUIRED BY TEST
+    public void setForecastedDemand(int forecastedDemand) {
+        this.forecastedDemand = forecastedDemand;
+    }
+
     public LocalDate getForecastDate() {
         return forecastDate;
     }

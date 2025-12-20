@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.InventoryLevel;
-
 import java.util.List;
 
 public interface InventoryLevelService {
@@ -10,9 +9,6 @@ public interface InventoryLevelService {
 
     List<InventoryLevel> getInventoryForProduct(Long productId);
 
-    // 🔥 REQUIRED
+    // 🔥 REQUIRED BY CONTROLLER
     List<InventoryLevel> getInventoryForStore(Long storeId);
-
-    // 🔥 REQUIRED
-    InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity);
 }

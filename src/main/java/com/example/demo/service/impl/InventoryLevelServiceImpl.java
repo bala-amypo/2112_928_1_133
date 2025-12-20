@@ -26,21 +26,9 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         return repository.findByProduct_Id(productId);
     }
 
+    // 🔥 REQUIRED BY CONTROLLER + TESTS
     @Override
     public List<InventoryLevel> getInventoryForStore(Long storeId) {
         return repository.findByStore_Id(storeId);
-    }
-
-    @Override
-    public InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity) {
-        InventoryLevel inv = repository
-                .findByStore_Id(storeId)
-                .stream()
-                .filter(i -> i.getProduct().getId().equals(productId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Inventory not found"));
-
-        inv.setQuantity(quantity);
-        return repository.save(inv);
     }
 }

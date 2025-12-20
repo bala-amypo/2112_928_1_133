@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.DemandForecast;
-
 import java.util.List;
 
 public interface DemandForecastService {
@@ -9,4 +8,7 @@ public interface DemandForecastService {
     DemandForecast createForecast(DemandForecast forecast);
 
     List<DemandForecast> getForecastsForStore(Long storeId);
+
+    // 🔥 REQUIRED BY CONTROLLER & TESTS
+    DemandForecast getForecast(Long storeId, Long productId);
 }

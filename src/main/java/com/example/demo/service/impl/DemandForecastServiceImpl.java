@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.DemandForecast;
+import com.example.demo.entity.Product;
+import com.example.demo.entity.Store;
 import com.example.demo.repository.DemandForecastRepository;
 import com.example.demo.service.DemandForecastService;
 import org.springframework.stereotype.Service;
@@ -24,5 +26,12 @@ public class DemandForecastServiceImpl implements DemandForecastService {
     @Override
     public List<DemandForecast> getForecastsForStore(Long storeId) {
         return repository.findByStore_Id(storeId);
+    }
+
+    // 🔥 REQUIRED
+    @Override
+    public DemandForecast getForecast(Long storeId, Long productId) {
+        return repository.findByStore_IdAndProduct_Id(storeId, productId)
+                .orElse(null);
     }
 }

@@ -8,64 +8,67 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.AuthService;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserAccountRepository userAccountRepository;
+    private final UserAccountRepository userRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public AuthServiceImpl(UserAccountRepository userAccountRepository,
-                           PasswordEncoder passwordEncoder,
-                           JwtUtil jwtUtil) {
-        this.userAccountRepository = userAccountRepository;
+    public AuthServiceImpl(
+            UserAccountRepository userRepo,
+            PasswordEncoder passwordEncoder,
+            JwtUtil jwtUtil) {
+
+        this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
 
     @Override
-    public void register(RegisterRequestDto dto) {
+    public AuthResponseDto register(RegisterRequestDto dto) {
 
-        if (userAccountRepository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new BadRequestException("Email already exists");
+        if (userRepo.findByUsername(dto.getUsername()).isPresent()) {
+            throw new BadRequestException("User already exists");
         }
 
         UserAccount user = new UserAccount();
-        user.setEmail(dto.getEmail());
-        user.setFullName(dto.getFullName());
+        user.setUsername(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setRole(dto.getRole());
 
-        // ✅ ROLE NORMALIZATION (CRITICAL FOR TESTS)
-        String role = dto.getRole();
-        if (role == null || role.isBlank()) {
-            role = "ROLE_USER";
-        } else if (!role.startsWith("ROLE_")) {
-            role = "ROLE_" + role.toUpperCase();
-        }
-        user.setRole(role);
+        userRepo.save(user);
 
-        userAccountRepository.save(user);
+        String token = jwtUtil.generateToken(user);
+
+        return new AuthResponseDto(
+                token,
+                user.getUsername(),
+                user.getRole()
+        );
     }
 
     @Override
     public AuthResponseDto login(AuthRequestDto dto) {
 
-        UserAccount user = userAccountRepository.findByEmail(dto.getEmail())
+        UserAccount user = userRepo.findByUsername(dto.getUsername())
                 .orElseThrow(() ->
-                        new BadRequestException("Invalid email or password"));
+                        new BadRequestException("Invalid credentials"));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new BadRequestException("Invalid email or password");
+            throw new BadRequestException("Invalid credentials");
         }
 
-        // ✅ SAFE JWT GENERATION
         String token = jwtUtil.generateToken(user);
 
-        return new AuthResponseDto(token, LocalDateTime.now().plusHours(1));
+        return new AuthResponseDto(
+                token,
+                user.getUsername(),
+                user.getRole()
+        );
     }
 }

@@ -16,49 +16,40 @@ public class InventoryLevel {
     @ManyToOne
     private Product product;
 
-    // 🔥 MUST BE Integer (not int)
+    // 🔥 MUST be Integer (tests call .equals())
     private Integer quantity;
 
     private LocalDateTime lastUpdated;
 
-    // ===== AUTO TIMESTAMP =====
+    // ======================
+    // TEST REQUIRED SETTERS
+    // ======================
+    public void setStoreId(Long storeId) {
+        if (this.store == null) this.store = new Store();
+        this.store.setId(storeId);
+    }
+
+    public void setProductId(Long productId) {
+        if (this.product == null) this.product = new Product();
+        this.product.setId(productId);
+    }
+
+    // ======================
+    // GETTERS / SETTERS
+    // ======================
+    public Store getStore() { return store; }
+    public Product getProduct() { return product; }
+
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+
     @PrePersist
     @PreUpdate
     public void touch() {
         this.lastUpdated = LocalDateTime.now();
     }
 
-    // ===== GETTERS =====
-    public Long getId() {
-        return id;
-    }
-
-    public Store getStore() {
-        return store;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
     public LocalDateTime getLastUpdated() {
         return lastUpdated;
-    }
-
-    // ===== SETTERS =====
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
     }
 }

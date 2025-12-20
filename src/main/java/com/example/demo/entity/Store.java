@@ -9,25 +9,33 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String storeName;
 
-    // ===== GETTERS =====
-    public Long getId() {
-        return id;
-    }
+    private boolean active = true;
 
-    public String getName() {
-        return name;
-    }
-
-    // ===== FLUENT SETTERS (🔥 REQUIRED BY TESTS) =====
+    // ======================
+    // TEST REQUIRED
+    // ======================
     public Store setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public Store setName(String name) {
-        this.name = name;
-        return this;
+    public Long getId() { return id; }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

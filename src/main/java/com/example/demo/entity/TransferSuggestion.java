@@ -29,6 +29,9 @@ public class TransferSuggestion {
     @Column(name = "priority")
     private String priority;
 
+    @Column(name = "reason")
+    private String reason;
+
     @Column(name = "generated_at")
     private LocalDateTime generatedAt;
 
@@ -73,12 +76,12 @@ public class TransferSuggestion {
         return quantity;
     }
 
-    // 🔥 SERVICE REQUIRED
+    // 🔥 Service required
     public void setQuantity(int qty) {
         this.quantity = qty;
     }
 
-    // 🔥 TEST REQUIRED (ALIAS)
+    // 🔥 Test required alias
     public void setSuggestedQuantity(int qty) {
         this.quantity = qty;
     }
@@ -89,6 +92,15 @@ public class TransferSuggestion {
 
     public void setPriority(String priority) {
         this.priority = priority;
+    }
+
+    // 🔥 FINAL FIX
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public LocalDateTime getGeneratedAt() {

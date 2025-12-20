@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transfer_suggestion")
 public class TransferSuggestion {
 
     @Id
@@ -12,40 +11,25 @@ public class TransferSuggestion {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "source_store_id")
     private Store sourceStore;
 
     @ManyToOne
-    @JoinColumn(name = "target_store_id")
     private Store targetStore;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(name = "suggested_quantity")
-    private int suggestedQuantity;
+    // 🔥 REQUIRED BY TESTS
+    private int quantity;
 
-    @Column(name = "priority")
+    // 🔥 REQUIRED BY TESTS
     private String priority;
 
-    @Column(name = "reason")
     private String reason;
 
-    @Column(name = "generated_at")
     private LocalDateTime generatedAt;
 
-    // =====================
-    // JPA Lifecycle
-    // =====================
-    @PrePersist
-    public void prePersist() {
-        this.generatedAt = LocalDateTime.now();
-    }
-
-    // =====================
-    // Getters and Setters
-    // =====================
+    // ===== GETTERS & SETTERS =====
 
     public Long getId() {
         return id;
@@ -75,24 +59,16 @@ public class TransferSuggestion {
         this.product = product;
     }
 
-    // ===== ORIGINAL (used by tests)
-    public int getSuggestedQuantity() {
-        return suggestedQuantity;
-    }
-
-    public void setSuggestedQuantity(int suggestedQuantity) {
-        this.suggestedQuantity = suggestedQuantity;
-    }
-
-    // ===== ALIAS (used by service)
+    // 🔥 THIS FIXES YOUR CURRENT ERROR
     public int getQuantity() {
-        return suggestedQuantity;
+        return quantity;
     }
 
     public void setQuantity(int quantity) {
-        this.suggestedQuantity = quantity;
+        this.quantity = quantity;
     }
 
+    // 🔥 REQUIRED BY TESTS
     public String getPriority() {
         return priority;
     }
@@ -101,6 +77,7 @@ public class TransferSuggestion {
         this.priority = priority;
     }
 
+    // 🔥 REQUIRED BY TESTS
     public String getReason() {
         return reason;
     }
@@ -109,6 +86,7 @@ public class TransferSuggestion {
         this.reason = reason;
     }
 
+    // 🔥 REQUIRED BY TESTS
     public LocalDateTime getGeneratedAt() {
         return generatedAt;
     }

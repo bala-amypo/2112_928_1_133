@@ -19,13 +19,16 @@ public class TransferSuggestion {
     @ManyToOne
     private Product product;
 
-    // 🔥 REQUIRED BY SERVICE & TESTS
+    // ✅ REQUIRED
     private int quantity;
 
-    // 🔥 REQUIRED BY TESTS
+    // ✅ REQUIRED
     private String reason;
 
-    // 🔥 REQUIRED BY TESTS
+    // ✅ REQUIRED BY TESTS
+    private String priority;
+
+    // ✅ REQUIRED BY TESTS
     private LocalDateTime generatedAt;
 
     /* ===================== GETTERS ===================== */
@@ -54,6 +57,10 @@ public class TransferSuggestion {
         return reason;
     }
 
+    public String getPriority() {
+        return priority;
+    }
+
     public LocalDateTime getGeneratedAt() {
         return generatedAt;
     }
@@ -72,7 +79,6 @@ public class TransferSuggestion {
         this.product = product;
     }
 
-    // 🔥 THIS FIXES YOUR ERROR
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
@@ -81,14 +87,20 @@ public class TransferSuggestion {
         this.reason = reason;
     }
 
+    // 🔥 THIS FIXES YOUR CURRENT ERROR
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
     public void setGeneratedAt(LocalDateTime generatedAt) {
         this.generatedAt = generatedAt;
     }
 
-    /* ===================== JPA CALLBACK ===================== */
+    /* ===================== AUTO TIMESTAMP ===================== */
 
     @PrePersist
     public void onCreate() {
         this.generatedAt = LocalDateTime.now();
     }
 }
+

@@ -12,19 +12,33 @@ public class Store {
     private String storeName;
     private String region;
     private String address;
-    private boolean active;
+    private boolean active = true;
 
+    // ===== GETTERS =====
     public Long getId() {
         return id;
     }
 
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    // ===== FLUENT SETTERS (🔥 REQUIRED BY TESTS) =====
     public Store setId(Long id) {
         this.id = id;
         return this;
-    }
-
-    public String getStoreName() {
-        return storeName;
     }
 
     public Store setStoreName(String storeName) {
@@ -32,26 +46,14 @@ public class Store {
         return this;
     }
 
-    public String getRegion() {
-        return region;
-    }
-
     public Store setRegion(String region) {
         this.region = region;
         return this;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
     public Store setAddress(String address) {
         this.address = address;
         return this;
-    }
-
-    public boolean isActive() {
-        return active;
     }
 
     public Store setActive(boolean active) {

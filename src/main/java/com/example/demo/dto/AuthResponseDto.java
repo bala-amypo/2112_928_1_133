@@ -3,15 +3,21 @@ package com.example.demo.dto;
 public class AuthResponseDto {
 
     private String token;
-    private String email;
+    private String message;
     private String role;
 
     public AuthResponseDto() {
     }
 
-    public AuthResponseDto(String token, String email, String role) {
+  
+    public AuthResponseDto(String token) {
         this.token = token;
-        this.email = email;
+    }
+
+    // existing constructor (tests / swagger may expect this)
+    public AuthResponseDto(String token, String message, String role) {
+        this.token = token;
+        this.message = message;
         this.role = role;
     }
 
@@ -21,8 +27,8 @@ public class AuthResponseDto {
         return token;
     }
 
-    public String getEmail() {
-        return email;
+    public String getMessage() {
+        return message;
     }
 
     public String getRole() {
@@ -35,8 +41,8 @@ public class AuthResponseDto {
         this.token = token;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public void setRole(String role) {

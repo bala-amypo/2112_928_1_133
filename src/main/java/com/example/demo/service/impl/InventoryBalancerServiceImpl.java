@@ -1,13 +1,19 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.DemandForecast;
+import com.example.demo.entity.InventoryLevel;
+import com.example.demo.entity.Store;
+import com.example.demo.entity.TransferSuggestion;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.*;
+import com.example.demo.repository.DemandForecastRepository;
+import com.example.demo.repository.InventoryLevelRepository;
+import com.example.demo.repository.StoreRepository;
+import com.example.demo.repository.TransferSuggestionRepository;
 import com.example.demo.service.InventoryBalancerService;
-
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,24 +53,28 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
                 continue;
             }
 
-            forecastRepo.findByStoreAndProduct(inv.getStore(), inv.getProduct())
-                    .ifPresentOrElse(forecast -> {
+            DemandForecast forecast = forecastRepo
+                    .findByStoreAndProduct(inv.getStore(), inv.getProduct())
+                    .orElseThrow(() -> new BadRequestException("No forecast found"));
 
-                        if (inv.getQuantity() > forecast.getForecastQuantity()) {
+            if (inv.getQuantity() > forecast.getForecastQuantity()) {
 
-                            TransferSuggestion ts = new TransferSuggestion();
-                            ts.setSourceStore(inv.getStore());
-                            ts.setTargetStore(inv.getStore()); // simple logic
-                            ts.setProduct(inv.getProduct());
-                            ts.setQuantity(inv.getQuantity() - forecast.getForecastQuantity());
-                            ts.setPriority("HIGH");
+                // 🔥 Find a different target store
+                Store targetStore = storeRepo.findAll().stream()
+                        .filter(s -> !s.getId().equals(inv.getStore().getId()))
+                        .findFirst()
+                        .orElse(inv.getStore());
 
-                            suggestions.add(suggestionRepo.save(ts));
-                        }
+                TransferSuggestion ts = new TransferSuggestion();
+                ts.setSourceStore(inv.getStore());
+                ts.setTargetStore(targetStore);
+                ts.setProduct(inv.getProduct());
+                ts.setQuantity(inv.getQuantity() - forecast.getForecastQuantity());
+                ts.setPriority("HIGH");
+                ts.setGeneratedAt(LocalDateTime.now()); // ✅ REQUIRED BY TESTS
 
-                    }, () -> {
-                        throw new BadRequestException("No forecast found");
-                    });
+                suggestions.add(suggestionRepo.save(ts));
+            }
         }
 
         return suggestions;

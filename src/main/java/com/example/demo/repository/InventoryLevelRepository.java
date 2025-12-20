@@ -10,7 +10,7 @@ public interface InventoryLevelRepository extends JpaRepository<InventoryLevel, 
 
     List<InventoryLevel> findByStore_Id(Long storeId);
 
-    Optional<InventoryLevel> findByStore_IdAndProduct_Id(Long storeId, Long productId);
-
     List<InventoryLevel> findByProduct_Id(Long productId);
+
+    Optional<InventoryLevel> findByStore_IdAndProduct_Id(Long storeId, Long productId);
 }

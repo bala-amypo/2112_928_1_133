@@ -10,14 +10,28 @@ import java.util.List;
 @Service
 public class DemandForecastServiceImpl implements DemandForecastService {
 
-    private final DemandForecastRepository demandForecastRepository;
+    private final DemandForecastRepository repository;
 
-    public DemandForecastServiceImpl(DemandForecastRepository demandForecastRepository) {
-        this.demandForecastRepository = demandForecastRepository;
+    public DemandForecastServiceImpl(DemandForecastRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public DemandForecast createForecast(DemandForecast forecast) {
+        return repository.save(forecast);
+    }
+
+    @Override
+    public DemandForecast getForecast(Long storeId, Long productId) {
+        return repository.findByStore_Id(storeId)
+                .stream()
+                .filter(f -> f.getProduct().getId().equals(productId))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public List<DemandForecast> getForecastsForStore(Long storeId) {
-        return demandForecastRepository.findByStore_Id(storeId);
+        return repository.findByStore_Id(storeId);
     }
 }

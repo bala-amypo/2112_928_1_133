@@ -11,14 +11,18 @@ public class TransferSuggestion {
 
     private int suggestedQuantity;
     private String reason;
+    private String priority;
+
+    @ManyToOne
+    private Store sourceStore;
+
+    @ManyToOne
+    private Store targetStore;
 
     @ManyToOne
     private Product product;
 
-    public TransferSuggestion() {
-    }
-
-    // ===== GETTERS =====
+    public TransferSuggestion() {}
 
     public Long getId() {
         return id;
@@ -32,11 +36,21 @@ public class TransferSuggestion {
         return reason;
     }
 
+    public String getPriority() {
+        return priority;
+    }
+
+    public Store getSourceStore() {
+        return sourceStore;
+    }
+
+    public Store getTargetStore() {
+        return targetStore;
+    }
+
     public Product getProduct() {
         return product;
     }
-
-    // ===== SETTERS =====
 
     public void setId(Long id) {
         this.id = id;
@@ -48,6 +62,18 @@ public class TransferSuggestion {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public void setSourceStore(Store sourceStore) {
+        this.sourceStore = sourceStore;
+    }
+
+    public void setTargetStore(Store targetStore) {
+        this.targetStore = targetStore;
     }
 
     public void setProduct(Product product) {

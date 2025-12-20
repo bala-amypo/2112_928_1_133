@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 public class DemandForecast {
@@ -10,71 +9,17 @@ public class DemandForecast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Product product;
-
-    @ManyToOne
-    private Store store;
-
-    private LocalDate forecastDate;
-
-    private Integer predictedDemand;
-
-    private Double confidenceScore;
-
-    public DemandForecast() {
-    }
-
-    // 🔥 REQUIRED BY TESTS
-    public Integer getForecastQuantity() {
-        return predictedDemand;
-    }
-
-    public void setForecastedDemand(int quantity) {
-        this.predictedDemand = quantity;
-    }
+    private int forecastedDemand;
 
     public Long getId() {
         return id;
     }
 
-    public Product getProduct() {
-        return product;
+    public int getForecastedDemand() {
+        return forecastedDemand;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public LocalDate getForecastDate() {
-        return forecastDate;
-    }
-
-    public void setForecastDate(LocalDate forecastDate) {
-        this.forecastDate = forecastDate;
-    }
-
-    public Integer getPredictedDemand() {
-        return predictedDemand;
-    }
-
-    public void setPredictedDemand(Integer predictedDemand) {
-        this.predictedDemand = predictedDemand;
-    }
-
-    public Double getConfidenceScore() {
-        return confidenceScore;
-    }
-
-    public void setConfidenceScore(Double confidenceScore) {
-        this.confidenceScore = confidenceScore;
+    public void setForecastedDemand(int forecastedDemand) {
+        this.forecastedDemand = forecastedDemand;
     }
 }

@@ -9,13 +9,13 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String storeName;
-    private String address;
+    private String name;
     private String region;
+    private String address;
     private boolean active = true;
 
     // =========================
-    // FLUENT SETTERS (TEST REQ)
+    // 🔥 FLUENT SETTERS (TEST REQUIRED)
     // =========================
 
     public Store setId(Long id) {
@@ -23,18 +23,18 @@ public class Store {
         return this;
     }
 
-    public Store setStoreName(String storeName) {
-        this.storeName = storeName;
-        return this;
-    }
-
-    public Store setAddress(String address) {
-        this.address = address;
+    public Store setName(String name) {
+        this.name = name;
         return this;
     }
 
     public Store setRegion(String region) {
         this.region = region;
+        return this;
+    }
+
+    public Store setAddress(String address) {
+        this.address = address;
         return this;
     }
 
@@ -44,7 +44,7 @@ public class Store {
     }
 
     // =========================
-    // GETTERS
+    // 🔥 GETTERS (TEST REQUIRED)
     // =========================
 
     public Long getId() {
@@ -52,15 +52,15 @@ public class Store {
     }
 
     public String getStoreName() {
-        return storeName;
-    }
-
-    public String getAddress() {
-        return address;
+        return name;
     }
 
     public String getRegion() {
         return region;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     public boolean isActive() {

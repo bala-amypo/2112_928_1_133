@@ -9,13 +9,60 @@ public class DemandForecast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int forecastQuantity;
+    // 🔥 REQUIRED — fixes "No property store found"
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
-    public int getForecastQuantity() {
-        return forecastQuantity;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    private int forecastedDemand;
+
+    // ========= GETTERS =========
+
+    public Long getId() {
+        return id;
     }
 
-    public void setForecastQuantity(int forecastQuantity) {
-        this.forecastQuantity = forecastQuantity;
+    public Store getStore() {
+        return store;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public int getForecastedDemand() {
+        return forecastedDemand;
+    }
+
+    // 🔥 REQUIRED BY InventoryBalancerServiceImpl
+    public int getForecastQuantity() {
+        return forecastedDemand;
+    }
+
+    // ========= SETTERS =========
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public void setForecastedDemand(int forecastedDemand) {
+        this.forecastedDemand = forecastedDemand;
+    }
+
+    // 🔥 REQUIRED BY TESTS
+    public void setForecastQuantity(int quantity) {
+        this.forecastedDemand = quantity;
     }
 }

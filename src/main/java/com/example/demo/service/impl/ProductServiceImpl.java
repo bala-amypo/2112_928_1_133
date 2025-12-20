@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Product;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.ProductService;
 import org.springframework.stereotype.Service;
@@ -19,24 +18,26 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(Product product) {
-
-        repository.findBySku(product.getSku()).ifPresent(p -> {
-            throw new BadRequestException("SKU already exists");
-        });
-
-        // primitive boolean → no null check
-        product.setActive(true);
-
         return repository.save(product);
     }
 
     @Override
     public Product getProductById(Long id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     @Override
     public List<Product> getAllProducts() {
         return repository.findAll();
+    }
+
+    // 🔥 REQUIRED BY TESTS
+    @Override
+    public void deactivateProduct(Long id) {
+        Product product = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setActive(false);
+        repository.save(product);
     }
 }

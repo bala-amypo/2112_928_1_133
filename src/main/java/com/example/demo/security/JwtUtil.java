@@ -14,8 +14,6 @@ public class JwtUtil {
     private static final String SECRET = "secret-key-123";
     private static final long EXPIRATION = 1000 * 60 * 60;
 
-    // ================= TOKEN CREATION =================
-
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
@@ -25,14 +23,17 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ================= TOKEN PARSING =================
-
     public String getUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     public boolean isTokenValid(String token, String email) {
         return getUsername(token).equals(email) && !isTokenExpired(token);
+    }
+
+    // 🔥 REQUIRED BY TESTS
+    public long getExpirationMillis() {
+        return EXPIRATION;
     }
 
     private boolean isTokenExpired(String token) {
@@ -44,7 +45,7 @@ public class JwtUtil {
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> resolver) {
-        final Claims claims = Jwts.parser()
+        Claims claims = Jwts.parser()
                 .setSigningKey(SECRET)
                 .parseClaimsJws(token)
                 .getBody();

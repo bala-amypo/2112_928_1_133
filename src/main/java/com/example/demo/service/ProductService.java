@@ -11,4 +11,7 @@ public interface ProductService {
     Product getProductById(Long id);
 
     List<Product> getAllProducts();
+
+    // 🔥 REQUIRED BY TESTS
+    void deactivateProduct(Long id);
 }

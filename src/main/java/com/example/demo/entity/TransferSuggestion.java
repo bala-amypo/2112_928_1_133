@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "transfer_suggestion")
 public class TransferSuggestion {
 
     @Id
@@ -11,26 +12,40 @@ public class TransferSuggestion {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "source_store_id")
     private Store sourceStore;
 
     @ManyToOne
+    @JoinColumn(name = "target_store_id")
     private Store targetStore;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(name = "suggested_quantity")
     private int suggestedQuantity;
 
+    @Column(name = "priority")
+    private String priority;
+
+    @Column(name = "reason")
     private String reason;
 
+    @Column(name = "generated_at")
     private LocalDateTime generatedAt;
 
+    // =====================
+    // JPA Lifecycle
+    // =====================
     @PrePersist
     public void prePersist() {
         this.generatedAt = LocalDateTime.now();
     }
 
-    // ===== GETTERS & SETTERS =====
+    // =====================
+    // Getters and Setters
+    // =====================
 
     public Long getId() {
         return id;
@@ -60,12 +75,30 @@ public class TransferSuggestion {
         this.product = product;
     }
 
+    // ===== ORIGINAL (used by tests)
     public int getSuggestedQuantity() {
         return suggestedQuantity;
     }
 
     public void setSuggestedQuantity(int suggestedQuantity) {
         this.suggestedQuantity = suggestedQuantity;
+    }
+
+    // ===== ALIAS (used by service)
+    public int getQuantity() {
+        return suggestedQuantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.suggestedQuantity = quantity;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 
     public String getReason() {
@@ -78,5 +111,9 @@ public class TransferSuggestion {
 
     public LocalDateTime getGeneratedAt() {
         return generatedAt;
+    }
+
+    public void setGeneratedAt(LocalDateTime generatedAt) {
+        this.generatedAt = generatedAt;
     }
 }

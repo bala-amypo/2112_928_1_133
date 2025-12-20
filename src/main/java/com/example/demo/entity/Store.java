@@ -12,45 +12,52 @@ public class Store {
     private String storeName;
     private String address;
     private String region;
-    private Boolean active = true;
+    private boolean active = true;
+
+    public Store() {
+    }
+
+    // ===== GETTERS =====
 
     public Long getId() {
         return id;
     }
- 
-    public void setId(Long id) {
-        this.id = id;
-    }
- 
+
     public String getStoreName() {
         return storeName;
     }
- 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
- 
+
     public String getAddress() {
         return address;
     }
- 
-    public void setAddress(String address) {
-        this.address = address;
-    }
- 
+
     public String getRegion() {
         return region;
     }
- 
+
+    public boolean isActive() {
+        return active;
+    }
+
+    // ===== SETTERS =====
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public void setRegion(String region) {
         this.region = region;
     }
- 
-    public Boolean getActive() {
-        return active;
-    }
- 
-    public void setActive(Boolean active) {
+
+    public void setActive(boolean active) {
         this.active = active;
     }
 }

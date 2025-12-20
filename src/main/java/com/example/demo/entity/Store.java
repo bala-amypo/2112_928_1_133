@@ -14,10 +14,7 @@ public class Store {
     private String region;
     private boolean active = true;
 
-    public Store() {
-    }
-
-    // ===== GETTERS =====
+    public Store() {}
 
     public Long getId() {
         return id;
@@ -39,7 +36,10 @@ public class Store {
         return active;
     }
 
-    // ===== SETTERS =====
+    // ✅ REQUIRED BY SERVICES
+    public boolean getActive() {
+        return active;
+    }
 
     public void setId(Long id) {
         this.id = id;

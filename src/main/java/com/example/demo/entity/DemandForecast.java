@@ -1,61 +1,14 @@
-package com.example.demo.entity;
+package com.example.demo.service;
 
-import jakarta.persistence.*;
-import java.time.LocalDate;
+import com.example.demo.entity.DemandForecast;
 
-@Entity
-public class DemandForecast {
+import java.util.List;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public interface DemandForecastService {
 
-    @ManyToOne
-    private Store store;
+    DemandForecast createForecast(DemandForecast forecast);
 
-    @ManyToOne
-    private Product product;
+    DemandForecast getForecast(Long storeId, Long productId);
 
-    private Integer forecastQuantity;
-
-    private LocalDate forecastDate;
-
-    public DemandForecast() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
- 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
- 
-    public Integer getForecastQuantity() {
-        return forecastQuantity;
-    }
- 
-    public void setForecastQuantity(Integer forecastQuantity) {
-        this.forecastQuantity = forecastQuantity;
-    }
-
-    public LocalDate getForecastDate() {
-        return forecastDate;
-    }
-
-    public void setForecastDate(LocalDate forecastDate) {
-        this.forecastDate = forecastDate;
-    }
+    List<DemandForecast> getForecastsForStore(Long storeId);
 }

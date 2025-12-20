@@ -16,14 +16,13 @@ public class DemandForecast {
     @ManyToOne
     private Product product;
 
-    // main field used by DB
     private int forecastedDemand;
 
     private LocalDate forecastDate;
 
-    // =========================
-    // 🔥 GETTERS & SETTERS
-    // =========================
+    // ======================
+    // NORMAL GETTERS/SETTERS
+    // ======================
 
     public Long getId() {
         return id;
@@ -33,45 +32,48 @@ public class DemandForecast {
         return store;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
     public Product getProduct() {
         return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public int getForecastedDemand() {
         return forecastedDemand;
     }
 
-    public void setForecastedDemand(int forecastedDemand) {
-        this.forecastedDemand = forecastedDemand;
-    }
-
     public LocalDate getForecastDate() {
         return forecastDate;
     }
 
-    // =========================
-    // 🔥 TEST + SERVICE ALIASES
-    // (DO NOT REMOVE)
-    // =========================
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    // ✔ used by InventoryBalancerService + tests
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public void setForecastedDemand(int forecastedDemand) {
+        this.forecastedDemand = forecastedDemand;
+    }
+
+    // ======================
+    // 🔥 REQUIRED BY SERVICE + TESTS
+    // ======================
+
+    // InventoryBalancerService uses this
     public int getForecastQuantity() {
-        return this.forecastedDemand;
+        return forecastedDemand;
     }
 
     public void setForecastQuantity(int qty) {
         this.forecastedDemand = qty;
     }
 
-    // ✔ used by MultiLocationInventoryBalancerTest
+    // Tests use this
     public void setForecastDate(LocalDate date) {
         this.forecastDate = date;
     }

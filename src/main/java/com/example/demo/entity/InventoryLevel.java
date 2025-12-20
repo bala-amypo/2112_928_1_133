@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 public class InventoryLevel {
@@ -16,19 +15,11 @@ public class InventoryLevel {
     @ManyToOne
     private Product product;
 
-    private Integer quantity;
+    private int quantity;
 
-    private LocalDateTime lastUpdated;
-
-    public InventoryLevel() {
-    }
-
-    public InventoryLevel(Store store, Product product, Integer quantity) {
-        this.store = store;
-        this.product = product;
-        this.quantity = quantity;
-        this.lastUpdated = LocalDateTime.now();
-    }
+    // ======================
+    // NORMAL GETTERS/SETTERS
+    // ======================
 
     public Long getId() {
         return id;
@@ -38,31 +29,47 @@ public class InventoryLevel {
         return store;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
     public Product getProduct() {
         return product;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public void setProduct(Product product) {
         this.product = product;
     }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+    // ======================
+    // 🔥 REQUIRED BY CONTROLLER + TESTS
+    // ======================
+
+    // Controller calls inventory.setStoreId(...)
+    public void setStoreId(Long storeId) {
+        if (this.store == null) {
+            this.store = new Store();
+        }
+        this.store.setId(storeId);
     }
 
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    // Controller calls inventory.setProductId(...)
+    public void setProductId(Long productId) {
+        if (this.product == null) {
+            this.product = new Product();
+        }
+        this.product.setId(productId);
     }
 }

@@ -28,7 +28,7 @@ public class TransferSuggestion {
     private LocalDateTime generatedAt;
 
     // =========================
-    // ✅ GETTERS
+    // 🔥 REQUIRED BY TESTCASES
     // =========================
 
     public Long getId() {
@@ -63,18 +63,7 @@ public class TransferSuggestion {
         return generatedAt;
     }
 
-    // =========================
-    // 🔥 REQUIRED BY TESTS + SERVICES
-    // =========================
-
-    public void setQuantity(int qty) {
-        this.quantity = qty;
-    }
-
-    // tests call this instead of setQuantity
-    public void setSuggestedQuantity(int qty) {
-        this.quantity = qty;
-    }
+    // --- setters expected by tests ---
 
     public void setSourceStore(Store store) {
         this.sourceStore = store;
@@ -86,6 +75,15 @@ public class TransferSuggestion {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public void setQuantity(int qty) {
+        this.quantity = qty;
+    }
+
+    // some tests call this instead of setQuantity
+    public void setSuggestedQuantity(int qty) {
+        this.quantity = qty;
     }
 
     public void setPriority(String priority) {

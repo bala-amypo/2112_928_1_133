@@ -9,6 +9,5 @@ public interface InventoryLevelService {
 
     List<InventoryLevel> getInventoryByStore(Long storeId);
 
-    List<InventoryLevel> getInventoryForProduct(Long productId);
+    List<InventoryLevel> getInventoryByProduct(Long productId);
 }
-

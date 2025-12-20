@@ -11,51 +11,30 @@ import java.util.List;
 @Service
 public class InventoryLevelServiceImpl implements InventoryLevelService {
 
-    private final InventoryLevelRepository inventoryRepo;
+    private final InventoryLevelRepository repository;
 
-    public InventoryLevelServiceImpl(InventoryLevelRepository inventoryRepo) {
-        this.inventoryRepo = inventoryRepo;
+    public InventoryLevelServiceImpl(InventoryLevelRepository repository) {
+        this.repository = repository;
     }
-
-    // ================= CONTROLLER METHODS =================
-
-    @Override
-    public InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity) {
-
-        InventoryLevel inventory = inventoryRepo
-                .findByStore_IdAndProduct_Id(storeId, productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Inventory not found"));
-
-        inventory.setQuantity(quantity);
-        return inventoryRepo.save(inventory);
-    }
-
-    @Override
-    public List<InventoryLevel> getInventoryByStore(Long storeId) {
-        return inventoryRepo.findByStore_Id(storeId);
-    }
-
-    @Override
-    public InventoryLevel getInventory(Long storeId, Long productId) {
-        return inventoryRepo.findByStore_IdAndProduct_Id(storeId, productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Inventory not found"));
-    }
-
-    // ================= TEST-REQUIRED METHODS =================
 
     @Override
     public InventoryLevel createOrUpdateInventory(InventoryLevel inventoryLevel) {
-        return inventoryRepo.save(inventoryLevel);
+        return repository.save(inventoryLevel);
     }
 
     @Override
     public List<InventoryLevel> getInventoryForStore(Long storeId) {
-        return inventoryRepo.findByStore_Id(storeId);
+        return repository.findByStore_Id(storeId);
     }
 
-    // 🔥 THIS METHOD FIXES YOUR CURRENT ERROR
     @Override
     public List<InventoryLevel> getInventoryForProduct(Long productId) {
-        return inventoryRepo.findByProduct_Id(productId);
+        return repository.findByProduct_Id(productId);
+    }
+
+    @Override
+    public InventoryLevel getInventory(Long storeId, Long productId) {
+        return repository.findByStore_IdAndProduct_Id(storeId, productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Inventory not found"));
     }
 }

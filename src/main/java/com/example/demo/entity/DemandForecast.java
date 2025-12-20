@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class DemandForecast {
@@ -9,25 +10,11 @@ public class DemandForecast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Store store;
-
-    @ManyToOne
-    private Product product;
-
-    // Original field
     private int forecastedDemand;
 
-    // ===== ORIGINAL METHODS =====
-    public int getForecastedDemand() {
-        return forecastedDemand;
-    }
+    private LocalDate forecastDate;
 
-    public void setForecastedDemand(int forecastedDemand) {
-        this.forecastedDemand = forecastedDemand;
-    }
-
-    // ===== 🔥 ALIAS METHODS (TEST FIX) =====
+    // ✅ REQUIRED BY TEST
     public int getForecastQuantity() {
         return forecastedDemand;
     }
@@ -36,23 +23,21 @@ public class DemandForecast {
         this.forecastedDemand = qty;
     }
 
-    public Long getId() {
-        return id;
+    // ✅ REQUIRED BY TEST
+    public int getForecastedDemand() {
+        return forecastedDemand;
     }
 
-    public Store getStore() {
-        return store;
+    public void setForecastedDemand(int forecastedDemand) {
+        this.forecastedDemand = forecastedDemand;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    // ✅ REQUIRED BY TEST
+    public LocalDate getForecastDate() {
+        return forecastDate;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setForecastDate(LocalDate forecastDate) {
+        this.forecastDate = forecastDate;
     }
 }

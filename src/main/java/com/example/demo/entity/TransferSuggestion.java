@@ -10,88 +10,58 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Store sourceStore;
-
-    @ManyToOne
-    private Store targetStore;
-
-    @ManyToOne
-    private Product product;
-
-    // 🔥 REQUIRED BY TESTS
     private int quantity;
 
-    // 🔥 REQUIRED BY TESTS
-    private String priority;
+    private int suggestedQuantity;
 
     private String reason;
 
+    private String priority;
+
     private LocalDateTime generatedAt;
 
-    // ===== GETTERS & SETTERS =====
-
-    public Long getId() {
-        return id;
-    }
-
-    public Store getSourceStore() {
-        return sourceStore;
-    }
-
-    public void setSourceStore(Store sourceStore) {
-        this.sourceStore = sourceStore;
-    }
-
-    public Store getTargetStore() {
-        return targetStore;
-    }
-
-    public void setTargetStore(Store targetStore) {
-        this.targetStore = targetStore;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    // 🔥 THIS FIXES YOUR CURRENT ERROR
-    public int getQuantity() {
-        return quantity;
-    }
-
+    // 🔥 REQUIRED BY SERVICE
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    // 🔥 REQUIRED BY TESTS
-    public String getPriority() {
-        return priority;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setPriority(String priority) {
-        this.priority = priority;
+    // 🔥 REQUIRED BY TEST
+    public void setSuggestedQuantity(int qty) {
+        this.suggestedQuantity = qty;
     }
 
-    // 🔥 REQUIRED BY TESTS
-    public String getReason() {
-        return reason;
+    public int getSuggestedQuantity() {
+        return suggestedQuantity;
     }
 
+    // 🔥 REQUIRED BY TEST
     public void setReason(String reason) {
         this.reason = reason;
     }
 
-    // 🔥 REQUIRED BY TESTS
-    public LocalDateTime getGeneratedAt() {
-        return generatedAt;
+    public String getReason() {
+        return reason;
     }
 
+    // 🔥 REQUIRED BY SERVICE
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    // 🔥 REQUIRED BY SERVICE
     public void setGeneratedAt(LocalDateTime generatedAt) {
         this.generatedAt = generatedAt;
+    }
+
+    public LocalDateTime getGeneratedAt() {
+        return generatedAt;
     }
 }

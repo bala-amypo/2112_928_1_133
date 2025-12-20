@@ -9,19 +9,29 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 🔥 TESTS EXPECT THIS NAME
     private String storeName;
 
+    // 🔥 TESTS EXPECT ACTIVE FLAG
     private boolean active = true;
 
-    // ======================
-    // TEST REQUIRED
-    // ======================
+    // =========================
+    // FLUENT SETTERS (IMPORTANT)
+    // =========================
+
+    // ❗ MUST return Store (tests expect chaining)
     public Store setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public Long getId() { return id; }
+    // =========================
+    // GETTERS / SETTERS
+    // =========================
+
+    public Long getId() {
+        return id;
+    }
 
     public String getStoreName() {
         return storeName;

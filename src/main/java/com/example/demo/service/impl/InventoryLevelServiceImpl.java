@@ -23,11 +23,18 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
 
     @Override
     public List<InventoryLevel> getInventoryByStore(Long storeId) {
-        return repository.findByStore_Id(storeId);
+        return repository.findAll()
+                .stream()
+                .filter(i -> i.getStore().getId().equals(storeId))
+                .toList();
     }
 
+    // 🔥 THIS METHOD WAS MISSING — NOW FIXED
     @Override
-    public List<InventoryLevel> getInventoryByProduct(Long productId) {
-        return repository.findByProduct_Id(productId);
+    public List<InventoryLevel> getInventoryForProduct(Long productId) {
+        return repository.findAll()
+                .stream()
+                .filter(i -> i.getProduct().getId().equals(productId))
+                .toList();
     }
 }

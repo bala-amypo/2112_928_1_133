@@ -52,8 +52,9 @@ public class TransferSuggestion {
         return product;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    // ✅ REQUIRED BY InventoryBalancerServiceImpl
+    public void setQuantity(int quantity) {
+        this.suggestedQuantity = quantity;
     }
 
     public void setSuggestedQuantity(int suggestedQuantity) {

@@ -38,7 +38,6 @@ public class UserAccount {
         return email;
     }
 
-   
     public String getUsername() {
         return email;
     }
@@ -50,17 +49,9 @@ public class UserAccount {
     public String getRole() {
         return role;
     }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    
+     public void setUsername(String username) {
+        this.email = username;
     }
 
     public void setEmail(String email) {

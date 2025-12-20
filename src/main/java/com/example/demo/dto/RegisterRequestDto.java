@@ -6,6 +6,7 @@ public class RegisterRequestDto {
     private String username;
     private String fullName;
     private String password;
+    private String role;   // ✅ REQUIRED
 
     public RegisterRequestDto() {}
 
@@ -25,6 +26,11 @@ public class RegisterRequestDto {
         return password;
     }
 
+    // ✅ REQUIRED BY AuthServiceImpl
+    public String getRole() {
+        return role;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -39,5 +45,9 @@ public class RegisterRequestDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

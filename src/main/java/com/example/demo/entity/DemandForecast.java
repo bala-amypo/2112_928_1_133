@@ -20,8 +20,39 @@ public class DemandForecast {
 
     private LocalDate forecastDate;
 
-    // ---------- TEST + SERVICE REQUIRED ----------
+    // =======================
+    // REQUIRED BY TESTS
+    // =======================
 
+    public Long getId() {
+        return id;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public int getForecastedDemand() {
+        return forecastedDemand;
+    }
+
+    public void setForecastedDemand(int forecastedDemand) {
+        this.forecastedDemand = forecastedDemand;
+    }
+
+    // Alias used by SERVICE + TEST
     public int getForecastQuantity() {
         return forecastedDemand;
     }
@@ -30,20 +61,11 @@ public class DemandForecast {
         this.forecastedDemand = qty;
     }
 
-    // 🔥 TEST REQUIRED
-    public void setForecastDate(LocalDate date) {
-        this.forecastDate = date;
-    }
-
     public LocalDate getForecastDate() {
         return forecastDate;
     }
 
-    public Store getStore() {
-        return store;
-    }
-
-    public Product getProduct() {
-        return product;
+    public void setForecastDate(LocalDate forecastDate) {
+        this.forecastDate = forecastDate;
     }
 }

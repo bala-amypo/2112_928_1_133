@@ -23,11 +23,13 @@ public class TransferSuggestion {
 
     private String priority;
 
-    private String reason;   // 🔥 REQUIRED BY TESTS
+    private String reason;
 
     private LocalDateTime generatedAt;
 
-    // ---------- GETTERS / SETTERS ----------
+    // =======================
+    // REQUIRED BY TESTS
+    // =======================
 
     public Long getId() {
         return id;
@@ -61,13 +63,13 @@ public class TransferSuggestion {
         return quantity;
     }
 
-    // 🔥 SERVICE REQUIRED
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    // TEST CALLS THIS
+    public void setSuggestedQuantity(int qty) {
+        this.quantity = qty;
     }
 
-    // 🔥 TEST REQUIRED (alias)
-    public void setSuggestedQuantity(int qty) {
+    // SERVICE CALLS THIS
+    public void setQuantity(int qty) {
         this.quantity = qty;
     }
 
@@ -79,7 +81,6 @@ public class TransferSuggestion {
         this.priority = priority;
     }
 
-    // 🔥 NEW (TEST REQUIRED)
     public String getReason() {
         return reason;
     }

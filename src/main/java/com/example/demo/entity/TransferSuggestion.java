@@ -10,14 +10,6 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int suggestedQuantity;
-
-    private String reason;
-
-    private String priority;
-
-    private LocalDateTime generatedAt = LocalDateTime.now();
-
     @ManyToOne
     private Store sourceStore;
 
@@ -27,61 +19,76 @@ public class TransferSuggestion {
     @ManyToOne
     private Product product;
 
-    public TransferSuggestion() {}
+    // 🔥 REQUIRED BY SERVICE & TESTS
+    private int quantity;
+
+    // 🔥 REQUIRED BY TESTS
+    private String reason;
+
+    // 🔥 REQUIRED BY TESTS
+    private LocalDateTime generatedAt;
+
+    /* ===================== GETTERS ===================== */
 
     public Long getId() {
         return id;
-    }
-
-    public int getSuggestedQuantity() {
-        return suggestedQuantity;
-    }
-
-    public void setSuggestedQuantity(int suggestedQuantity) {
-        this.suggestedQuantity = suggestedQuantity;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public String getPriority() {
-        return priority;
-    }
-
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
-
-    public LocalDateTime getGeneratedAt() {
-        return generatedAt;
     }
 
     public Store getSourceStore() {
         return sourceStore;
     }
 
-    public void setSourceStore(Store sourceStore) {
-        this.sourceStore = sourceStore;
-    }
-
     public Store getTargetStore() {
         return targetStore;
-    }
-
-    public void setTargetStore(Store targetStore) {
-        this.targetStore = targetStore;
     }
 
     public Product getProduct() {
         return product;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public LocalDateTime getGeneratedAt() {
+        return generatedAt;
+    }
+
+    /* ===================== SETTERS ===================== */
+
+    public void setSourceStore(Store sourceStore) {
+        this.sourceStore = sourceStore;
+    }
+
+    public void setTargetStore(Store targetStore) {
+        this.targetStore = targetStore;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    // 🔥 THIS FIXES YOUR ERROR
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public void setGeneratedAt(LocalDateTime generatedAt) {
+        this.generatedAt = generatedAt;
+    }
+
+    /* ===================== JPA CALLBACK ===================== */
+
+    @PrePersist
+    public void onCreate() {
+        this.generatedAt = LocalDateTime.now();
     }
 }

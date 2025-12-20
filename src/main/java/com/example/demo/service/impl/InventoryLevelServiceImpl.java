@@ -70,7 +70,7 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
 
     @Override
     public InventoryLevel getInventory(Long storeId, Long productId) {
-    return inventoryRepo.findByStore_IdAndProduct_Id(storeId, productId)
+        return inventoryRepo.findByStore_IdAndProduct_Id(storeId, productId)
             .orElseThrow(() -> new ResourceNotFoundException("Inventory not found"));
 }
 

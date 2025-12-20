@@ -38,7 +38,7 @@ public class StoreServiceImpl implements StoreService {
         return repository.findAll();
     }
 
-    // 🔥 REQUIRED
+    // ✅ REQUIRED BY TESTS
     @Override
     public void updateStore(Long id, Store store) {
         Store existing = repository.findById(id)
@@ -50,7 +50,7 @@ public class StoreServiceImpl implements StoreService {
         repository.save(existing);
     }
 
-    // 🔥 REQUIRED
+    // ✅ REQUIRED BY TESTS
     @Override
     public void deactivateStore(Long id) {
         Store store = repository.findById(id)

@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Store;
-
 import java.util.List;
 
 public interface StoreService {
@@ -12,9 +11,9 @@ public interface StoreService {
 
     List<Store> getAllStores();
 
-    // 🔥 REQUIRED
+    // ✅ REQUIRED BY TESTS
     void updateStore(Long id, Store store);
 
-    // 🔥 REQUIRED
+    // ✅ REQUIRED BY TESTS
     void deactivateStore(Long id);
 }

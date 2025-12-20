@@ -1,4 +1,4 @@
-\package com.example.demo.controller;
+package com.example.demo.controller;
 
 import com.example.demo.entity.InventoryLevel;
 import com.example.demo.service.InventoryLevelService;

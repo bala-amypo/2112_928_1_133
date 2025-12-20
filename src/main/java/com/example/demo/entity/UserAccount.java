@@ -1,9 +1,9 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "user_accounts")
 public class UserAccount {
 
     @Id
@@ -11,32 +11,38 @@ public class UserAccount {
     private Long id;
 
     private String email;
+
     private String password;
+
     private String role;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    // ===== GETTERS & SETTERS =====
 
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
+    public Long getId() {
+        return id;
     }
 
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
+    public String getEmail() {
+        return email;
     }
 
-    // ✅ REQUIRED GETTERS & SETTERS
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getPassword() {
+        return password;
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

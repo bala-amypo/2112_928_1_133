@@ -10,8 +10,4 @@ public interface InventoryLevelService {
     List<InventoryLevel> getInventoryByStore(Long storeId);
 
     InventoryLevel getInventory(Long storeId, Long productId);
-
-    InventoryLevel createOrUpdateInventory(InventoryLevel inventoryLevel);
-
-    List<InventoryLevel> getInventoryForProduct(Long productId);
 }

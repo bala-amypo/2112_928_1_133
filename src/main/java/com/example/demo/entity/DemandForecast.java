@@ -1,15 +1,16 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
+@Table(name = "demand_forecasts")
 public class DemandForecast {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔥 REQUIRED — fixes "No property store found"
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
@@ -18,9 +19,11 @@ public class DemandForecast {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private int forecastedDemand;
+    private Integer forecastQuantity;
 
-    // ========= GETTERS =========
+    private LocalDate forecastDate;
+
+    // ===== GETTERS & SETTERS =====
 
     public Long getId() {
         return id;
@@ -30,39 +33,31 @@ public class DemandForecast {
         return store;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public int getForecastedDemand() {
-        return forecastedDemand;
-    }
-
-    // 🔥 REQUIRED BY InventoryBalancerServiceImpl
-    public int getForecastQuantity() {
-        return forecastedDemand;
-    }
-
-    // ========= SETTERS =========
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    public Product getProduct() {
+        return product;
     }
 
     public void setProduct(Product product) {
         this.product = product;
     }
 
-    public void setForecastedDemand(int forecastedDemand) {
-        this.forecastedDemand = forecastedDemand;
+    public Integer getForecastQuantity() {
+        return forecastQuantity;
     }
 
-    // 🔥 REQUIRED BY TESTS
-    public void setForecastQuantity(int quantity) {
-        this.forecastedDemand = quantity;
+    public void setForecastQuantity(Integer forecastQuantity) {
+        this.forecastQuantity = forecastQuantity;
+    }
+
+    public LocalDate getForecastDate() {
+        return forecastDate;
+    }
+
+    public void setForecastDate(LocalDate forecastDate) {
+        this.forecastDate = forecastDate;
     }
 }

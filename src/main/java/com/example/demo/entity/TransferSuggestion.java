@@ -10,89 +10,102 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 🔥 REQUIRED BY TESTS
+    private int quantity;
+
+    private String reason;
+
+    // 🔥 REQUIRED BY TESTS
+    private String priority;
+
+    // 🔥 REQUIRED BY TESTS
+    private LocalDateTime generatedAt;
+
     @ManyToOne
+    @JoinColumn(name = "source_store_id")
     private Store sourceStore;
 
     @ManyToOne
+    @JoinColumn(name = "target_store_id")
     private Store targetStore;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
-    private int quantity;                 // used by service
-    private int suggestedQuantity;         // used by tests
-    private String reason;                 // used by tests
-    private String priority;               // used by service
-    private LocalDateTime generatedAt;     // used by service
-
-    // ===== REQUIRED SETTERS / GETTERS =====
-
-    public void setSourceStore(Store sourceStore) {
-        this.sourceStore = sourceStore;
+    // ===== CONSTRUCTORS =====
+    public TransferSuggestion() {
     }
 
-    public Store getSourceStore() {
-        return sourceStore;
-    }
-
-    public void setTargetStore(Store targetStore) {
-        this.targetStore = targetStore;
-    }
-
-    public Store getTargetStore() {
-        return targetStore;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    // 🔥 REQUIRED BY SERVICE
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    // ===== GETTERS & SETTERS =====
+    public Long getId() {
+        return id;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    // 🔥 REQUIRED BY TEST
-    public void setSuggestedQuantity(int qty) {
-        this.suggestedQuantity = qty;
-    }
-
-    public int getSuggestedQuantity() {
-        return suggestedQuantity;
-    }
-
-    // 🔥 REQUIRED BY TEST
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getReason() {
         return reason;
     }
 
-    // 🔥 REQUIRED BY SERVICE
-    public void setPriority(String priority) {
-        this.priority = priority;
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public Store getSourceStore() {
+        return sourceStore;
+    }
+
+    public void setSourceStore(Store sourceStore) {
+        this.sourceStore = sourceStore;
+    }
+
+    public Store getTargetStore() {
+        return targetStore;
+    }
+
+    public void setTargetStore(Store targetStore) {
+        this.targetStore = targetStore;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public String getPriority() {
         return priority;
     }
 
-    // 🔥 REQUIRED BY SERVICE
-    public void setGeneratedAt(LocalDateTime generatedAt) {
-        this.generatedAt = generatedAt;
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 
     public LocalDateTime getGeneratedAt() {
         return generatedAt;
+    }
+
+    public void setGeneratedAt(LocalDateTime generatedAt) {
+        this.generatedAt = generatedAt;
+    }
+
+    // ===== 🔥 TEST-REQUIRED ALIAS METHODS =====
+
+    // Tests expect this name
+    public int getSuggestedQuantity() {
+        return this.quantity;
+    }
+
+    public void setSuggestedQuantity(int qty) {
+        this.quantity = qty;
     }
 }

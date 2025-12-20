@@ -10,27 +10,46 @@ public class DemandForecast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 🔥 REQUIRED for repository queries
     @ManyToOne
+    @JoinColumn(name = "store_id")
     private Store store;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
-    private int forecastedDemand;      // canonical field
-    private LocalDate forecastDate;     // REQUIRED BY TEST
+    // original field used by tests
+    private int forecastedDemand;
 
-    // ===== REQUIRED ALIAS METHODS =====
+    // 🔥 REQUIRED BY TESTS
+    private LocalDate forecastDate;
 
-    // 🔥 Service calls this
-    public int getForecastQuantity() {
-        return forecastedDemand;
+    // ===== CONSTRUCTORS =====
+    public DemandForecast() {
     }
 
-    public void setForecastQuantity(int qty) {
-        this.forecastedDemand = qty;
+    // ===== GETTERS & SETTERS =====
+    public Long getId() {
+        return id;
     }
 
-    // 🔥 Tests call this
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public int getForecastedDemand() {
         return forecastedDemand;
     }
@@ -39,7 +58,18 @@ public class DemandForecast {
         this.forecastedDemand = forecastedDemand;
     }
 
-    // 🔥 Tests call this
+    // ===== 🔥 TEST-REQUIRED ALIAS METHODS (DO NOT REMOVE) =====
+
+    // Used by services
+    public int getForecastQuantity() {
+        return forecastedDemand;
+    }
+
+    public void setForecastQuantity(int qty) {
+        this.forecastedDemand = qty;
+    }
+
+    // Used by tests
     public LocalDate getForecastDate() {
         return forecastDate;
     }

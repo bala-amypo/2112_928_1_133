@@ -1,3 +1,10 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 @Entity
 public class Store {
 
@@ -14,6 +21,7 @@ public class Store {
         return id;
     }
 
+    // 🔥 MUST RETURN Store (TEST REQUIRES THIS)
     public Store setId(Long id) {
         this.id = id;
         return this;

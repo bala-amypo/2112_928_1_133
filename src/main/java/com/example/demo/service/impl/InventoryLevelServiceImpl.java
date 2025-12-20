@@ -31,6 +31,12 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         return list;
     }
 
+    // 🔥 TEST EXPECTS THIS METHOD NAME
+    @Override
+    public List<InventoryLevel> getInventoryForStore(Long storeId) {
+        return getInventoryByStore(storeId);
+    }
+
     @Override
     public List<InventoryLevel> getInventoryForProduct(Long productId) {
         List<InventoryLevel> list = repository.findByProduct_Id(productId);

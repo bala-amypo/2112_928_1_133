@@ -10,5 +10,8 @@ public interface InventoryLevelService {
 
     List<InventoryLevel> getInventoryByStore(Long storeId);
 
+    // 🔥 TEST ALIAS (DO NOT REMOVE)
+    List<InventoryLevel> getInventoryForStore(Long storeId);
+
     List<InventoryLevel> getInventoryForProduct(Long productId);
 }

@@ -1,54 +1,48 @@
-// package com.example.demo.security;
+package com.example.demo.security;
 
-// import io.jsonwebtoken.Claims;
-// import io.jsonwebtoken.Jwts;
-// import io.jsonwebtoken.SignatureAlgorithm;
-// import org.springframework.stereotype.Component;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 
-// import java.util.Date;
-// import java.util.function.Function;
+import java.util.Date;
 
-// @Component
-// public class JwtUtil {
+@Component
+public class JwtUtil {
 
-//     private static final String SECRET = "secret-key-123";
-//     private static final long EXPIRATION = 1000 * 60 * 60;
+    private static final String SECRET = "secret-key-demo";
+    private static final long EXPIRATION = 1000 * 60 * 60; // 1 hour
 
-//     public String generateToken(String email) {
-//         return Jwts.builder()
-//                 .setSubject(email)
-//                 .setIssuedAt(new Date())
-//                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-//                 .signWith(SignatureAlgorithm.HS256, SECRET)
-//                 .compact();
-//     }
+    public String generateToken(String email) {
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(SignatureAlgorithm.HS256, SECRET)
+                .compact();
+    }
 
-//     public String getUsername(String token) {
-//         return extractClaim(token, Claims::getSubject);
-//     }
+    public String extractUsername(String token) {
+        return getClaims(token).getSubject();
+    }
 
-//     public boolean isTokenValid(String token, String email) {
-//         return getUsername(token).equals(email) && !isTokenExpired(token);
-//     }
+    public boolean validateToken(String token, String email) {
+        String username = extractUsername(token);
+        return username.equals(email) && !isTokenExpired(token);
+    }
 
-//     // 🔥 REQUIRED BY TESTS
-//     public long getExpirationMillis() {
-//         return EXPIRATION;
-//     }
+    public long getExpirationMillis() {
+        return EXPIRATION;
+    }
 
-//     private boolean isTokenExpired(String token) {
-//         return extractExpiration(token).before(new Date());
-//     }
+    private boolean isTokenExpired(String token) {
+        return getClaims(token).getExpiration().before(new Date());
+    }
 
-//     private Date extractExpiration(String token) {
-//         return extractClaim(token, Claims::getExpiration);
-//     }
-
-//     private <T> T extractClaim(String token, Function<Claims, T> resolver) {
-//         Claims claims = Jwts.parser()
-//                 .setSigningKey(SECRET)
-//                 .parseClaimsJws(token)
-//                 .getBody();
-//         return resolver.apply(claims);
-//     }
-// }
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+}

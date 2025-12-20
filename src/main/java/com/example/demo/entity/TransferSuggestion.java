@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 public class TransferSuggestion {
@@ -10,83 +9,48 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Store sourceStore;
-
-    @ManyToOne
-    private Store targetStore;
+    private int suggestedQuantity;
+    private String reason;
 
     @ManyToOne
     private Product product;
 
-    private Integer quantity;
-    private String priority;
-    private String status;
-    private LocalDateTime generatedAt;
-
-    @PrePersist
-    private void prePersist() {
-        this.generatedAt = LocalDateTime.now();
-        this.status = "PENDING";
+    public TransferSuggestion() {
     }
+
+    // ===== GETTERS =====
 
     public Long getId() {
         return id;
     }
- 
-    public void setId(Long id) {
-        this.id = id;
+
+    public int getSuggestedQuantity() {
+        return suggestedQuantity;
     }
- 
-    public Store getSourceStore() {
-        return sourceStore;
+
+    public String getReason() {
+        return reason;
     }
- 
-    public void setSourceStore(Store sourceStore) {
-        this.sourceStore = sourceStore;
-    }
- 
-    public Store getTargetStore() {
-        return targetStore;
-    }
- 
-    public void setTargetStore(Store targetStore) {
-        this.targetStore = targetStore;
-    }
- 
+
     public Product getProduct() {
         return product;
     }
- 
+
+    // ===== SETTERS =====
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSuggestedQuantity(int suggestedQuantity) {
+        this.suggestedQuantity = suggestedQuantity;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
-    }
- 
-    public Integer getQuantity() {
-        return quantity;
-    }
- 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
- 
-    public String getPriority() {
-        return priority;
-    }
- 
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
- 
-    public String getStatus() {
-        return status;
-    }
- 
-    public void setStatus(String status) {
-        this.status = status;
-    }
- 
-    public LocalDateTime getGeneratedAt() {
-        return generatedAt;
     }
 }

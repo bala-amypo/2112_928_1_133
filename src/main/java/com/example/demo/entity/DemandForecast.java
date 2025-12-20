@@ -9,17 +9,13 @@ public class DemandForecast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int forecastedDemand;
+    private int forecastQuantity;
 
-    public Long getId() {
-        return id;
+    public int getForecastQuantity() {
+        return forecastQuantity;
     }
 
-    public int getForecastedDemand() {
-        return forecastedDemand;
-    }
-
-    public void setForecastedDemand(int forecastedDemand) {
-        this.forecastedDemand = forecastedDemand;
+    public void setForecastQuantity(int forecastQuantity) {
+        this.forecastQuantity = forecastQuantity;
     }
 }

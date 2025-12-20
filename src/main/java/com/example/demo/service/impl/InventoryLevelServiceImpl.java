@@ -17,13 +17,29 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
     }
 
     @Override
-    public InventoryLevel createOrUpdateInventory(InventoryLevel inventoryLevel) {
-        return repository.save(inventoryLevel);
+    public InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity) {
+        InventoryLevel level =
+                repository.findByStore_IdAndProduct_Id(storeId, productId)
+                        .orElse(new InventoryLevel());
+
+        level.setQuantity(quantity);
+        return repository.save(level);
     }
 
     @Override
-    public List<InventoryLevel> getInventoryForStore(Long storeId) {
+    public List<InventoryLevel> getInventoryByStore(Long storeId) {
         return repository.findByStore_Id(storeId);
+    }
+
+    @Override
+    public InventoryLevel getInventory(Long storeId, Long productId) {
+        return repository.findByStore_IdAndProduct_Id(storeId, productId)
+                .orElse(null);
+    }
+
+    @Override
+    public InventoryLevel createOrUpdateInventory(InventoryLevel inventoryLevel) {
+        return repository.save(inventoryLevel);
     }
 
     @Override

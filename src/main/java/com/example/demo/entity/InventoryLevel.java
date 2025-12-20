@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class InventoryLevel {
@@ -15,13 +16,49 @@ public class InventoryLevel {
     @ManyToOne
     private Product product;
 
-    private int quantity;
+    private Integer quantity;
 
-    public Long getId() { return id; }
-    public Store getStore() { return store; }
-    public void setStore(Store store) { this.store = store; }
-    public Product getProduct() { return product; }
-    public void setProduct(Product product) { this.product = product; }
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    private LocalDateTime lastUpdated;
+
+    @PrePersist
+    @PreUpdate
+    private void updateTimestamp() {
+        this.lastUpdated = LocalDateTime.now();
+    }
+
+    public Long getId() {
+        return id;
+    }
+ 
+    public void setId(Long id) {
+        this.id = id;
+    }
+ 
+    public Store getStore() {
+        return store;
+    }
+ 
+    public void setStore(Store store) {
+        this.store = store;
+    }
+ 
+    public Product getProduct() {
+        return product;
+    }
+ 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+ 
+    public Integer getQuantity() {
+        return quantity;
+    }
+ 
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+ 
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
 }

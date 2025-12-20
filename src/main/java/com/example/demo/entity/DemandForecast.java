@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 public class DemandForecast {
@@ -16,29 +15,37 @@ public class DemandForecast {
     @ManyToOne
     private Product product;
 
-    private int forecastedDemand;
-    private LocalDate forecastDate;
+    private Integer forecastQuantity;
 
-    public Long getId() { return id; }
-
-    public Store getStore() { return store; }
-    public void setStore(Store store) { this.store = store; }
-
-    public Product getProduct() { return product; }
-    public void setProduct(Product product) { this.product = product; }
-
-    public int getForecastedDemand() { return forecastedDemand; }
-    public void setForecastedDemand(int forecastedDemand) {
-        this.forecastedDemand = forecastedDemand;
+    public Long getId() {
+        return id;
     }
-
-    // REQUIRED BY InventoryBalancerService
-    public int getPredictedDemand() {
-        return forecastedDemand;
+ 
+    public void setId(Long id) {
+        this.id = id;
     }
-
-    public LocalDate getForecastDate() { return forecastDate; }
-    public void setForecastDate(LocalDate forecastDate) {
-        this.forecastDate = forecastDate;
+ 
+    public Store getStore() {
+        return store;
+    }
+ 
+    public void setStore(Store store) {
+        this.store = store;
+    }
+ 
+    public Product getProduct() {
+        return product;
+    }
+ 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+ 
+    public Integer getForecastQuantity() {
+        return forecastQuantity;
+    }
+ 
+    public void setForecastQuantity(Integer forecastQuantity) {
+        this.forecastQuantity = forecastQuantity;
     }
 }

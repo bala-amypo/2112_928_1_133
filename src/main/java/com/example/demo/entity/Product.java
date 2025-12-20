@@ -9,18 +9,50 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(unique = true)
     private String sku;
-    private boolean active;
 
-    public Long getId() { return id; }
+    private String name;
+    private String category;
+    private Boolean active = true;
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getSku() { return sku; }
-    public void setSku(String sku) { this.sku = sku; }
-
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public Long getId() {
+        return id;
+    }
+ 
+    public void setId(Long id) {
+        this.id = id;
+    }
+ 
+    public String getSku() {
+        return sku;
+    }
+ 
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+ 
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {
+        this.name = name;
+    }
+ 
+    public String getCategory() {
+        return category;
+    }
+ 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+ 
+    public Boolean getActive() {
+        return active;
+    }
+ 
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }

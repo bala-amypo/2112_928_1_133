@@ -16,7 +16,7 @@ public class InventoryLevel {
     @ManyToOne
     private Product product;
 
-    // 🔥 MUST be Integer (tests call .equals())
+    // 🔥 MUST be Integer (tests use .equals)
     private Integer quantity;
 
     // 🔥 REQUIRED BY TESTS
@@ -26,7 +26,6 @@ public class InventoryLevel {
     // TEST REQUIRED SETTERS
     // =========================
 
-    // Used by controller tests
     public void setStoreId(Long storeId) {
         if (this.store == null) {
             this.store = new Store();

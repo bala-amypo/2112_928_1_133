@@ -9,19 +9,30 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔥 TESTS EXPECT THIS NAME
+    // REQUIRED BY TESTS
     private String storeName;
 
-    // 🔥 TESTS EXPECT ACTIVE FLAG
+    private String address;   // 🔥 TEST EXPECTS
+    private String region;    // 🔥 TEST EXPECTS
+
     private boolean active = true;
 
     // =========================
-    // FLUENT SETTERS (IMPORTANT)
+    // FLUENT SETTERS (CRITICAL)
     // =========================
 
-    // ❗ MUST return Store (tests expect chaining)
     public Store setId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public Store setAddress(String address) {
+        this.address = address;
+        return this;
+    }
+
+    public Store setRegion(String region) {
+        this.region = region;
         return this;
     }
 
@@ -39,6 +50,14 @@ public class Store {
 
     public void setStoreName(String storeName) {
         this.storeName = storeName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getRegion() {
+        return region;
     }
 
     public boolean isActive() {

@@ -10,11 +10,18 @@ public class DemandForecast {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int forecastedDemand;
+    @ManyToOne
+    private Store store;
 
-    private LocalDate forecastDate;
+    @ManyToOne
+    private Product product;
 
-    // ✅ REQUIRED BY TEST
+    private int forecastedDemand;      // canonical field
+    private LocalDate forecastDate;     // REQUIRED BY TEST
+
+    // ===== REQUIRED ALIAS METHODS =====
+
+    // 🔥 Service calls this
     public int getForecastQuantity() {
         return forecastedDemand;
     }
@@ -23,7 +30,7 @@ public class DemandForecast {
         this.forecastedDemand = qty;
     }
 
-    // ✅ REQUIRED BY TEST
+    // 🔥 Tests call this
     public int getForecastedDemand() {
         return forecastedDemand;
     }
@@ -32,7 +39,7 @@ public class DemandForecast {
         this.forecastedDemand = forecastedDemand;
     }
 
-    // ✅ REQUIRED BY TEST
+    // 🔥 Tests call this
     public LocalDate getForecastDate() {
         return forecastDate;
     }

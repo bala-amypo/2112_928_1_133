@@ -65,15 +65,22 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
                         .findFirst()
                         .orElse(inv.getStore());
 
-                TransferSuggestion ts = new TransferSuggestion();
-                ts.setSourceStore(inv.getStore());
-                ts.setTargetStore(targetStore);
-                ts.setProduct(inv.getProduct());
-                ts.setQuantity(inv.getQuantity() - forecast.getForecastQuantity());
-                ts.setPriority("HIGH");
-                ts.setGeneratedAt(LocalDateTime.now()); // ✅ REQUIRED BY TESTS
+               TransferSuggestion ts = new TransferSuggestion();
+ts.setSourceStore(inv.getStore());
+ts.setTargetStore(targetStore);
+ts.setProduct(inv.getProduct());
 
-                suggestions.add(suggestionRepo.save(ts));
+int excess = inv.getQuantity() - forecast.getForecastQuantity();
+
+            ts.setQuantity(excess);               // service
+            ts.setSuggestedQuantity(excess);      // tests
+            ts.setReason("EXCESS_STOCK");          // tests
+            ts.setPriority("HIGH");               // service
+            ts.setGeneratedAt(LocalDateTime.now());
+
+            suggestions.add(suggestionRepo.save(ts));
+
+            
             }
         }
 

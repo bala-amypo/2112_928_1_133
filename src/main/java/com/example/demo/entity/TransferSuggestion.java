@@ -10,15 +10,46 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int quantity;
+    @ManyToOne
+    private Store sourceStore;
 
-    private int suggestedQuantity;
+    @ManyToOne
+    private Store targetStore;
 
-    private String reason;
+    @ManyToOne
+    private Product product;
 
-    private String priority;
+    private int quantity;                 // used by service
+    private int suggestedQuantity;         // used by tests
+    private String reason;                 // used by tests
+    private String priority;               // used by service
+    private LocalDateTime generatedAt;     // used by service
 
-    private LocalDateTime generatedAt;
+    // ===== REQUIRED SETTERS / GETTERS =====
+
+    public void setSourceStore(Store sourceStore) {
+        this.sourceStore = sourceStore;
+    }
+
+    public Store getSourceStore() {
+        return sourceStore;
+    }
+
+    public void setTargetStore(Store targetStore) {
+        this.targetStore = targetStore;
+    }
+
+    public Store getTargetStore() {
+        return targetStore;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
 
     // 🔥 REQUIRED BY SERVICE
     public void setQuantity(int quantity) {

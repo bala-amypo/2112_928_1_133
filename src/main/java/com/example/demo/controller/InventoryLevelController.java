@@ -23,7 +23,7 @@ public class InventoryLevelController {
 
     @GetMapping("/store/{storeId}")
     public List<InventoryLevel> byStore(@PathVariable Long storeId) {
-        return inventoryLevelService.getInventoryByStore(storeId);
+        return inventoryLevelService.getInventoryForStore(storeId);
     }
 
     @GetMapping("/product/{productId}")

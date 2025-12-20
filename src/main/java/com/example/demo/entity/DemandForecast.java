@@ -1,3 +1,6 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -17,10 +20,28 @@ public class DemandForecast {
 
     private LocalDate forecastDate;
 
-    // =========================
-    // 🔥 TEST + SERVICE REQUIRED
-    // =========================
+    // ---------- getters ----------
+    public Long getId() {
+        return id;
+    }
 
+    public Store getStore() {
+        return store;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public int getForecastQuantity() {
+        return forecastedDemand;
+    }
+
+    public LocalDate getForecastDate() {
+        return forecastDate;
+    }
+
+    // ---------- setters (TEST REQUIRED) ----------
     public void setStore(Store store) {
         this.store = store;
     }
@@ -29,25 +50,15 @@ public class DemandForecast {
         this.product = product;
     }
 
-    public void setForecastedDemand(int demand) {
-        this.forecastedDemand = demand;
-    }
-
-    // alias used by SERVICE + TEST
-    public int getForecastQuantity() {
-        return forecastedDemand;
+    public void setForecastedDemand(int qty) {
+        this.forecastedDemand = qty;
     }
 
     public void setForecastQuantity(int qty) {
         this.forecastedDemand = qty;
     }
 
-    // test requires this
     public void setForecastDate(LocalDate date) {
         this.forecastDate = date;
-    }
-
-    public Long getId() {
-        return id;
     }
 }

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "demand_forecasts")
 public class DemandForecast {
 
     @Id
@@ -12,14 +11,12 @@ public class DemandForecast {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
     private Store store;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
     private Product product;
 
-    private Integer forecastQuantity;
+    private int forecastedDemand;
 
     private LocalDate forecastDate;
 
@@ -45,12 +42,12 @@ public class DemandForecast {
         this.product = product;
     }
 
-    public Integer getForecastQuantity() {
-        return forecastQuantity;
+    public int getForecastedDemand() {
+        return forecastedDemand;
     }
 
-    public void setForecastQuantity(Integer forecastQuantity) {
-        this.forecastQuantity = forecastQuantity;
+    public void setForecastedDemand(int forecastedDemand) {
+        this.forecastedDemand = forecastedDemand;
     }
 
     public LocalDate getForecastDate() {

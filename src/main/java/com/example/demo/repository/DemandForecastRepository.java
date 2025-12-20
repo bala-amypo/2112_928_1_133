@@ -10,12 +10,13 @@ public interface DemandForecastRepository extends JpaRepository<DemandForecast, 
 
     List<DemandForecast> findByStore_Id(Long storeId);
 
-    // 🔥 REQUIRED BY InventoryBalancer + Service
     Optional<DemandForecast> findByStoreAndProduct(
             com.example.demo.entity.Store store,
             com.example.demo.entity.Product product
     );
 
-    // 🔥 REQUIRED BY Service
     Optional<DemandForecast> findByStore_IdAndProduct_Id(Long storeId, Long productId);
+
+    // 🔥 REQUIRED BY TEST
+    List<DemandForecast> findByProduct_Id(Long productId);
 }

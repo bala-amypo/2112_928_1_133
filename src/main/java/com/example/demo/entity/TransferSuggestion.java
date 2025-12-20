@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transfer_suggestions")
 public class TransferSuggestion {
 
     @Id
@@ -20,11 +19,16 @@ public class TransferSuggestion {
     @ManyToOne
     private Product product;
 
-    private Integer quantity;
+    private int suggestedQuantity;
 
-    private String priority;
+    private String reason;
 
     private LocalDateTime generatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.generatedAt = LocalDateTime.now();
+    }
 
     // ===== GETTERS & SETTERS =====
 
@@ -56,27 +60,23 @@ public class TransferSuggestion {
         this.product = product;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public int getSuggestedQuantity() {
+        return suggestedQuantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setSuggestedQuantity(int suggestedQuantity) {
+        this.suggestedQuantity = suggestedQuantity;
     }
 
-    public String getPriority() {
-        return priority;
+    public String getReason() {
+        return reason;
     }
 
-    public void setPriority(String priority) {
-        this.priority = priority;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public LocalDateTime getGeneratedAt() {
         return generatedAt;
-    }
-
-    public void setGeneratedAt(LocalDateTime generatedAt) {
-        this.generatedAt = generatedAt;
     }
 }

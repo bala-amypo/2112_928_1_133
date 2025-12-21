@@ -1,6 +1,13 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,26 +23,26 @@ public class UserAccount {
     private String password;
     private String role;
 
-    // ✅ TIMESTAMP FIELDS (IMPORTANT)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     // =================================================
-    // 🔥 JPA LIFECYCLE CALLBACKS (MANDATORY)
+    // 🔥 JPA LIFECYCLE METHODS (THIS FIXES THE ERROR)
     // =================================================
     @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+    public void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
 
     @PreUpdate
-    protected void onUpdate() {
+    public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 
     // =================================================
-    // GETTERS & FLUENT SETTERS
+    // GETTERS & FLUENT SETTERS (TEST REQUIRED)
     // =================================================
 
     public Long getId() {
@@ -83,7 +90,7 @@ public class UserAccount {
         return this;
     }
 
-    // ✅ REQUIRED BY TESTS
+    // 🔥 REQUIRED BY TESTS
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

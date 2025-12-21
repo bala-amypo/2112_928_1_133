@@ -1,10 +1,7 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_accounts")
@@ -18,6 +15,28 @@ public class UserAccount {
     private String fullName;
     private String password;
     private String role;
+
+    // ✅ TIMESTAMP FIELDS (IMPORTANT)
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    // =================================================
+    // 🔥 JPA LIFECYCLE CALLBACKS (MANDATORY)
+    // =================================================
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // =================================================
+    // GETTERS & FLUENT SETTERS
+    // =================================================
 
     public Long getId() {
         return id;
@@ -62,5 +81,14 @@ public class UserAccount {
     public UserAccount setRole(String role) {
         this.role = role;
         return this;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }

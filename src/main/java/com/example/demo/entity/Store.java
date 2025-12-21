@@ -21,7 +21,7 @@ public class Store {
         return id;
     }
 
-    // 🔥 MUST RETURN Store (TEST REQUIRES THIS)
+    
     public Store setId(Long id) {
         this.id = id;
         return this;
@@ -30,7 +30,7 @@ public class Store {
     public String getStoreName() {
         return storeName;
     }
-
+ 
     public Store setStoreName(String storeName) {
         this.storeName = storeName;
         return this;

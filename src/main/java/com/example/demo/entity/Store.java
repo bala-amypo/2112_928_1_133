@@ -1,9 +1,6 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Store {
@@ -21,7 +18,6 @@ public class Store {
         return id;
     }
 
-    
     public Store setId(Long id) {
         this.id = id;
         return this;
@@ -30,7 +26,7 @@ public class Store {
     public String getStoreName() {
         return storeName;
     }
- 
+
     public Store setStoreName(String storeName) {
         this.storeName = storeName;
         return this;

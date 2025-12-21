@@ -1,9 +1,13 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "user_accounts")
 public class UserAccount {
 
     @Id
@@ -11,58 +15,52 @@ public class UserAccount {
     private Long id;
 
     private String email;
+    private String fullName;
     private String password;
     private String role;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = createdAt;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
-    // ===== GETTERS & SETTERS =====
-
     public Long getId() {
         return id;
+    }
+
+    public UserAccount setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public UserAccount setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public UserAccount setFullName(String fullName) {
+        this.fullName = fullName;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public UserAccount setPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public String getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public UserAccount setRole(String role) {
         this.role = role;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+        return this;
     }
 }

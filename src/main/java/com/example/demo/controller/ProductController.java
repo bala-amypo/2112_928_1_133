@@ -2,8 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Product;
 import com.example.demo.service.ProductService;
-
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -22,7 +22,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
+    public Product getProduct(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 

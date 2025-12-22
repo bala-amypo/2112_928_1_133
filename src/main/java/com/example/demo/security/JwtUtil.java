@@ -19,9 +19,13 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    private Key key() {
+    private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
+
+    /* =======================
+       TOKEN GENERATION
+       ======================= */
 
     public String generateToken(UserAccount user) {
         return generateToken(Map.of("role", user.getRole()), user.getEmail());
@@ -33,26 +37,54 @@ public class JwtUtil {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(key(), SignatureAlgorithm.HS256)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
+    /* =======================
+       METHODS REQUIRED BY FILTER
+       ======================= */
+
+    public boolean validateToken(String token) {
+        try {
+            extractAllClaims(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public String extractEmail(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+    /* =======================
+       METHODS REQUIRED BY TESTS
+       ======================= */
+
     public String getUsername(String token) {
-        return parse(token).getSubject();
+        return extractAllClaims(token).getSubject();
     }
 
     public boolean isTokenValid(String token, String username) {
-        return getUsername(token).equals(username)
-                && !parse(token).getExpiration().before(new Date());
+        return getUsername(token).equals(username) && !isTokenExpired(token);
     }
 
     public long getExpirationMillis() {
         return expiration;
     }
 
-    private Claims parse(String token) {
+    /* =======================
+       INTERNAL HELPERS
+       ======================= */
+
+    private boolean isTokenExpired(String token) {
+        return extractAllClaims(token).getExpiration().before(new Date());
+    }
+
+    private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key())
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

@@ -3,59 +3,63 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "stores")
 public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String storeName;
-    private String address;
-    private String region;
-    private boolean active = true;
 
+    private String address;
+
+    private String region;
+
+    private Boolean active = true;
+
+    public Store() {
+    }
+
+    // Getters & Setters
     public Long getId() {
         return id;
     }
-
-    public Store setId(Long id) {
+    
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
 
     public String getStoreName() {
         return storeName;
     }
-
-    public Store setStoreName(String storeName) {
+    
+    public void setStoreName(String storeName) {
         this.storeName = storeName;
-        return this;
     }
 
     public String getAddress() {
         return address;
     }
-
-    public Store setAddress(String address) {
+    
+    public void setAddress(String address) {
         this.address = address;
-        return this;
     }
 
     public String getRegion() {
         return region;
     }
-
-    public Store setRegion(String region) {
+    
+    public void setRegion(String region) {
         this.region = region;
-        return this;
     }
 
-    public boolean isActive() {
+    public Boolean getActive() {
         return active;
     }
-
-    public Store setActive(boolean active) {
+    
+    public void setActive(Boolean active) {
         this.active = active;
-        return this;
     }
 }

@@ -1,13 +1,6 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,20 +11,26 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String email;
+
     private String fullName;
+
+    @Column(nullable = false)
     private String password;
+
     private String role;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-   
+    public UserAccount() {
+    }
+
     @PrePersist
     public void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
-        this.createdAt = now;
-        this.updatedAt = now;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
@@ -39,58 +38,51 @@ public class UserAccount {
         this.updatedAt = LocalDateTime.now();
     }
 
-   
-
+    // Getters & Setters
     public Long getId() {
         return id;
     }
 
-    public UserAccount setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
 
     public String getEmail() {
         return email;
     }
-
-    public UserAccount setEmail(String email) {
+    
+    public void setEmail(String email) {
         this.email = email;
-        return this;
     }
 
     public String getFullName() {
         return fullName;
     }
-
-    public UserAccount setFullName(String fullName) {
+    
+    public void setFullName(String fullName) {
         this.fullName = fullName;
-        return this;
     }
 
     public String getPassword() {
         return password;
     }
-
-    public UserAccount setPassword(String password) {
+    
+    public void setPassword(String password) {
         this.password = password;
-        return this;
     }
 
     public String getRole() {
         return role;
     }
-
-    public UserAccount setRole(String role) {
+    
+    public void setRole(String role) {
         this.role = role;
-        return this;
     }
 
-    
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-
+    
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }

@@ -27,9 +27,7 @@ public class TransferSuggestion {
 
     private LocalDateTime generatedAt;
 
-    // =========================
-    // 🔥 REQUIRED BY TESTCASES
-    // =========================
+  
 
     public Long getId() {
         return id;

@@ -36,7 +36,7 @@ public class RegisterRequestDto {
         return this;
     }
 
-    // 🔥 REQUIRED BY TEST
+   
     public String getFullName() {
         return fullName;
     }

@@ -20,9 +20,7 @@ public class DemandForecast {
 
     private LocalDate forecastDate;
 
-    // ======================
-    // NORMAL GETTERS/SETTERS
-    // ======================
+   
 
     public Long getId() {
         return id;
@@ -60,9 +58,7 @@ public class DemandForecast {
         this.forecastedDemand = forecastedDemand;
     }
 
-    // ======================
-    // 🔥 REQUIRED BY SERVICE + TESTS
-    // ======================
+   
 
     // InventoryBalancerService uses this
     public int getForecastQuantity() {

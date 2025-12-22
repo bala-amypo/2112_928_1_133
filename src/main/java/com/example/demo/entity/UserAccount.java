@@ -26,9 +26,7 @@ public class UserAccount {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // =================================================
-    // 🔥 JPA LIFECYCLE METHODS (THIS FIXES THE ERROR)
-    // =================================================
+   
     @PrePersist
     public void prePersist() {
         LocalDateTime now = LocalDateTime.now();
@@ -41,9 +39,7 @@ public class UserAccount {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // =================================================
-    // GETTERS & FLUENT SETTERS (TEST REQUIRED)
-    // =================================================
+   
 
     public Long getId() {
         return id;
@@ -90,7 +86,7 @@ public class UserAccount {
         return this;
     }
 
-    // 🔥 REQUIRED BY TESTS
+    
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

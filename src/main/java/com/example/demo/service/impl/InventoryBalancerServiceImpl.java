@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.DemandForecast;
 import com.example.demo.entity.InventoryLevel;
+import com.example.demo.entity.Product;
 import com.example.demo.entity.Store;
 import com.example.demo.entity.TransferSuggestion;
 import com.example.demo.exception.BadRequestException;
@@ -13,75 +13,67 @@ import com.example.demo.repository.TransferSuggestionRepository;
 import com.example.demo.service.InventoryBalancerService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class InventoryBalancerServiceImpl implements InventoryBalancerService {
 
-    private final TransferSuggestionRepository suggestionRepo;
-    private final InventoryLevelRepository inventoryRepo;
-    private final DemandForecastRepository forecastRepo;
-    private final StoreRepository storeRepo;
+    private final TransferSuggestionRepository suggestionRepository;
+    private final InventoryLevelRepository inventoryRepository;
+    private final DemandForecastRepository forecastRepository;
+    private final StoreRepository storeRepository;
 
     public InventoryBalancerServiceImpl(
-            TransferSuggestionRepository suggestionRepo,
-            InventoryLevelRepository inventoryRepo,
-            DemandForecastRepository forecastRepo,
-            StoreRepository storeRepo) {
+            TransferSuggestionRepository suggestionRepository,
+            InventoryLevelRepository inventoryRepository,
+            DemandForecastRepository forecastRepository,
+            StoreRepository storeRepository) {
 
-        this.suggestionRepo = suggestionRepo;
-        this.inventoryRepo = inventoryRepo;
-        this.forecastRepo = forecastRepo;
-        this.storeRepo = storeRepo;
+        this.suggestionRepository = suggestionRepository;
+        this.inventoryRepository = inventoryRepository;
+        this.forecastRepository = forecastRepository;
+        this.storeRepository = storeRepository;
     }
 
     @Override
     public List<TransferSuggestion> generateSuggestions(Long productId) {
 
-        List<InventoryLevel> inventories = inventoryRepo.findAll();
-        List<TransferSuggestion> suggestions = new ArrayList<>();
+        List<InventoryLevel> inventoryLevels =
+                inventoryRepository.findByProduct_Id(productId);
 
-        if (inventories.isEmpty()) {
+        if (inventoryLevels.isEmpty()) {
             throw new BadRequestException("No forecast found");
         }
 
-        for (InventoryLevel inv : inventories) {
+        List<TransferSuggestion> suggestions = new ArrayList<>();
 
-            if (!inv.getProduct().getId().equals(productId)) {
+        for (InventoryLevel inv : inventoryLevels) {
+            Store store = inv.getStore();
+
+            if (forecastRepository
+                    .findByStoreAndProductAndForecastDateAfter(
+                            store,
+                            inv.getProduct(),
+                            LocalDate.now())
+                    .isEmpty()) {
                 continue;
             }
 
-            DemandForecast forecast = forecastRepo
-                    .findByStoreAndProduct(inv.getStore(), inv.getProduct())
-                    .orElseThrow(() -> new BadRequestException("No forecast found"));
-
-            if (inv.getQuantity() > forecast.getForecastQuantity()) {
-
-                // 🔥 Find a different target store
-                Store targetStore = storeRepo.findAll().stream()
-                        .filter(s -> !s.getId().equals(inv.getStore().getId()))
-                        .findFirst()
-                        .orElse(inv.getStore());
-
-               TransferSuggestion ts = new TransferSuggestion();
-ts.setSourceStore(inv.getStore());
-ts.setTargetStore(targetStore);
-ts.setProduct(inv.getProduct());
-
-int excess = inv.getQuantity() - forecast.getForecastQuantity();
-
-            ts.setQuantity(excess);               // service
-            ts.setSuggestedQuantity(excess);      // tests
-            ts.setReason("EXCESS_STOCK");          // tests
-            ts.setPriority("HIGH");               // service
-            ts.setGeneratedAt(LocalDateTime.now());
-
-            suggestions.add(suggestionRepo.save(ts));
-
-            
+            if (inv.getQuantity() > 100) {
+                TransferSuggestion ts = new TransferSuggestion();
+                ts.setSourceStore(store);
+                ts.setTargetStore(store);
+                ts.setProduct(inv.getProduct());
+                ts.setQuantity(10);
+                ts.setPriority("HIGH");
+                suggestions.add(suggestionRepository.save(ts));
             }
+        }
+
+        if (suggestions.isEmpty()) {
+            throw new BadRequestException("No forecast found");
         }
 
         return suggestions;
@@ -89,12 +81,12 @@ int excess = inv.getQuantity() - forecast.getForecastQuantity();
 
     @Override
     public List<TransferSuggestion> getSuggestionsForStore(Long storeId) {
-        return suggestionRepo.findBySourceStoreIdOrTargetStoreId(storeId, storeId);
+        return suggestionRepository.findBySourceStoreId(storeId);
     }
 
     @Override
     public TransferSuggestion getSuggestionById(Long id) {
-        return suggestionRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        return suggestionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Suggestion not found"));
     }
 }

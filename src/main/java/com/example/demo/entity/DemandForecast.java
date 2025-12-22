@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "demand_forecasts")
 public class DemandForecast {
 
     @Id
@@ -11,66 +12,68 @@ public class DemandForecast {
     private Long id;
 
     @ManyToOne
-    private Store store;
-
-    @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
-    private int forecastedDemand;
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
     private LocalDate forecastDate;
 
-   
+    private Integer predictedDemand;
 
+    private Double confidenceScore;
+
+    public DemandForecast() {
+    }
+
+    // Getters & Setters
     public Long getId() {
         return id;
     }
-
-    public Store getStore() {
-        return store;
+    
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Product getProduct() {
         return product;
     }
+    
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
-    public int getForecastedDemand() {
-        return forecastedDemand;
+    public Store getStore() {
+        return store;
+    }
+    
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public LocalDate getForecastDate() {
         return forecastDate;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    
+    public void setForecastDate(LocalDate forecastDate) {
+        this.forecastDate = forecastDate;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    public Integer getPredictedDemand() {
+        return predictedDemand;
+    }
+    
+    public void setPredictedDemand(Integer predictedDemand) {
+        this.predictedDemand = predictedDemand;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public Double getConfidenceScore() {
+        return confidenceScore;
     }
-
-    public void setForecastedDemand(int forecastedDemand) {
-        this.forecastedDemand = forecastedDemand;
-    }
-
-   
-
-    // InventoryBalancerService uses this
-    public int getForecastQuantity() {
-        return forecastedDemand;
-    }
-
-    public void setForecastQuantity(int qty) {
-        this.forecastedDemand = qty;
-    }
-
-    // Tests use this
-    public void setForecastDate(LocalDate date) {
-        this.forecastDate = date;
+    
+    public void setConfidenceScore(Double confidenceScore) {
+        this.confidenceScore = confidenceScore;
     }
 }

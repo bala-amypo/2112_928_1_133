@@ -3,61 +3,64 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "products")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(unique = true, nullable = false)
     private String sku;
+
+    @Column(nullable = false)
+    private String name;
+
     private String category;
-    private boolean active = true;
 
-    public Product() {}
+    private Boolean active = true;
 
+    public Product() {
+    }
+
+    // Getters & Setters
     public Long getId() {
         return id;
     }
-
-    public String getName() {
-        return name;
+    
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getSku() {
         return sku;
     }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
     
-    public boolean getActive() {
-        return active;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setSku(String sku) {
         this.sku = sku;
     }
 
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+    
     public void setCategory(String category) {
         this.category = category;
     }
 
-    public void setActive(boolean active) {
+    public Boolean getActive() {
+        return active;
+    }
+    
+    public void setActive(Boolean active) {
         this.active = active;
     }
 }

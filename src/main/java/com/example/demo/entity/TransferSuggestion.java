@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "transfer_suggestions")
 public class TransferSuggestion {
 
     @Id
@@ -11,88 +12,91 @@ public class TransferSuggestion {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "source_store_id")
     private Store sourceStore;
 
     @ManyToOne
+    @JoinColumn(name = "target_store_id")
     private Store targetStore;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
-    private int quantity;
+    private Integer quantity;
 
     private String priority;
 
-    private String reason;
+    private LocalDateTime suggestedAt;
 
-    private LocalDateTime generatedAt;
+    private String status = "PENDING";
 
-  
+    public TransferSuggestion() {
+    }
 
+    @PrePersist
+    public void prePersist() {
+        this.suggestedAt = LocalDateTime.now();
+    }
+
+    // Getters & Setters
     public Long getId() {
         return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Store getSourceStore() {
         return sourceStore;
     }
+    
+    public void setSourceStore(Store sourceStore) {
+        this.sourceStore = sourceStore;
+    }
 
     public Store getTargetStore() {
         return targetStore;
+    }
+    
+    public void setTargetStore(Store targetStore) {
+        this.targetStore = targetStore;
     }
 
     public Product getProduct() {
         return product;
     }
+    
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
+    }
+    
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public String getPriority() {
         return priority;
     }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public LocalDateTime getGeneratedAt() {
-        return generatedAt;
-    }
-
-    // --- setters expected by tests ---
-
-    public void setSourceStore(Store store) {
-        this.sourceStore = store;
-    }
-
-    public void setTargetStore(Store store) {
-        this.targetStore = store;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public void setQuantity(int qty) {
-        this.quantity = qty;
-    }
-
-    // some tests call this instead of setQuantity
-    public void setSuggestedQuantity(int qty) {
-        this.quantity = qty;
-    }
-
+    
     public void setPriority(String priority) {
         this.priority = priority;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public LocalDateTime getSuggestedAt() {
+        return suggestedAt;
     }
 
-    public void setGeneratedAt(LocalDateTime generatedAt) {
-        this.generatedAt = generatedAt;
+    public String getStatus() {
+        return status;
+    }
+    
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.demo.service;
+\package com.example.demo.service;
 
 import com.example.demo.entity.Product;
 
@@ -12,6 +12,5 @@ public interface ProductService {
 
     List<Product> getAllProducts();
 
-    // 🔥 REQUIRED BY TESTS
     void deactivateProduct(Long id);
 }

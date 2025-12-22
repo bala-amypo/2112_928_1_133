@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
@@ -18,39 +19,40 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    private Key getSigningKey() {
+    private Key key() {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
     public String generateToken(UserAccount user) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + expiration);
+        return generateToken(Map.of("role", user.getRole()), user.getEmail());
+    }
 
+    public String generateToken(Map<String, Object> claims, String username) {
         return Jwts.builder()
-                .setSubject(user.getEmail())
-                .claim("role", user.getRole())
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String extractEmail(String token) {
-        return getClaims(token).getSubject();
+    public String getUsername(String token) {
+        return parse(token).getSubject();
     }
 
-    public boolean validateToken(String token) {
-        try {
-            getClaims(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
+    public boolean isTokenValid(String token, String username) {
+        return getUsername(token).equals(username)
+                && !parse(token).getExpiration().before(new Date());
     }
 
-    private Claims getClaims(String token) {
+    public long getExpirationMillis() {
+        return expiration;
+    }
+
+    private Claims parse(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+                .setSigningKey(key())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "demand_forecasts")
 public class DemandForecast {
 
     @Id
@@ -12,68 +11,35 @@ public class DemandForecast {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "store_id")
     private Store store;
 
+    @ManyToOne
+    private Product product;
+
     private LocalDate forecastDate;
+    private int predictedDemand;
 
-    private Integer predictedDemand;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    private Double confidenceScore;
+    public Store getStore() { return store; }
+    public void setStore(Store store) { this.store = store; }
 
-    public DemandForecast() {
-    }
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
 
-    // Getters & Setters
-    public Long getId() {
-        return id;
-    }
-    
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public LocalDate getForecastDate() { return forecastDate; }
+    public void setForecastDate(LocalDate forecastDate) { this.forecastDate = forecastDate; }
 
-    public Product getProduct() {
-        return product;
-    }
-    
-    public void setProduct(Product product) {
-        this.product = product;
+    public int getPredictedDemand() { return predictedDemand; }
+    public void setPredictedDemand(int predictedDemand) { this.predictedDemand = predictedDemand; }
+
+    /* TEST ALIASES */
+    public void setForecastedDemand(int demand) {
+        this.predictedDemand = demand;
     }
 
-    public Store getStore() {
-        return store;
-    }
-    
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
-    public LocalDate getForecastDate() {
-        return forecastDate;
-    }
-    
-    public void setForecastDate(LocalDate forecastDate) {
-        this.forecastDate = forecastDate;
-    }
-
-    public Integer getPredictedDemand() {
+    public int getForecastedDemand() {
         return predictedDemand;
-    }
-    
-    public void setPredictedDemand(Integer predictedDemand) {
-        this.predictedDemand = predictedDemand;
-    }
-
-    public Double getConfidenceScore() {
-        return confidenceScore;
-    }
-    
-    public void setConfidenceScore(Double confidenceScore) {
-        this.confidenceScore = confidenceScore;
     }
 }

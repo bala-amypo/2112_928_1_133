@@ -11,8 +11,12 @@ import java.util.List;
 
 public interface InventoryLevelRepository extends JpaRepository<InventoryLevel, Long> {
 
+    // ✅ REQUIRED by existing services/tests
     InventoryLevel findByStoreAndProduct(Store store, Product product);
+    List<InventoryLevel> findByStore_Id(Long storeId);
+    List<InventoryLevel> findByProduct_Id(Long productId);
 
+    // ✅ HQL (for transaction & HQL topic)
     @Query("FROM InventoryLevel i WHERE i.store.id = :storeId")
     List<InventoryLevel> findInventoryByStoreId(@Param("storeId") Long storeId);
 

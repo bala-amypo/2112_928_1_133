@@ -9,6 +9,10 @@ import java.util.List;
 
 public interface TransferSuggestionRepository extends JpaRepository<TransferSuggestion, Long> {
 
+    // ✅ REQUIRED by existing services/tests
+    List<TransferSuggestion> findBySourceStoreId(Long storeId);
+
+    // ✅ HQL
     @Query("FROM TransferSuggestion t WHERE t.sourceStore.id = :storeId")
     List<TransferSuggestion> findSuggestionsFromStore(@Param("storeId") Long storeId);
 }

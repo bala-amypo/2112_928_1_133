@@ -12,45 +12,44 @@ import java.util.List;
 @Service
 public class StoreServiceImpl implements StoreService {
 
-    private final StoreRepository storeRepository;
+    private final StoreRepository storeRepo;
 
-    public StoreServiceImpl(StoreRepository storeRepository) {
-        this.storeRepository = storeRepository;
+    public StoreServiceImpl(StoreRepository storeRepo) {
+        this.storeRepo = storeRepo;
     }
 
     @Override
     public Store createStore(Store store) {
-        if (storeRepository.findByStoreName(store.getStoreName()) != null) {
+        if (storeRepo.findByStoreName(store.getStoreName()) != null) {
             throw new BadRequestException("Store name already exists");
         }
-        store.setActive(true);
-        return storeRepository.save(store);
+        return storeRepo.save(store);
     }
 
     @Override
     public Store getStoreById(Long id) {
-        return storeRepository.findById(id)
+        return storeRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
     }
 
     @Override
     public List<Store> getAllStores() {
-        return storeRepository.findAll();
+        return storeRepo.findAll();
     }
 
     @Override
     public Store updateStore(Long id, Store update) {
-        Store store = getStoreById(id);
-        store.setStoreName(update.getStoreName());
-        store.setAddress(update.getAddress());
-        store.setRegion(update.getRegion());
-        return storeRepository.save(store);
+        Store existing = getStoreById(id);
+        existing.setStoreName(update.getStoreName());
+        existing.setAddress(update.getAddress());
+        existing.setRegion(update.getRegion());
+        return storeRepo.save(existing);
     }
 
     @Override
     public void deactivateStore(Long id) {
         Store store = getStoreById(id);
         store.setActive(false);
-        storeRepository.save(store);
+        storeRepo.save(store);
     }
 }

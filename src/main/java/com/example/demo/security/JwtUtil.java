@@ -21,10 +21,10 @@ public class JwtUtil {
 
     public String generateToken(UserAccount user) {
         return Jwts.builder()
-                .subject(user.getEmail())
+                .setSubject(user.getEmail())      // ✅ correct for 0.11.5
                 .claim("role", user.getRole())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
                 .signWith(key)
                 .compact();
     }
@@ -43,10 +43,10 @@ public class JwtUtil {
     }
 
     private Claims parseClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(key)
+        return Jwts.parserBuilder()              
+                .setSigningKey(key)
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

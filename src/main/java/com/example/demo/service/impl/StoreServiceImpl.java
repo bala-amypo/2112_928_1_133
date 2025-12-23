@@ -6,10 +6,12 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.service.StoreService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepo;
@@ -39,11 +41,11 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store updateStore(Long id, Store update) {
-        Store existing = getStoreById(id);
-        existing.setStoreName(update.getStoreName());
-        existing.setAddress(update.getAddress());
-        existing.setRegion(update.getRegion());
-        return storeRepo.save(existing);
+        Store store = getStoreById(id);
+        store.setStoreName(update.getStoreName());
+        store.setAddress(update.getAddress());
+        store.setRegion(update.getRegion());
+        return storeRepo.save(store);
     }
 
     @Override

@@ -17,22 +17,17 @@ public class InventoryLevelController {
     }
 
     @PostMapping
-    public InventoryLevel createInventory(@RequestBody InventoryLevel inventory) {
-        return inventoryService.createOrUpdateInventory(inventory);
-    }
-
-    @PutMapping("/update")
-    public InventoryLevel updateInventory(@RequestBody InventoryLevel inventory) {
+    public InventoryLevel createOrUpdate(@RequestBody InventoryLevel inventory) {
         return inventoryService.createOrUpdateInventory(inventory);
     }
 
     @GetMapping("/store/{storeId}")
-    public List<InventoryLevel> getInventoryForStore(@PathVariable Long storeId) {
+    public List<InventoryLevel> getForStore(@PathVariable Long storeId) {
         return inventoryService.getInventoryForStore(storeId);
     }
 
     @GetMapping("/product/{productId}")
-    public List<InventoryLevel> getInventoryForProduct(@PathVariable Long productId) {
+    public List<InventoryLevel> getForProduct(@PathVariable Long productId) {
         return inventoryService.getInventoryForProduct(productId);
     }
 }

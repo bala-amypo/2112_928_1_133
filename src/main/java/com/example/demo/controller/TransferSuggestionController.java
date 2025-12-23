@@ -17,19 +17,17 @@ public class TransferSuggestionController {
     }
 
     @PostMapping("/generate/{productId}")
-    public List<TransferSuggestion> generateSuggestions(
-            @PathVariable Long productId) {
+    public List<TransferSuggestion> generate(@PathVariable Long productId) {
         return balancerService.generateSuggestions(productId);
     }
 
     @GetMapping("/store/{storeId}")
-    public List<TransferSuggestion> getSuggestionsForStore(
-            @PathVariable Long storeId) {
+    public List<TransferSuggestion> getForStore(@PathVariable Long storeId) {
         return balancerService.getSuggestionsForStore(storeId);
     }
 
     @GetMapping("/{id}")
-    public TransferSuggestion getSuggestion(@PathVariable Long id) {
+    public TransferSuggestion getById(@PathVariable Long id) {
         return balancerService.getSuggestionById(id);
     }
 }

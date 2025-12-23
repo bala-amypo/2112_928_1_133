@@ -17,17 +17,17 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
+    public Product create(@RequestBody Product product) {
         return productService.createProduct(product);
     }
 
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable Long id) {
+    public Product getById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<Product> getAll() {
         return productService.getAllProducts();
     }
 }

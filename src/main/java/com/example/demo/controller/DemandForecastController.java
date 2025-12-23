@@ -17,18 +17,19 @@ public class DemandForecastController {
     }
 
     @PostMapping
-    public DemandForecast createForecast(@RequestBody DemandForecast forecast) {
+    public DemandForecast create(@RequestBody DemandForecast forecast) {
         return forecastService.createForecast(forecast);
     }
 
     @GetMapping("/store/{storeId}")
-    public List<DemandForecast> getForecastsForStore(@PathVariable Long storeId) {
+    public List<DemandForecast> getForStore(@PathVariable Long storeId) {
         return forecastService.getForecastsForStore(storeId);
     }
 
     @GetMapping("/store/{storeId}/product/{productId}")
-    public DemandForecast getForecast(@PathVariable Long storeId,
-                                      @PathVariable Long productId) {
+    public DemandForecast getForStoreAndProduct(
+            @PathVariable Long storeId,
+            @PathVariable Long productId) {
         return forecastService.getForecast(storeId, productId);
     }
 }

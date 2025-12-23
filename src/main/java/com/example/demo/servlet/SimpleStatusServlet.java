@@ -1,16 +1,22 @@
 package com.example.demo.servlet;
 
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+
 import java.io.IOException;
 
-@WebServlet("/simple-status")
+@WebServlet(urlPatterns = "/simple-status")
 public class SimpleStatusServlet extends HttpServlet {
 
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse res)
-            throws IOException {
-        res.setStatus(HttpServletResponse.SC_OK);
-        res.getWriter().write("OK");
+    protected void doGet(HttpServletRequest req,
+                         HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write("OK");
     }
 }

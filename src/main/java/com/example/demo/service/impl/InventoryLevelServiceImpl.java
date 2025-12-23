@@ -10,10 +10,12 @@ import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.service.InventoryLevelService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class InventoryLevelServiceImpl implements InventoryLevelService {
 
     private final InventoryLevelRepository inventoryRepo;
@@ -36,11 +38,12 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
 
         Store store = storeRepo.findById(inv.getStore().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
-
         Product product = productRepo.findById(inv.getProduct().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        InventoryLevel existing = inventoryRepo.findByStoreAndProduct(store, product);
+        InventoryLevel existing =
+                inventoryRepo.findByStoreAndProduct(store, product);
+
         if (existing != null) {
             existing.setQuantity(inv.getQuantity());
             return inventoryRepo.save(existing);
@@ -53,12 +56,12 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
 
     @Override
     public List<InventoryLevel> getInventoryForStore(Long storeId) {
-        return inventoryRepo.findByStore_Id(storeId);
+        return inventoryRepo.findInventoryByStoreId(storeId);
     }
 
     @Override
     public List<InventoryLevel> getInventoryForProduct(Long productId) {
-        return inventoryRepo.findByProduct_Id(productId);
+        return inventoryRepo.findInventoryByProductId(productId);
     }
 
     @Override

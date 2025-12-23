@@ -3,21 +3,27 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "products", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "sku")
+})
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String sku;
 
+    @Column(nullable = false)
     private String name;
+
     private String category;
+
     private Boolean active = true;
 
+    // getters & setters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getSku() { return sku; }
     public void setSku(String sku) { this.sku = sku; }
@@ -30,8 +36,4 @@ public class Product {
 
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
-
-    public boolean isActive() {
-        return Boolean.TRUE.equals(active);
-    }
 }

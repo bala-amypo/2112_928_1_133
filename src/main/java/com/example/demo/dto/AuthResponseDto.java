@@ -15,19 +15,9 @@ public class AuthResponseDto {
         this.expiresAt = expiresAt;
     }
 
-    public String getToken() {
-        return token;
-    }
-    
-    public void setToken(String token) {
-        this.token = token;
-    }
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
 
-    public LocalDateTime getExpiresAt() {
-        return expiresAt;
-    }
-    
-    public void setExpiresAt(LocalDateTime expiresAt) {
-        this.expiresAt = expiresAt;
-    }
+    public LocalDateTime getExpiresAt() { return expiresAt; }
+    public void setExpiresAt(LocalDateTime expiresAt) { this.expiresAt = expiresAt; }
 }

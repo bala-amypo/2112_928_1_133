@@ -3,38 +3,64 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "stores", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "storeName")
-})
+@Table(name = "stores")
 public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
     private String storeName;
-
     private String address;
     private String region;
 
-    @Column(nullable = false)
     private Boolean active = true;
 
-    public Store() {}
+    public Store() {
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // ---------- GETTERS ----------
 
-    public String getStoreName() { return storeName; }
-    public void setStoreName(String storeName) { this.storeName = storeName; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public String getStoreName() {
+        return storeName;
+    }
 
-    public String getRegion() { return region; }
-    public void setRegion(String region) { this.region = region; }
+    public String getAddress() {
+        return address;
+    }
 
-    public Boolean isActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public String getRegion() {
+        return region;
+    }
+
+    // ✅ THIS IS WHAT WAS MISSING
+    public Boolean getActive() {
+        return active;
+    }
+
+    // ---------- SETTERS ----------
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }

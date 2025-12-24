@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -19,14 +20,19 @@ public class UserAccount {
 
     private String fullName;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
     @PrePersist
     public void prePersist() {
-        // required for tests
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     public void preUpdate() {
-        // required for tests
+        updatedAt = LocalDateTime.now();
     }
 
     // -------- Getters & Setters --------
@@ -42,11 +48,11 @@ public class UserAccount {
     public String getEmail() {
         return email;
     }
-
+ 
     public void setEmail(String email) {
         this.email = email;
     }
-
+ 
     public String getPassword() {
         return password;
     }
@@ -62,12 +68,22 @@ public class UserAccount {
     public void setRole(String role) {
         this.role = role;
     }
-
+ 
     public String getFullName() {
         return fullName;
     }
  
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    // ⭐ TEST EXPECTED
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    // ⭐ TEST EXPECTED
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }

@@ -7,8 +7,7 @@ public class AuthResponseDto {
     private String token;
     private LocalDateTime expiresAt;
 
-    public AuthResponseDto() {
-    }
+    public AuthResponseDto() {}
 
     public AuthResponseDto(String token, LocalDateTime expiresAt) {
         this.token = token;

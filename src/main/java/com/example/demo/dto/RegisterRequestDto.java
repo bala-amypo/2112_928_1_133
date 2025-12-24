@@ -7,6 +7,8 @@ public class RegisterRequestDto {
     private String password;
     private String role;
 
+    public RegisterRequestDto() {}
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 

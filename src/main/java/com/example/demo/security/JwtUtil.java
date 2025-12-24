@@ -1,49 +1,57 @@
 package com.example.demo.security;
 
 import com.example.demo.entity.UserAccount;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
+import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private static final String SECRET =
-            "this-is-a-very-secure-secret-key-for-jwt-signing-123456";
-    private static final long EXPIRATION_MS = 60 * 60 * 1000;
-
-    private final SecretKey key =
-            Keys.hmacShaKeyFor(SECRET.getBytes());
+    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final long expirationMinutes = 60;
 
     public String generateToken(UserAccount user) {
+        Date now = new Date();
+        Date expiry = Date.from(
+                LocalDateTime.now().plusMinutes(expirationMinutes)
+                        .atZone(ZoneId.systemDefault()).toInstant()
+        );
+
         return Jwts.builder()
-                .setSubject(user.getEmail())      // ✅ correct for 0.11.5
+                .setSubject(user.getEmail())
                 .claim("role", user.getRole())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
+                .setIssuedAt(now)
+                .setExpiration(expiry)
                 .signWith(key)
                 .compact();
     }
 
+    public String extractEmail(String token) {
+        return getClaims(token).getSubject();
+    }
+
     public boolean validateToken(String token) {
         try {
-            parseClaims(token);
+            getClaims(token);
             return true;
-        } catch (Exception e) {
+        } catch (JwtException e) {
             return false;
         }
     }
 
-    public String extractUsername(String token) {
-        return parseClaims(token).getSubject();
+    public LocalDateTime getExpiry(String token) {
+        return getClaims(token).getExpiration()
+                .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    private Claims parseClaims(String token) {
-        return Jwts.parserBuilder()              
+    private Claims getClaims(String token) {
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)

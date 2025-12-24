@@ -6,12 +6,10 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.ProductService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepo;
@@ -22,16 +20,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(Product product) {
+
         if (productRepo.findBySku(product.getSku()) != null) {
             throw new BadRequestException("SKU already exists");
         }
+
+        product.setActive(true);
         return productRepo.save(product);
     }
 
     @Override
     public Product getProductById(Long id) {
         return productRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product not found"));
     }
 
     @Override

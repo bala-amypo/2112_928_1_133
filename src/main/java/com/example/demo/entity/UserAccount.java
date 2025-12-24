@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_accounts", uniqueConstraints = {
+@Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
 public class UserAccount {
@@ -21,24 +21,28 @@ public class UserAccount {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String role;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @PrePersist
-    public void prePersist() {
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // getters & setters
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public UserAccount() {}
+
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 

@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "inventory_levels",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"store_id", "product_id"}))
+@Table(name = "inventory_levels")
 public class InventoryLevel {
 
     @Id
@@ -18,18 +17,21 @@ public class InventoryLevel {
     @ManyToOne(optional = false)
     private Product product;
 
+    @Column(nullable = false)
     private Integer quantity;
 
     private LocalDateTime lastUpdated;
 
     @PrePersist
     @PreUpdate
-    public void updateTimestamp() {
+    protected void updateTimestamp() {
         this.lastUpdated = LocalDateTime.now();
     }
 
-    // getters & setters
+    public InventoryLevel() {}
+
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public Store getStore() { return store; }
     public void setStore(Store store) { this.store = store; }

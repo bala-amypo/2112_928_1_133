@@ -11,28 +11,30 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Store sourceStore;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Store targetStore;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Product product;
 
     private Integer quantity;
     private String priority;
 
-    private String status = "PENDING";
-
     private LocalDateTime suggestedAt;
 
+    @Column(nullable = false)
+    private String status = "PENDING";
+
     @PrePersist
-    public void prePersist() {
+    protected void onCreate() {
         this.suggestedAt = LocalDateTime.now();
     }
 
-    // getters & setters
+    public TransferSuggestion() {}
+
     public Long getId() { return id; }
 
     public Store getSourceStore() { return sourceStore; }
@@ -50,8 +52,8 @@ public class TransferSuggestion {
     public String getPriority() { return priority; }
     public void setPriority(String priority) { this.priority = priority; }
 
+    public LocalDateTime getSuggestedAt() { return suggestedAt; }
+
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-
-    public LocalDateTime getSuggestedAt() { return suggestedAt; }
 }

@@ -17,14 +17,18 @@ public class DemandForecast {
     @ManyToOne(optional = false)
     private Store store;
 
+    @Column(nullable = false)
     private LocalDate forecastDate;
 
+    @Column(nullable = false)
     private Integer predictedDemand;
 
     private Double confidenceScore;
 
-    // getters & setters
+    public DemandForecast() {}
+
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public Product getProduct() { return product; }
     public void setProduct(Product product) { this.product = product; }

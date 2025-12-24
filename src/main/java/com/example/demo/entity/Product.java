@@ -20,10 +20,13 @@ public class Product {
 
     private String category;
 
+    @Column(nullable = false)
     private Boolean active = true;
 
-    // getters & setters
+    public Product() {}
+
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getSku() { return sku; }
     public void setSku(String sku) { this.sku = sku; }
@@ -34,6 +37,6 @@ public class Product {
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
 
-    public Boolean getActive() { return active; }
+    public Boolean isActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
 }

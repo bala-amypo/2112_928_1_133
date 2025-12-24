@@ -1,6 +1,10 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "stores")
@@ -37,8 +41,13 @@ public class Store {
         return region;
     }
 
-    // ✅ THIS IS WHAT WAS MISSING
+    // ✔ Required by some services
     public Boolean getActive() {
+        return active;
+    }
+
+    // ✔ Required by TEST CASES
+    public Boolean isActive() {
         return active;
     }
 

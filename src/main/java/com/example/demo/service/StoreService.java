@@ -11,6 +11,8 @@ public interface StoreService {
 
     List<Store> getAllStores();
 
-    // ⭐ REQUIRED BY TESTS
+    // ✅ REQUIRED BY TEST
+    Store updateStore(Long id, Store store);
+
     void deactivateStore(Long storeId);
 }

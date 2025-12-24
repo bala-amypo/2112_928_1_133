@@ -32,7 +32,19 @@ public class StoreServiceImpl implements StoreService {
         return repository.findAll();
     }
 
-    // ⭐ REQUIRED BY TESTS
+    // ✅ REQUIRED BY TEST
+    @Override
+    public Store updateStore(Long id, Store updated) {
+        Store store = getStoreById(id);
+
+        store.setStoreName(updated.getStoreName());
+        store.setAddress(updated.getAddress());
+        store.setRegion(updated.getRegion());
+        store.setActive(updated.getActive());
+
+        return repository.save(store);
+    }
+
     @Override
     public void deactivateStore(Long storeId) {
         Store store = getStoreById(storeId);

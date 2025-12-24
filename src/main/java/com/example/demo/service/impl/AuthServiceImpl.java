@@ -10,28 +10,27 @@ import com.example.demo.security.JwtUtil;
 import com.example.demo.service.AuthService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
-@Transactional
 public class AuthServiceImpl implements AuthService {
 
     private final UserAccountRepository userRepo;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder encoder;
     private final JwtUtil jwtUtil;
 
     public AuthServiceImpl(UserAccountRepository userRepo,
-                           PasswordEncoder passwordEncoder,
+                           PasswordEncoder encoder,
                            JwtUtil jwtUtil) {
         this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
+        this.encoder = encoder;
         this.jwtUtil = jwtUtil;
     }
 
     @Override
     public void register(RegisterRequestDto dto) {
+
         if (userRepo.findByEmail(dto.getEmail()).isPresent()) {
             throw new BadRequestException("Email already exists");
         }
@@ -39,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
         UserAccount user = new UserAccount();
         user.setEmail(dto.getEmail());
         user.setFullName(dto.getFullName());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setPassword(encoder.encode(dto.getPassword()));
         user.setRole(dto.getRole());
 
         userRepo.save(user);
@@ -47,14 +46,19 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponseDto login(AuthRequestDto dto) {
+
         UserAccount user = userRepo.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new BadRequestException("Invalid credentials"));
 
-        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+        if (!encoder.matches(dto.getPassword(), user.getPassword())) {
             throw new BadRequestException("Invalid credentials");
         }
 
         String token = jwtUtil.generateToken(user);
-        return new AuthResponseDto(token, LocalDateTime.now().plusHours(1));
+
+        return new AuthResponseDto(
+                token,
+                jwtUtil.getExpiry(token)
+        );
     }
 }

@@ -14,76 +14,42 @@ public class UserAccount {
     @Column(unique = true, nullable = false)
     private String email;
 
+    private String fullName;
+
     private String password;
 
     private String role;
 
-    private String fullName;
-
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
 
     @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
-    // -------- Getters & Setters --------
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
 
-    public String getEmail() {
-        return email;
-    }
- 
-    public void setEmail(String email) {
-        this.email = email;
-    }
- 
-    public String getPassword() {
-        return password;
-    }
- 
-    public void setPassword(String password) {
-        this.password = password;
-    }
- 
-    public String getRole() {
-        return role;
-    }
- 
-    public void setRole(String role) {
-        this.role = role;
-    }
- 
-    public String getFullName() {
-        return fullName;
-    }
- 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    // ⭐ TEST EXPECTED
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    // ⭐ TEST EXPECTED
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }

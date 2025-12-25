@@ -28,8 +28,12 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         this.productRepo = productRepo;
     }
 
+    // ================================
+    // Update inventory using IDs
+    // ================================
     @Override
     public InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity) {
+
         if (quantity < 0) {
             throw new BadRequestException("Quantity must be >= 0");
         }
@@ -40,19 +44,22 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        InventoryLevel existing = inventoryRepo.findByStoreAndProduct(store, product);
+        InventoryLevel inventory =
+                inventoryRepo.findByStoreAndProduct(store, product);
 
-        if (existing == null) {
-            existing = new InventoryLevel();
-            existing.setStore(store);
-            existing.setProduct(product);
+        if (inventory == null) {
+            inventory = new InventoryLevel();
+            inventory.setStore(store);
+            inventory.setProduct(product);
         }
 
-        existing.setQuantity(quantity);
-        return inventoryRepo.save(existing);
+        inventory.setQuantity(quantity);
+        return inventoryRepo.save(inventory);
     }
 
-    // ✅ REQUIRED BY TESTS
+    // ================================
+    // REQUIRED BY TESTS (Object based)
+    // ================================
     @Override
     public InventoryLevel createOrUpdateInventory(InventoryLevel inventory) {
 
@@ -60,10 +67,11 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
             throw new BadRequestException("Quantity must be >= 0");
         }
 
-        InventoryLevel existing = inventoryRepo.findByStoreAndProduct(
-                inventory.getStore(),
-                inventory.getProduct()
-        );
+        InventoryLevel existing =
+                inventoryRepo.findByStoreAndProduct(
+                        inventory.getStore(),
+                        inventory.getProduct()
+                );
 
         if (existing != null) {
             existing.setQuantity(inventory.getQuantity());
@@ -73,28 +81,38 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         return inventoryRepo.save(inventory);
     }
 
+    // ================================
+    // Get inventory for store + product
+    // ================================
     @Override
     public InventoryLevel getInventory(Long storeId, Long productId) {
+
         Store store = storeRepo.findById(storeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
 
         Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        InventoryLevel inv = inventoryRepo.findByStoreAndProduct(store, product);
-        if (inv == null) {
+        InventoryLevel inventory =
+                inventoryRepo.findByStoreAndProduct(store, product);
+
+        if (inventory == null) {
             throw new ResourceNotFoundException("Inventory not found");
         }
-        return inv;
+
+        return inventory;
     }
 
+    // ================================
+    // REQUIRED BY TESTS
+    // ================================
     @Override
-    public List<InventoryLevel> getInventoryByStore(Long storeId) {
+    public List<InventoryLevel> getInventoryForStore(Long storeId) {
         return inventoryRepo.findByStore_Id(storeId);
     }
 
     @Override
-    public List<InventoryLevel> getInventoryByProduct(Long productId) {
+    public List<InventoryLevel> getInventoryForProduct(Long productId) {
         return inventoryRepo.findByProduct_Id(productId);
     }
 }

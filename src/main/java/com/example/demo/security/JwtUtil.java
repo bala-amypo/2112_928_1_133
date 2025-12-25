@@ -2,73 +2,39 @@ package com.example.demo.security;
 
 import com.example.demo.entity.UserAccount;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    private static final String SECRET =
-            "test-secret-key-test-secret-key-test-secret-key";
-    private static final long EXPIRATION = 3600000; // 1 hour
+    private final String SECRET = "secret-key-demo";
+    private final long EXPIRATION = 1000 * 60 * 60;
 
     public String generateToken(UserAccount user) {
-        return generateToken(Map.of(), user.getEmail());
-    }
-
-    // 🔹 Used directly by tests
-    public String generateToken(Map<String, Object> claims, String username) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(username)
+                .setSubject(user.getEmail())
+                .claim("role", user.getRole())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(Keys.hmacShaKeyFor(SECRET.getBytes()), SignatureAlgorithm.HS256)
+                .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
     }
 
-    // 🔹 Used by filter + tests
+    public String extractUsername(String token) {
+        return getClaims(token).getSubject();
+    }
+
     public boolean validateToken(String token) {
-        try {
-            parse(token);
-            return true;
-        } catch (JwtException e) {
-            return false;
-        }
+        return !getClaims(token).getExpiration().before(new Date());
     }
 
-    public String extractEmail(String token) {
-        return parse(token).getSubject();
+    public Date getExpirationDate(String token) {
+        return getClaims(token).getExpiration();
     }
 
-    // ⭐ REQUIRED BY TESTS
-    public String getUsername(String token) {
-        return extractEmail(token);
-    }
-
-    // ⭐ REQUIRED BY TESTS
-    public boolean isTokenValid(String token, String username) {
-        return validateToken(token) && extractEmail(token).equals(username);
-    }
-
-    // 🔹 Used in AuthServiceImpl
-    public long getExpiry(String token) {
-        return parse(token).getExpiration().getTime();
-    }
-
-    // ⭐ REQUIRED BY TESTS
-    public long getExpirationMillis() {
-        return EXPIRATION;
-    }
-
-    private Claims parse(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(SECRET.getBytes())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    private Claims getClaims(String token) {
+        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
     }
 }

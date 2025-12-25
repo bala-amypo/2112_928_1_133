@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/forecasts")
 public class DemandForecastController {
 
-    private final DemandForecastService forecastService;
+    private final DemandForecastService service;
 
-    public DemandForecastController(DemandForecastService forecastService) {
-        this.forecastService = forecastService;
+    public DemandForecastController(DemandForecastService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public DemandForecast createForecast(@RequestBody DemandForecast forecast) {
-        return forecastService.createForecast(forecast);
+    public DemandForecast create(@RequestBody DemandForecast forecast) {
+        return service.createForecast(forecast);
     }
 
     @GetMapping("/store/{storeId}/product/{productId}")
-    public DemandForecast getForecast(@PathVariable Long storeId,
-                                      @PathVariable Long productId) {
-        return forecastService.getForecast(storeId, productId);
+    public DemandForecast get(@PathVariable Long storeId,
+                              @PathVariable Long productId) {
+        return service.getForecast(storeId, productId);
     }
 }

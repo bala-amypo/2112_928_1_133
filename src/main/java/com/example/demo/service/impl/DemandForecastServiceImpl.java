@@ -31,33 +31,30 @@ public class DemandForecastServiceImpl implements DemandForecastService {
 
     @Override
     public DemandForecast createForecast(DemandForecast forecast) {
-
         if (!forecast.getForecastDate().isAfter(LocalDate.now())) {
             throw new BadRequestException("Forecast date must be in the future");
         }
-
         if (forecast.getPredictedDemand() < 0) {
             throw new BadRequestException("Quantity must be >= 0");
         }
-
         return forecastRepo.save(forecast);
     }
 
     @Override
     public DemandForecast getForecast(Long storeId, Long productId) {
-
         Store store = storeRepo.findById(storeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
 
         Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        return forecastRepo.findByStoreAndProductAndForecastDateAfter(
-                        store, product, LocalDate.now())
-                .stream()
-                .findFirst()
-                .orElseThrow(() ->
-                        new BadRequestException("No forecast found"));
+        List<DemandForecast> list = forecastRepo
+                .findByStoreAndProductAndForecastDateAfter(store, product, LocalDate.now());
+
+        if (list.isEmpty()) {
+            throw new BadRequestException("No forecast found");
+        }
+        return list.get(0);
     }
 
     @Override

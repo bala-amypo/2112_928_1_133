@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Store;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.service.StoreService;
 import org.springframework.stereotype.Service;
@@ -10,45 +12,44 @@ import java.util.List;
 @Service
 public class StoreServiceImpl implements StoreService {
 
-    private final StoreRepository repository;
+    private final StoreRepository storeRepo;
 
-    public StoreServiceImpl(StoreRepository repository) {
-        this.repository = repository;
+    public StoreServiceImpl(StoreRepository storeRepo) {
+        this.storeRepo = storeRepo;
     }
 
     @Override
     public Store createStore(Store store) {
-        return repository.save(store);
+        if (storeRepo.findByStoreName(store.getStoreName()) != null) {
+            throw new BadRequestException("Store name already exists");
+        }
+        return storeRepo.save(store);
     }
 
     @Override
     public Store getStoreById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Store not found"));
+        return storeRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
     }
 
     @Override
     public List<Store> getAllStores() {
-        return repository.findAll();
+        return storeRepo.findAll();
     }
 
-    // ✅ REQUIRED BY TEST
     @Override
-    public Store updateStore(Long id, Store updated) {
+    public Store updateStore(Long id, Store store) {
+        Store existing = getStoreById(id);
+        existing.setStoreName(store.getStoreName());
+        existing.setRegion(store.getRegion());
+        existing.setAddress(store.getAddress());
+        return storeRepo.save(existing);
+    }
+
+    @Override
+    public void deactivateStore(Long id) {
         Store store = getStoreById(id);
-
-        store.setStoreName(updated.getStoreName());
-        store.setAddress(updated.getAddress());
-        store.setRegion(updated.getRegion());
-        store.setActive(updated.getActive());
-
-        return repository.save(store);
-    }
-
-    @Override
-    public void deactivateStore(Long storeId) {
-        Store store = getStoreById(storeId);
         store.setActive(false);
-        repository.save(store);
+        storeRepo.save(store);
     }
 }

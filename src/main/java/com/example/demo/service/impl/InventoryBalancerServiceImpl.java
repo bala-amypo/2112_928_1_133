@@ -19,12 +19,13 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
     private final DemandForecastRepository forecastRepo;
     private final StoreRepository storeRepo;
 
+    // ⚠️ DO NOT CHANGE ORDER
     public InventoryBalancerServiceImpl(
             TransferSuggestionRepository suggestionRepo,
             InventoryLevelRepository inventoryRepo,
             DemandForecastRepository forecastRepo,
-            StoreRepository storeRepo) {
-
+            StoreRepository storeRepo
+    ) {
         this.suggestionRepo = suggestionRepo;
         this.inventoryRepo = inventoryRepo;
         this.forecastRepo = forecastRepo;
@@ -34,56 +35,43 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
     @Override
     public List<TransferSuggestion> generateSuggestions(Long productId) {
 
-        List<InventoryLevel> inventory =
-                inventoryRepo.findByProduct_Id(productId);
-
-        if (inventory.isEmpty()) {
+        List<InventoryLevel> inventories = inventoryRepo.findByProduct_Id(productId);
+        if (inventories.isEmpty()) {
             throw new BadRequestException("No forecast found");
         }
 
-        List<TransferSuggestion> results = new ArrayList<>();
+        List<TransferSuggestion> suggestions = new ArrayList<>();
 
-        for (InventoryLevel source : inventory) {
-
+        for (InventoryLevel inv : inventories) {
             List<DemandForecast> forecasts =
                     forecastRepo.findByStoreAndProductAndForecastDateAfter(
-                            source.getStore(),
-                            source.getProduct(),
-                            LocalDate.now());
+                            inv.getStore(), inv.getProduct(), LocalDate.now());
 
-            if (forecasts.isEmpty()) {
-                continue;
-            }
+            if (forecasts.isEmpty()) continue;
 
-            int demand = forecasts.get(0).getPredictedDemand();
+            int forecastQty = forecasts.get(0).getPredictedDemand();
+            int diff = inv.getQuantity() - forecastQty;
 
-            if (source.getQuantity() > demand) {
-
-                for (InventoryLevel target : inventory) {
-
-                    if (target.getQuantity() < demand) {
-
+            if (diff > 0) {
+                for (InventoryLevel target : inventories) {
+                    if (target.getQuantity() < forecastQty) {
                         TransferSuggestion ts = new TransferSuggestion();
-                        ts.setSourceStore(source.getStore());
+                        ts.setSourceStore(inv.getStore());
                         ts.setTargetStore(target.getStore());
-                        ts.setProduct(source.getProduct());
-                        ts.setQuantity(
-                                source.getQuantity() - demand);
+                        ts.setProduct(inv.getProduct());
+                        ts.setQuantity(Math.min(diff, forecastQty - target.getQuantity()));
                         ts.setPriority("HIGH");
-
-                        results.add(
-                                suggestionRepo.save(ts)
-                        );
+                        suggestions.add(suggestionRepo.save(ts));
                     }
                 }
             }
         }
 
-        if (results.isEmpty()) {
+        if (suggestions.isEmpty()) {
             throw new BadRequestException("No forecast found");
         }
 
-        return results;
+        return suggestions;
     }
 
     @Override
@@ -94,7 +82,6 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
     @Override
     public TransferSuggestion getSuggestionById(Long id) {
         return suggestionRepo.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Suggestion not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Suggestion not found"));
     }
 }

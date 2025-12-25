@@ -20,20 +20,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(Product product) {
-
         if (productRepo.findBySku(product.getSku()) != null) {
             throw new BadRequestException("SKU already exists");
         }
-
-        product.setActive(true);
         return productRepo.save(product);
     }
 
     @Override
     public Product getProductById(Long id) {
         return productRepo.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override

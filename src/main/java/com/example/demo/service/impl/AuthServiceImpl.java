@@ -8,6 +8,7 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.AuthService;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,27 +19,28 @@ import java.time.LocalDateTime;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserAccountRepository repo;
+    private final UserAccountRepository userRepo;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authManager;
+    private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
     public AuthServiceImpl(
-            UserAccountRepository repo,
+            UserAccountRepository userRepo,
             PasswordEncoder passwordEncoder,
-            AuthenticationManager authManager,
+            AuthenticationManager authenticationManager,
             JwtUtil jwtUtil) {
 
-        this.repo = repo;
+        this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
-        this.authManager = authManager;
+        this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
 
+    // ================= REGISTER =================
     @Override
     public void register(RegisterRequestDto dto) {
 
-        if (repo.findByEmail(dto.getEmail()).isPresent()) {
+        if (userRepo.findByEmail(dto.getEmail()).isPresent()) {
             throw new BadRequestException("Email already exists");
         }
 
@@ -46,33 +48,39 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(dto.getEmail());
         user.setFullName(dto.getFullName());
 
-        // ✅ ENCODE PASSWORD (THIS FIXES LOGIN)
+        // ✅ PASSWORD MUST BE ENCODED
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
+        // ROLE_USER / ROLE_ADMIN
         user.setRole("ROLE_" + dto.getRole());
-        repo.save(user);
+
+        userRepo.save(user);
     }
 
+    // ================= LOGIN =================
     @Override
     public AuthResponseDto login(AuthRequestDto dto) {
 
-        // ✅ AUTHENTICATE
-        authManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                dto.getEmail(),
-                dto.getPassword()
-            )
+        // ✅ AUTHENTICATE USING SPRING SECURITY
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        dto.getEmail(),
+                        dto.getPassword()
+                )
         );
 
-        UserAccount user = repo.findByEmail(dto.getEmail())
+        UserAccount user = userRepo.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new BadRequestException("Invalid credentials"));
 
         String token = jwtUtil.generateToken(user);
 
         AuthResponseDto response = new AuthResponseDto();
         response.setToken(token);
+
+        // ✅ FIX: LocalDateTime DOES NOT SUPPORT plusMillis
         response.setExpiresAt(
-            LocalDateTime.now().plusMillis(jwtUtil.getExpirationMillis())
+                LocalDateTime.now()
+                        .plusSeconds(jwtUtil.getExpirationMillis() / 1000)
         );
 
         return response;

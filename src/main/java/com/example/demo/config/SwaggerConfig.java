@@ -22,10 +22,12 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("Multi-Location Inventory Balancer API")
                         .version("1.0")
-                        .description("Secured backend for inventory balancing"))
+                        .description("Secured backend for inventory balancing")
+                )
+                // ✅ PORT KEPT (as requested)
                 .servers(List.of(
                         new Server()
-                                .url("https://9129.408procr.amypo.ai/")
+                                .url("https://9129.408procr.amypo.ai")
                                 .description("Hosted Server")
                 ))
                 .addSecurityItem(

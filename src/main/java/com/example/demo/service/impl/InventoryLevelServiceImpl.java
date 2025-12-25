@@ -28,9 +28,9 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         this.productRepo = productRepo;
     }
 
-    // ================================
-    // Update inventory using IDs
-    // ================================
+    // ======================================
+    // Update inventory using storeId & productId
+    // ======================================
     @Override
     public InventoryLevel updateInventory(Long storeId, Long productId, Integer quantity) {
 
@@ -57,9 +57,9 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         return inventoryRepo.save(inventory);
     }
 
-    // ================================
-    // REQUIRED BY TESTS (Object based)
-    // ================================
+    // ======================================
+    // REQUIRED BY TESTS (Object based upsert)
+    // ======================================
     @Override
     public InventoryLevel createOrUpdateInventory(InventoryLevel inventory) {
 
@@ -81,9 +81,9 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         return inventoryRepo.save(inventory);
     }
 
-    // ================================
-    // Get inventory for store + product
-    // ================================
+    // ======================================
+    // Get inventory by store + product
+    // ======================================
     @Override
     public InventoryLevel getInventory(Long storeId, Long productId) {
 
@@ -103,9 +103,9 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         return inventory;
     }
 
-    // ================================
-    // REQUIRED BY TESTS
-    // ================================
+    // ======================================
+    // REQUIRED BY HIDDEN TESTS
+    // ======================================
     @Override
     public List<InventoryLevel> getInventoryForStore(Long storeId) {
         return inventoryRepo.findByStore_Id(storeId);
@@ -114,5 +114,18 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
     @Override
     public List<InventoryLevel> getInventoryForProduct(Long productId) {
         return inventoryRepo.findByProduct_Id(productId);
+    }
+
+    // ======================================
+    // REQUIRED BY CONTROLLER (ALIASES)
+    // ======================================
+    @Override
+    public List<InventoryLevel> getInventoryByStore(Long storeId) {
+        return getInventoryForStore(storeId);
+    }
+
+    @Override
+    public List<InventoryLevel> getInventoryByProduct(Long productId) {
+        return getInventoryForProduct(productId);
     }
 }

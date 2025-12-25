@@ -11,9 +11,11 @@ public interface InventoryLevelService {
 
     InventoryLevel getInventory(Long storeId, Long productId);
 
-    // ✅ REQUIRED BY TESTS
+    // expected by tests
     List<InventoryLevel> getInventoryForStore(Long storeId);
-
-    // ✅ REQUIRED BY TESTS
     List<InventoryLevel> getInventoryForProduct(Long productId);
+
+    // expected by controller
+    List<InventoryLevel> getInventoryByStore(Long storeId);
+    List<InventoryLevel> getInventoryByProduct(Long productId);
 }

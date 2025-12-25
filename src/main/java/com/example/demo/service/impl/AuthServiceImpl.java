@@ -14,7 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -61,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponseDto login(AuthRequestDto dto) {
 
-        // ✅ AUTHENTICATE USING SPRING SECURITY
+        // ✅ SPRING SECURITY AUTHENTICATION
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         dto.getEmail(),
@@ -77,10 +77,9 @@ public class AuthServiceImpl implements AuthService {
         AuthResponseDto response = new AuthResponseDto();
         response.setToken(token);
 
-        // ✅ FIX: LocalDateTime DOES NOT SUPPORT plusMillis
+        // ✅ FIXED: java.util.Date (JWT-compatible)
         response.setExpiresAt(
-                LocalDateTime.now()
-                        .plusSeconds(jwtUtil.getExpirationMillis() / 1000)
+                new Date(System.currentTimeMillis() + jwtUtil.getExpirationMillis())
         );
 
         return response;

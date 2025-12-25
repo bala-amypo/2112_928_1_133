@@ -7,9 +7,19 @@ public class AuthResponseDto {
     private String token;
     private Date expiresAt;
 
-    public String getToken() { return token; }
-    public void setToken(String token) { this.token = token; }
+    public String getToken() {
+        return token;
+    }
 
-    public Date getExpiresAt() { return expiresAt; }
-    public void setExpiresAt(Date expiresAt) { this.expiresAt = expiresAt; }
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Date getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(Date expiresAt) {
+        this.expiresAt = expiresAt;
+    }
 }

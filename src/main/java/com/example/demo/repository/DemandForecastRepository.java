@@ -17,4 +17,7 @@ public interface DemandForecastRepository extends JpaRepository<DemandForecast, 
     );
 
     List<DemandForecast> findByStore_Id(Long storeId);
+
+    // ✅ REQUIRED BY TESTS
+    List<DemandForecast> findByProduct_Id(Long productId);
 }

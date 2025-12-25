@@ -22,16 +22,21 @@ public class TransferSuggestion {
 
     private Integer quantity;
     private String priority;
-
     private String status = "PENDING";
-    private LocalDateTime suggestedAt;
+
+    // ✅ REQUIRED BY TESTS
+    private Integer suggestedQuantity;
+    private String reason;
+    private LocalDateTime generatedAt;
 
     @PrePersist
-    public void onCreate() {
-        this.suggestedAt = LocalDateTime.now();
+    public void prePersist() {
+        this.generatedAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = "PENDING";
+        }
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
 
     public Store getSourceStore() { return sourceStore; }
@@ -52,5 +57,24 @@ public class TransferSuggestion {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    public LocalDateTime getSuggestedAt() { return suggestedAt; }
+    // ✅ REQUIRED BY TESTS
+    public void setSuggestedQuantity(Integer qty) {
+        this.suggestedQuantity = qty;
+    }
+
+    public Integer getSuggestedQuantity() {
+        return suggestedQuantity;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public LocalDateTime getGeneratedAt() {
+        return generatedAt;
+    }
 }

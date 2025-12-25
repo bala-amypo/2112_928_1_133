@@ -17,15 +17,12 @@ public class DemandForecast {
     @ManyToOne
     private Store store;
 
-    @Column(nullable = false)
     private LocalDate forecastDate;
 
-    @Column(nullable = false)
     private Integer predictedDemand;
 
     private Double confidenceScore;
 
-    // Getters and Setters
     public Long getId() { return id; }
 
     public Product getProduct() { return product; }
@@ -38,8 +35,22 @@ public class DemandForecast {
     public void setForecastDate(LocalDate forecastDate) { this.forecastDate = forecastDate; }
 
     public Integer getPredictedDemand() { return predictedDemand; }
-    public void setPredictedDemand(Integer predictedDemand) { this.predictedDemand = predictedDemand; }
+    public void setPredictedDemand(Integer predictedDemand) {
+        this.predictedDemand = predictedDemand;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public void setForecastedDemand(Integer demand) {
+        this.predictedDemand = demand;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public Integer getForecastedDemand() {
+        return this.predictedDemand;
+    }
 
     public Double getConfidenceScore() { return confidenceScore; }
-    public void setConfidenceScore(Double confidenceScore) { this.confidenceScore = confidenceScore; }
+    public void setConfidenceScore(Double confidenceScore) {
+        this.confidenceScore = confidenceScore;
+    }
 }

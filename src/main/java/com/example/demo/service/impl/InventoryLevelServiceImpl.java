@@ -40,15 +40,36 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        InventoryLevel inventory = inventoryRepo.findByStoreAndProduct(store, product);
+        InventoryLevel existing = inventoryRepo.findByStoreAndProduct(store, product);
 
-        if (inventory == null) {
-            inventory = new InventoryLevel();
-            inventory.setStore(store);
-            inventory.setProduct(product);
+        if (existing == null) {
+            existing = new InventoryLevel();
+            existing.setStore(store);
+            existing.setProduct(product);
         }
 
-        inventory.setQuantity(quantity);
+        existing.setQuantity(quantity);
+        return inventoryRepo.save(existing);
+    }
+
+    // ✅ REQUIRED BY TESTS
+    @Override
+    public InventoryLevel createOrUpdateInventory(InventoryLevel inventory) {
+
+        if (inventory.getQuantity() < 0) {
+            throw new BadRequestException("Quantity must be >= 0");
+        }
+
+        InventoryLevel existing = inventoryRepo.findByStoreAndProduct(
+                inventory.getStore(),
+                inventory.getProduct()
+        );
+
+        if (existing != null) {
+            existing.setQuantity(inventory.getQuantity());
+            return inventoryRepo.save(existing);
+        }
+
         return inventoryRepo.save(inventory);
     }
 
@@ -60,12 +81,11 @@ public class InventoryLevelServiceImpl implements InventoryLevelService {
         Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        InventoryLevel inventory = inventoryRepo.findByStoreAndProduct(store, product);
-
-        if (inventory == null) {
+        InventoryLevel inv = inventoryRepo.findByStoreAndProduct(store, product);
+        if (inv == null) {
             throw new ResourceNotFoundException("Inventory not found");
         }
-        return inventory;
+        return inv;
     }
 
     @Override

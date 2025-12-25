@@ -20,7 +20,6 @@ public class Product {
 
     private Boolean active = true;
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -34,5 +33,9 @@ public class Product {
     public void setCategory(String category) { this.category = category; }
 
     public Boolean getActive() { return active; }
+
+    // ✅ REQUIRED BY TESTS
+    public Boolean isActive() { return active; }
+
     public void setActive(Boolean active) { this.active = active; }
 }

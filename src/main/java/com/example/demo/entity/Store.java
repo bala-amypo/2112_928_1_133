@@ -1,10 +1,6 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "stores")
@@ -14,62 +10,27 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String storeName;
+
     private String address;
     private String region;
 
     private Boolean active = true;
 
-    public Store() {
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    // ---------- GETTERS ----------
+    public String getStoreName() { return storeName; }
+    public void setStoreName(String storeName) { this.storeName = storeName; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
-    public String getStoreName() {
-        return storeName;
-    }
+    public String getRegion() { return region; }
+    public void setRegion(String region) { this.region = region; }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    // ✔ Required by some services
-    public Boolean getActive() {
-        return active;
-    }
-
-    // ✔ Required by TEST CASES
-    public Boolean isActive() {
-        return active;
-    }
-
-    // ---------- SETTERS ----------
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 }

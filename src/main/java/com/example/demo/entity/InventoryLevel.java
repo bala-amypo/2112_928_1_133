@@ -11,10 +11,10 @@ public class InventoryLevel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Store store;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Product product;
 
     @Column(nullable = false)
@@ -24,14 +24,12 @@ public class InventoryLevel {
 
     @PrePersist
     @PreUpdate
-    protected void updateTimestamp() {
+    public void updateTimestamp() {
         this.lastUpdated = LocalDateTime.now();
     }
 
-    public InventoryLevel() {}
-
+    // Getters and Setters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public Store getStore() { return store; }
     public void setStore(Store store) { this.store = store; }

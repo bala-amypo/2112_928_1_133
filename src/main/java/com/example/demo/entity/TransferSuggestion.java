@@ -1,40 +1,50 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transfer_suggestions")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class TransferSuggestion {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(optional = false)
-    private Product product;
-
-    @ManyToOne(optional = false)
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "source_store_id", nullable = false)
     private Store sourceStore;
-
-    @ManyToOne(optional = false)
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "target_store_id", nullable = false)
     private Store targetStore;
-
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+    
+    @Column(nullable = false)
     private Integer suggestedQuantity;
-
-    private String reason;
-
+    
+    @Column(nullable = false)
+    private String priority = "MEDIUM";
+    
     private LocalDateTime generatedAt;
-
+    
+    @Column(nullable = false)
+    private String status = "PENDING";
+    
+    private String reason;
+    
     @PrePersist
-    public void prePersist() {
-        this.generatedAt = LocalDateTime.now();
+    protected void onCreate() {
+        generatedAt = LocalDateTime.now();
     }
 }

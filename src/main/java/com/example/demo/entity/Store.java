@@ -1,28 +1,27 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "stores")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Store {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true)
+    
+    @Column(unique = true, nullable = false)
     private String storeName;
-
+    
     private String address;
-
     private String region;
-
-    @Builder.Default
-    private boolean active = true;
+    
+    @Column(nullable = false)
+    private Boolean active = true;
 }

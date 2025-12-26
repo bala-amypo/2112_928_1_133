@@ -15,13 +15,13 @@ public class InventoryController {
     private InventoryLevelService inventoryLevelService;
 
     @PostMapping
-    public InventoryLevel create(@RequestBody InventoryLevel inv) {
-        return inventoryLevelService.createOrUpdateInventory(inv);
+    public InventoryLevel create(@RequestBody InventoryLevel inventory) {
+        return inventoryLevelService.createOrUpdateInventory(inventory);
     }
 
     @PutMapping("/update")
-    public InventoryLevel update(@RequestBody InventoryLevel inv) {
-        return inventoryLevelService.createOrUpdateInventory(inv);
+    public InventoryLevel update(@RequestBody InventoryLevel inventory) {
+        return inventoryLevelService.createOrUpdateInventory(inventory);
     }
 
     @GetMapping("/store/{storeId}")

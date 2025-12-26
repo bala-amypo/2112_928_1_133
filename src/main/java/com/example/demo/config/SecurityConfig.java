@@ -1,51 +1,58 @@
 package com.example.demo.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.example.demo.entity.UserAccount;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Configuration
-public class SecurityConfig {
+import java.util.Collection;
+import java.util.List;
 
-    @Autowired
-    private JwtAuthenticationFilter jwtFilter;
+public class CustomUserDetails implements UserDetails {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    private final UserAccount user;
+
+    public CustomUserDetails(UserAccount user) {
+        this.user = user;
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public Long getUserId() {
+        return user.getId();
+    }
 
-        http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(sm ->
-                sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .authorizeHttpRequests(auth -> auth
-                // PUBLIC ENDPOINTS (TESTED)
-                .requestMatchers(
-                        "/auth/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/v3/api-docs/**"
-                ).permitAll()
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(user.getRole()));
+    }
 
-                // PROTECTED APIs
-                .requestMatchers("/api/**").authenticated()
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
 
-                .anyRequest().permitAll()
-            );
+    @Override
+    public String getUsername() {
+        // IMPORTANT: username = email (tests rely on this)
+        return user.getEmail();
+    }
 
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-        return http.build();
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

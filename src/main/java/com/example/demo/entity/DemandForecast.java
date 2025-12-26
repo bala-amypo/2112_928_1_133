@@ -1,22 +1,15 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
-@Table(
-    name = "inventory_levels",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"store_id", "product_id"})
-    }
-)
-public class InventoryLevel {
+@Table(name = "demand_forecasts")
+public class DemandForecast {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "store_id")
@@ -26,28 +19,13 @@ public class InventoryLevel {
     @JoinColumn(name = "product_id")
     private Product product;
 
-  
     @Column(nullable = false)
-    private Integer quantity;
+    private Integer forecastedDemand;
 
     @Column(nullable = false)
-    private LocalDateTime lastUpdated;
-
-    
-    // LIFECYCLE HOOKS (TESTED)
-    
-    @PrePersist
-    public void prePersist() {
-        this.lastUpdated = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.lastUpdated = LocalDateTime.now();
-    }
+    private LocalDate forecastDate;
 
    
-
     public Long getId() {
         return id;
     }
@@ -67,24 +45,24 @@ public class InventoryLevel {
     public Product getProduct() {
         return product;
     }
- 
+
     public void setProduct(Product product) {
         this.product = product;
     }
- 
-    public Integer getQuantity() {
-        return quantity;
+
+    public Integer getForecastedDemand() {
+        return forecastedDemand;
     }
- 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+
+    public void setForecastedDemand(Integer forecastedDemand) {
+        this.forecastedDemand = forecastedDemand;
     }
- 
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+
+    public LocalDate getForecastDate() {
+        return forecastDate;
     }
- 
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
+
+    public void setForecastDate(LocalDate forecastDate) {
+        this.forecastDate = forecastDate;
     }
 }

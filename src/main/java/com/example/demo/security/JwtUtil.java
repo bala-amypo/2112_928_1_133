@@ -1,51 +1,96 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
+import com.example.demo.entity.UserAccount;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-
-    private static final long EXPIRATION_MS = 1000 * 60 * 60; // 1 hour
-    private static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
-    public String generateToken(Map<String, Object> claims, String username) {
+    
+    @Value("${jwt.secret:mySecretKey}")
+    private String secret;
+    
+    @Value("${jwt.expiration:86400000}")
+    private Long expiration;
+    
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
+    }
+    
+    public String generateToken(Map<String, Object> claims, String subject) {
+        return createToken(claims, subject);
+    }
+    
+    public String generateToken(UserAccount user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole());
+        return createToken(claims, user.getEmail());
+    }
+    
+    private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
-                .signWith(KEY)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-
-    public String getUsername(String token) {
-        return parseClaims(token).getSubject();
-    }
-
-    public boolean isTokenValid(String token, String username) {
+    
+    public Boolean validateToken(String token) {
         try {
-            return getUsername(token).equals(username)
-                    && !parseClaims(token).getExpiration().before(new Date());
-        } catch (Exception ex) {
+            Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
+            return !isTokenExpired(token);
+        } catch (Exception e) {
             return false;
         }
     }
-
-    public long getExpirationMillis() {
-        return EXPIRATION_MS;
+    
+    public String getUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
     }
-
-    private Claims parseClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(KEY)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+    
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+    
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+    
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
+    }
+    
+    private Boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+    
+    public boolean isTokenValid(String token, String username) {
+        try {
+            String tokenUsername = extractUsername(token);
+            return tokenUsername.equals(username) && !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    public long getExpirationMillis() {
+        return expiration;
     }
 }

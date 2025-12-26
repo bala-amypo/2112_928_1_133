@@ -5,10 +5,8 @@ import com.example.demo.entity.InventoryLevel;
 import java.util.List;
 
 public interface InventoryLevelService {
-
-    InventoryLevel createOrUpdateInventory(InventoryLevel inventory);
-
+    InventoryLevel createOrUpdateInventory(InventoryLevel inv);
     List<InventoryLevel> getInventoryForStore(Long storeId);
-
     List<InventoryLevel> getInventoryForProduct(Long productId);
+    InventoryLevel getInventory(Long storeId, Long productId);
 }

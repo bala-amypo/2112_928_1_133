@@ -1,52 +1,55 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Store;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.service.StoreService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
-
-    private final StoreRepository storeRepo;
-
+    
+    private final StoreRepository storeRepository;
+    
+    public StoreServiceImpl(StoreRepository storeRepository) {
+        this.storeRepository = storeRepository;
+    }
+    
     @Override
     public Store createStore(Store store) {
-        return storeRepo.save(store);
+        if (storeRepository.findByStoreName(store.getStoreName()) != null) {
+            throw new BadRequestException("Store name already exists");
+        }
+        return storeRepository.save(store);
     }
-
+    
+    @Override
+    public Store getStoreById(Long id) {
+        return storeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
+    }
+    
+    @Override
+    public List<Store> getAllStores() {
+        return storeRepository.findAll();
+    }
+    
     @Override
     public Store updateStore(Long id, Store update) {
-        Store existing = getStoreById(id);
-
-        existing.setStoreName(update.getStoreName());
-        existing.setAddress(update.getAddress());
-        existing.setRegion(update.getRegion());
-        existing.setActive(update.isActive());
-
-        return storeRepo.save(existing);
+        Store store = getStoreById(id);
+        store.setStoreName(update.getStoreName());
+        store.setAddress(update.getAddress());
+        store.setRegion(update.getRegion());
+        return storeRepository.save(store);
     }
-
+    
     @Override
     public void deactivateStore(Long id) {
         Store store = getStoreById(id);
         store.setActive(false);
-        storeRepo.save(store);
-    }
-
-    @Override
-    public Store getStoreById(Long id) {
-        return storeRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
-    }
-
-    @Override
-    public List<Store> getAllStores() {
-        return storeRepo.findAll();
+        storeRepository.save(store);
     }
 }

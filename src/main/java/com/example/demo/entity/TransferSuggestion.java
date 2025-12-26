@@ -11,70 +11,87 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Store sourceStore;
-
-    @ManyToOne
-    private Store targetStore;
-
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id")
     private Product product;
 
-    private Integer quantity;
-    private String priority;
-    private String status = "PENDING";
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "source_store_id")
+    private Store sourceStore;
 
-    // ✅ REQUIRED BY TESTS
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "target_store_id")
+    private Store targetStore;
+
+    @Column(nullable = false)
     private Integer suggestedQuantity;
+
     private String reason;
+
+    @Column(nullable = false)
     private LocalDateTime generatedAt;
+
+    
 
     @PrePersist
     public void prePersist() {
         this.generatedAt = LocalDateTime.now();
-        if (this.status == null) {
-            this.status = "PENDING";
-        }
     }
 
-    public Long getId() { return id; }
+  
+    public Long getId() {
+        return id;
+    }
 
-    public Store getSourceStore() { return sourceStore; }
-    public void setSourceStore(Store sourceStore) { this.sourceStore = sourceStore; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Store getTargetStore() { return targetStore; }
-    public void setTargetStore(Store targetStore) { this.targetStore = targetStore; }
+    public Product getProduct() {
+        return product;
+    }
 
-    public Product getProduct() { return product; }
-    public void setProduct(Product product) { this.product = product; }
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public Store getSourceStore() {
+        return sourceStore;
+    }
 
-    public String getPriority() { return priority; }
-    public void setPriority(String priority) { this.priority = priority; }
+    public void setSourceStore(Store sourceStore) {
+        this.sourceStore = sourceStore;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public Store getTargetStore() {
+        return targetStore;
+    }
 
-    // ✅ REQUIRED BY TESTS
-    public void setSuggestedQuantity(Integer qty) {
-        this.suggestedQuantity = qty;
+    public void setTargetStore(Store targetStore) {
+        this.targetStore = targetStore;
     }
 
     public Integer getSuggestedQuantity() {
         return suggestedQuantity;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setSuggestedQuantity(Integer suggestedQuantity) {
+        this.suggestedQuantity = suggestedQuantity;
     }
 
     public String getReason() {
         return reason;
     }
 
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     public LocalDateTime getGeneratedAt() {
         return generatedAt;
+    }
+
+    public void setGeneratedAt(LocalDateTime generatedAt) {
+        this.generatedAt = generatedAt;
     }
 }

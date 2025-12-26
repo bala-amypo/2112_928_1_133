@@ -1,25 +1,25 @@
-package com.example.demo.dto;
+// package com.example.demo.dto;
 
-import java.util.Date;
+// import java.util.Date;
 
-public class AuthResponseDto {
+// public class AuthResponseDto {
 
-    private String token;
-    private Date expiresAt;
+//     private String token;
+//     private Date expiresAt;
 
-    public String getToken() {
-        return token;
-    }
+//     public String getToken() {
+//         return token;
+//     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+//     public void setToken(String token) {
+//         this.token = token;
+//     }
 
-    public Date getExpiresAt() {
-        return expiresAt;
-    }
+//     public Date getExpiresAt() {
+//         return expiresAt;
+//     }
 
-    public void setExpiresAt(Date expiresAt) {
-        this.expiresAt = expiresAt;
-    }
-}
+//     public void setExpiresAt(Date expiresAt) {
+//         this.expiresAt = expiresAt;
+//     }
+// }

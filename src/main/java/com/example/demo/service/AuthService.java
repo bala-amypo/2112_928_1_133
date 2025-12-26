@@ -5,8 +5,6 @@ import com.example.demo.dto.RegisterRequestDto;
 import com.example.demo.entity.UserAccount;
 
 public interface AuthService {
-
     UserAccount register(RegisterRequestDto dto);
-
     String login(AuthRequestDto dto);
 }

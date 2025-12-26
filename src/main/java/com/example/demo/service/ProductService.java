@@ -8,9 +8,9 @@ public interface ProductService {
 
     Product createProduct(Product product);
 
-    Product getProductById(Long id);
-
     void deactivateProduct(Long id);
+
+    Product getProductById(Long id);
 
     List<Product> getAllProducts();
 }

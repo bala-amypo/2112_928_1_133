@@ -8,7 +8,7 @@ public interface StoreService {
 
     Store createStore(Store store);
 
-    Store updateStore(Long id, Store store);
+    Store updateStore(Long id, Store update);
 
     void deactivateStore(Long id);
 

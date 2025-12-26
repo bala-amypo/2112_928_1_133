@@ -1,56 +1,90 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "demand_forecasts")
-public class DemandForecast {
+@Table(
+    name = "inventory_levels",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"store_id", "product_id"})
+    }
+)
+public class InventoryLevel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Product product;
+    
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "store_id")
     private Store store;
 
-    private LocalDate forecastDate;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    private Integer predictedDemand;
+  
+    @Column(nullable = false)
+    private Integer quantity;
 
-    private Double confidenceScore;
+    @Column(nullable = false)
+    private LocalDateTime lastUpdated;
 
-    public Long getId() { return id; }
-
-    public Product getProduct() { return product; }
-    public void setProduct(Product product) { this.product = product; }
-
-    public Store getStore() { return store; }
-    public void setStore(Store store) { this.store = store; }
-
-    public LocalDate getForecastDate() { return forecastDate; }
-    public void setForecastDate(LocalDate forecastDate) { this.forecastDate = forecastDate; }
-
-    public Integer getPredictedDemand() { return predictedDemand; }
-    public void setPredictedDemand(Integer predictedDemand) {
-        this.predictedDemand = predictedDemand;
+    
+    // LIFECYCLE HOOKS (TESTED)
+    
+    @PrePersist
+    public void prePersist() {
+        this.lastUpdated = LocalDateTime.now();
     }
 
-    // ✅ REQUIRED BY TESTS
-    public void setForecastedDemand(Integer demand) {
-        this.predictedDemand = demand;
+    @PreUpdate
+    public void preUpdate() {
+        this.lastUpdated = LocalDateTime.now();
     }
 
-    // ✅ REQUIRED BY TESTS
-    public Integer getForecastedDemand() {
-        return this.predictedDemand;
+   
+
+    public Long getId() {
+        return id;
     }
 
-    public Double getConfidenceScore() { return confidenceScore; }
-    public void setConfidenceScore(Double confidenceScore) {
-        this.confidenceScore = confidenceScore;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+ 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+ 
+    public Integer getQuantity() {
+        return quantity;
+    }
+ 
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+ 
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+ 
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

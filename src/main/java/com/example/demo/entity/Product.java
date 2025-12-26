@@ -1,29 +1,33 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "products")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true, nullable = false)
     private String sku;
-    
+
     @Column(nullable = false)
     private String name;
-    
+
     private String category;
-    
+
     @Column(nullable = false)
     private Boolean active = true;
+
+    
+    public boolean isActive() {
+        return Boolean.TRUE.equals(active);
+    }
 }

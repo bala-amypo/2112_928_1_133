@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.InventoryLevel;
 import com.example.demo.service.InventoryLevelService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,17 +10,20 @@ import java.util.List;
 @RequestMapping("/api/inventory")
 public class InventoryController {
 
-    @Autowired
-    private InventoryLevelService inventoryLevelService;
+    private final InventoryLevelService inventoryLevelService;
+
+    public InventoryController(InventoryLevelService inventoryLevelService) {
+        this.inventoryLevelService = inventoryLevelService;
+    }
 
     @PostMapping
-    public InventoryLevel create(@RequestBody InventoryLevel inventory) {
-        return inventoryLevelService.createOrUpdateInventory(inventory);
+    public InventoryLevel create(@RequestBody InventoryLevel inventoryLevel) {
+        return inventoryLevelService.createOrUpdateInventory(inventoryLevel);
     }
 
     @PutMapping("/update")
-    public InventoryLevel update(@RequestBody InventoryLevel inventory) {
-        return inventoryLevelService.createOrUpdateInventory(inventory);
+    public InventoryLevel update(@RequestBody InventoryLevel inventoryLevel) {
+        return inventoryLevelService.createOrUpdateInventory(inventoryLevel);
     }
 
     @GetMapping("/store/{storeId}")

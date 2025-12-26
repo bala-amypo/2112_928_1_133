@@ -10,7 +10,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String sku;
 
     @Column(nullable = false)
@@ -18,24 +18,53 @@ public class Product {
 
     private String category;
 
-    private Boolean active = true;
+    @Column(nullable = false)
+    private boolean active = true; // DEFAULT TRUE (TESTED)
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+   
+    public Product() {
+        // default constructor
+    }
 
-    public String getSku() { return sku; }
-    public void setSku(String sku) { this.sku = sku; }
+   
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Boolean getActive() { return active; }
-
-    // ✅ REQUIRED BY TESTS
-    public Boolean isActive() { return active; }
-
-    public void setActive(Boolean active) { this.active = active; }
+    public String getSku() {
+        return sku;
+    }
+ 
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+ 
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {
+        this.name = name;
+    }
+ 
+    public String getCategory() {
+        return category;
+    }
+ 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+ 
+    public boolean isActive() {
+        return active;
+    }
+ 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

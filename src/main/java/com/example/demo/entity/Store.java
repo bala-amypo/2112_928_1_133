@@ -10,30 +10,61 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String storeName;
 
     private String address;
+
     private String region;
 
-    private Boolean active = true;
+    @Column(nullable = false)
+    private boolean active = true; // DEFAULT TRUE (TESTED)
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    
 
-    public String getStoreName() { return storeName; }
-    public void setStoreName(String storeName) { this.storeName = storeName; }
+    public Store() {
+        // default constructor
+    }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+   
 
-    public String getRegion() { return region; }
-    public void setRegion(String region) { this.region = region; }
+    public Long getId() {
+        return id;
+    }
 
-    public Boolean getActive() { return active; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    // ✅ REQUIRED BY TESTS
-    public Boolean isActive() { return active; }
+    public String getStoreName() {
+        return storeName;
+    }
 
-    public void setActive(Boolean active) { this.active = active; }
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+ 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+ 
+    public String getRegion() {
+        return region;
+    }
+ 
+    public void setRegion(String region) {
+        this.region = region;
+    }
+ 
+    public boolean isActive() {
+        return active;
+    }
+ 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

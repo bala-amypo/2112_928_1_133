@@ -7,7 +7,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TransferSuggestionRepository extends JpaRepository<TransferSuggestion, Long> {
-    List<TransferSuggestion> findBySourceStoreId(Long storeId);
+public interface TransferSuggestionRepository
+        extends JpaRepository<TransferSuggestion, Long> {
+
+    // Used in HQL tests
     List<TransferSuggestion> findByProduct_Id(Long productId);
+
+    // ✅ REQUIRED by InventoryBalancerServiceImpl
+    List<TransferSuggestion> findBySourceStore_Id(Long storeId);
 }

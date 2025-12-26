@@ -1,9 +1,15 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.DemandForecast;
+import com.example.demo.entity.InventoryLevel;
+import com.example.demo.entity.Product;
+import com.example.demo.entity.TransferSuggestion;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.*;
+import com.example.demo.repository.DemandForecastRepository;
+import com.example.demo.repository.InventoryLevelRepository;
+import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.TransferSuggestionRepository;
 import com.example.demo.service.InventoryBalancerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional   
+@Transactional  
 public class InventoryBalancerServiceImpl implements InventoryBalancerService {
 
     private final ProductRepository productRepository;
@@ -22,14 +28,13 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
     private final DemandForecastRepository forecastRepo;
     private final TransferSuggestionRepository suggestionRepo;
 
+   
     @Override
     public List<TransferSuggestion> generateSuggestions(Long productId) {
 
-        
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-      
         if (!product.isActive()) {
             throw new BadRequestException("Inactive product");
         }
@@ -62,13 +67,19 @@ public class InventoryBalancerServiceImpl implements InventoryBalancerService {
                 }
             }
         }
-
         return suggestions;
     }
 
+  
     @Override
     public TransferSuggestion getSuggestionById(Long id) {
         return suggestionRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Suggestion not found"));
+    }
+
+   
+    @Override
+    public List<TransferSuggestion> getSuggestionsForStore(Long storeId) {
+        return suggestionRepo.findBySourceStore_Id(storeId);
     }
 }

@@ -28,4 +28,10 @@ public class DemandForecastServiceImpl implements DemandForecastService {
     public List<DemandForecast> getForecastsForStore(Long storeId) {
         return forecastRepo.findByStore_Id(storeId);
     }
+
+    // ✅ ADD THIS METHOD (FIXES COMPILATION ERROR)
+    @Override
+    public List<DemandForecast> getForecastsForProduct(Long productId) {
+        return forecastRepo.findByProduct_Id(productId);
+    }
 }

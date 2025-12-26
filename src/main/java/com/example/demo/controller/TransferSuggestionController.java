@@ -2,27 +2,36 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.TransferSuggestion;
 import com.example.demo.service.InventoryBalancerService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/suggestions")
-@RequiredArgsConstructor
 public class TransferSuggestionController {
-
-    private final InventoryBalancerService balancerService;
-
-    // Generate suggestions for a product
-    @PostMapping("/generate/{productId}")
-    public List<TransferSuggestion> generate(@PathVariable Long productId) {
-        return balancerService.generateSuggestions(productId);
+    
+    private final InventoryBalancerService inventoryBalancerService;
+    
+    public TransferSuggestionController(InventoryBalancerService inventoryBalancerService) {
+        this.inventoryBalancerService = inventoryBalancerService;
     }
-
-    // Get suggestion by ID
+    
+    @PostMapping("/generate/{productId}")
+    public ResponseEntity<List<TransferSuggestion>> generateSuggestions(@PathVariable Long productId) {
+        List<TransferSuggestion> suggestions = inventoryBalancerService.generateSuggestions(productId);
+        return ResponseEntity.ok(suggestions);
+    }
+    
+    @GetMapping("/store/{storeId}")
+    public ResponseEntity<List<TransferSuggestion>> getSuggestionsForStore(@PathVariable Long storeId) {
+        List<TransferSuggestion> suggestions = inventoryBalancerService.getSuggestionsForStore(storeId);
+        return ResponseEntity.ok(suggestions);
+    }
+    
     @GetMapping("/{id}")
-    public TransferSuggestion getById(@PathVariable Long id) {
-        return balancerService.getSuggestionById(id);
+    public ResponseEntity<TransferSuggestion> getSuggestion(@PathVariable Long id) {
+        TransferSuggestion suggestion = inventoryBalancerService.getSuggestionById(id);
+        return ResponseEntity.ok(suggestion);
     }
 }

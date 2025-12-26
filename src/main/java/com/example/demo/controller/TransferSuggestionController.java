@@ -2,25 +2,27 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.TransferSuggestion;
 import com.example.demo.service.InventoryBalancerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/suggestions")
+@RequiredArgsConstructor
 public class TransferSuggestionController {
 
-    @Autowired
-    private InventoryBalancerService inventoryBalancerService;
+    private final InventoryBalancerService balancerService;
 
+    // Generate suggestions for a product
     @PostMapping("/generate/{productId}")
     public List<TransferSuggestion> generate(@PathVariable Long productId) {
-        return inventoryBalancerService.generateSuggestions(productId);
+        return balancerService.generateSuggestions(productId);
     }
 
+    // Get suggestion by ID
     @GetMapping("/{id}")
     public TransferSuggestion getById(@PathVariable Long id) {
-        return inventoryBalancerService.getSuggestionById(id);
+        return balancerService.getSuggestionById(id);
     }
 }

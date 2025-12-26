@@ -7,7 +7,7 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,35 +15,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    private UserAccountRepository userAccountRepository;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserAccountRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Override
     public UserAccount register(RegisterRequestDto dto) {
-        if (userAccountRepository.findByEmail(dto.getEmail()).isPresent()) {
+        if (userRepo.findByEmail(dto.getEmail()).isPresent()) {
             throw new BadRequestException("Email already exists");
         }
 
-        UserAccount user = new UserAccount();
-        user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setRole(dto.getRole());
+        UserAccount user = UserAccount.builder()
+                .email(dto.getEmail())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .role(dto.getRole())
+                .build();
 
-        return userAccountRepository.save(user);
+        return userRepo.save(user);
     }
 
     @Override
     public String login(AuthRequestDto dto) {
-        UserAccount user = userAccountRepository
-                .findByEmail(dto.getEmail())
+        UserAccount user = userRepo.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new BadRequestException("Invalid credentials"));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {

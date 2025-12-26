@@ -4,20 +4,20 @@ import com.example.demo.entity.Store;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.StoreRepository;
 import com.example.demo.service.StoreService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
 
-    @Autowired
-    private StoreRepository storeRepository;
+    private final StoreRepository storeRepo;
 
     @Override
     public Store createStore(Store store) {
-        return storeRepository.save(store);
+        return storeRepo.save(store);
     }
 
     @Override
@@ -29,24 +29,24 @@ public class StoreServiceImpl implements StoreService {
         existing.setRegion(update.getRegion());
         existing.setActive(update.isActive());
 
-        return storeRepository.save(existing);
+        return storeRepo.save(existing);
     }
 
     @Override
     public void deactivateStore(Long id) {
         Store store = getStoreById(id);
         store.setActive(false);
-        storeRepository.save(store);
+        storeRepo.save(store);
     }
 
     @Override
     public Store getStoreById(Long id) {
-        return storeRepository.findById(id)
+        return storeRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Store not found"));
     }
 
     @Override
     public List<Store> getAllStores() {
-        return storeRepository.findAll();
+        return storeRepo.findAll();
     }
 }

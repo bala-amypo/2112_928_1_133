@@ -5,76 +5,57 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.*;
 import com.example.demo.service.InventoryBalancerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class InventoryBalancerServiceImpl implements InventoryBalancerService {
 
-    private final ProductRepository productRepository;
-    private final InventoryLevelRepository inventoryLevelRepository;
-    private final DemandForecastRepository demandForecastRepository;
-    private final TransferSuggestionRepository transferSuggestionRepository;
-
-    public InventoryBalancerServiceImpl(
-            ProductRepository productRepository,
-            InventoryLevelRepository inventoryLevelRepository,
-            DemandForecastRepository demandForecastRepository,
-            TransferSuggestionRepository transferSuggestionRepository
-    ) {
-        this.productRepository = productRepository;
-        this.inventoryLevelRepository = inventoryLevelRepository;
-        this.demandForecastRepository = demandForecastRepository;
-        this.transferSuggestionRepository = transferSuggestionRepository;
-    }
+    private final ProductRepository productRepo;
+    private final InventoryLevelRepository inventoryRepo;
+    private final DemandForecastRepository forecastRepo;
+    private final TransferSuggestionRepository suggestionRepo;
 
     @Override
     public List<TransferSuggestion> generateSuggestions(Long productId) {
-
-        Product product = productRepository.findById(productId)
+        Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
         if (!product.isActive()) {
-            throw new BadRequestException("Inactive product");
+            throw new BadRequestException("Product inactive");
         }
 
-        List<InventoryLevel> inventories =
-                inventoryLevelRepository.findByProduct_Id(productId);
-
-        List<DemandForecast> forecasts =
-                demandForecastRepository.findByProduct_Id(productId);
+        List<InventoryLevel> inventories = inventoryRepo.findByProduct_Id(productId);
+        List<DemandForecast> forecasts = forecastRepo.findByProduct_Id(productId);
 
         List<TransferSuggestion> suggestions = new ArrayList<>();
 
         for (InventoryLevel inv : inventories) {
-            for (DemandForecast forecast : forecasts) {
-
-                if (!inv.getStore().getId().equals(forecast.getStore().getId())) {
-
-                    int excess = inv.getQuantity() - forecast.getForecastedDemand();
-
-                    if (excess > 0) {
-                        TransferSuggestion ts = new TransferSuggestion();
-                        ts.setProduct(product);
-                        ts.setSourceStore(inv.getStore());
-                        ts.setTargetStore(forecast.getStore());
-                        ts.setSuggestedQuantity(excess);
-                        ts.setReason("Auto-balancing based on forecast");
-
-                        suggestions.add(transferSuggestionRepository.save(ts));
+            for (DemandForecast fc : forecasts) {
+                if (!inv.getStore().getId().equals(fc.getStore().getId())) {
+                    if (inv.getQuantity() > fc.getForecastedDemand()) {
+                        TransferSuggestion ts = TransferSuggestion.builder()
+                                .product(product)
+                                .sourceStore(inv.getStore())
+                                .targetStore(fc.getStore())
+                                .suggestedQuantity(inv.getQuantity() - fc.getForecastedDemand())
+                                .reason("Auto-balanced")
+                                .build();
+                        suggestions.add(suggestionRepo.save(ts));
                     }
                 }
             }
         }
-
         return suggestions;
     }
 
     @Override
     public TransferSuggestion getSuggestionById(Long id) {
-        return transferSuggestionRepository.findById(id)
+        return suggestionRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Suggestion not found"));
     }
 }

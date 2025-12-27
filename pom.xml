@@ -103,17 +103,12 @@
 
     </dependencies>
 
-    <!--  REPLACED BUILD SECTION -->
-    <build>
+   <build>
         <plugins>
-
-            <!-- Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
-            <!-- TestNG via Surefire -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -126,8 +121,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
         </plugins>
     </build>
-
 </project>

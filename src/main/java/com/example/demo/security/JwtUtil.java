@@ -94,7 +94,6 @@
 //         return expiration;
 //     }
 // }
-
 package com.example.demo.security;
 
 import com.example.demo.entity.UserAccount;
@@ -111,32 +110,44 @@ import java.util.Map;
 public class JwtUtil {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
     private final long expirationMillis = 1000 * 60 * 60 * 24;
 
-    public String generateToken(UserAccount user) {
-
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.getRole());
-
+    // REQUIRED: Map + username version
+    public String generateToken(Map<String, Object> claims, String username) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getEmail())
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
                 .signWith(key)
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    // REQUIRED: UserAccount version
+    public String generateToken(UserAccount user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getId());
+        claims.put("role", user.getRole());
+        return generateToken(claims, user.getEmail());
+    }
+
+    // REQUIRED by tests
+    public String getUsername(String token) {
         return getClaims(token).getSubject();
     }
 
-    public boolean validateToken(String token) {
-        return !getClaims(token).getExpiration().before(new Date());
+    // REQUIRED by tests
+    public boolean isTokenValid(String token, String username) {
+        return username.equals(getUsername(token)) && !isTokenExpired(token);
     }
 
     public long getExpirationMillis() {
         return expirationMillis;
+    }
+
+    private boolean isTokenExpired(String token) {
+        return getClaims(token).getExpiration().before(new Date());
     }
 
     private Claims getClaims(String token) {

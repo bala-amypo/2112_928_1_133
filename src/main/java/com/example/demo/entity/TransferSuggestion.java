@@ -17,18 +17,13 @@ public class TransferSuggestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // REQUIRED BY TESTS
     @ManyToOne
-    @JoinColumn(name = "source_store_id", nullable = false)
     private Store sourceStore;
 
-    // REQUIRED BY TESTS
     @ManyToOne
-    @JoinColumn(name = "target_store_id", nullable = false)
     private Store targetStore;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     private Integer suggestedQuantity;
@@ -42,7 +37,7 @@ public class TransferSuggestion {
     private LocalDateTime generatedAt;
 
     @PrePersist
-    void onCreate() {
+    public void prePersist() {
         generatedAt = LocalDateTime.now();
     }
 }

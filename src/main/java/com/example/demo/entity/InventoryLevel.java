@@ -6,41 +6,40 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_accounts")
+@Table(
+    name = "inventory_levels",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"store_id", "product_id"})
+)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAccount {
+public class InventoryLevel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "store_id", nullable = false)
+    private Store store;
 
-    private String fullName;
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     @Column(nullable = false)
-    private String password;
+    private Integer quantity;
 
-    @Column(nullable = false)
-    private String role;
+    private LocalDateTime lastUpdated;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    // MUST be public – tests call directly
     @PrePersist
     public void prePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        lastUpdated = LocalDateTime.now();
     }
 
-    // MUST be public – tests call directly
     @PreUpdate
     public void preUpdate() {
-        updatedAt = LocalDateTime.now();
+        lastUpdated = LocalDateTime.now();
     }
 }

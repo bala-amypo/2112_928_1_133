@@ -18,16 +18,16 @@ public class DemandForecast {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    private LocalDate forecastDate;
-
+    @Column(nullable = false)
     private Integer forecastedDemand;
+
+    @Column(nullable = false)
+    private LocalDate forecastDate;
 
     private Integer confidenceScore;
 }

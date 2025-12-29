@@ -18,7 +18,9 @@ public class Product {
     @Column(unique = true, nullable = false)
     private String sku;
 
+    @Column(nullable = false)
     private String name;
+
     private String category;
 
     private boolean active = true;

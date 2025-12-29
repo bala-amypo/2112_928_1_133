@@ -67,7 +67,8 @@ public class AuthServiceImpl implements AuthService {
 
         return new AuthResponseDto(
                 token,
-                LocalDateTime.now().plusMillis(jwtUtil.getExpirationMillis())
+                LocalDateTime.now().plusSeconds(jwtUtil.getExpirationMillis() / 1000)
+
         );
     }
 }

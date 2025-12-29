@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "stores")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,8 +15,11 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String storeName;
+
     private String address;
     private String region;
-    private boolean active;
+
+    private boolean active = true;
 }

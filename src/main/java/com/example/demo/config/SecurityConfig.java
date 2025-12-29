@@ -17,38 +17,51 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    
+
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
-    
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-    
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+        http
+            // ❌ Disable defaults
+            .csrf(csrf -> csrf.disable())
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable())
+
+            // ✅ Stateless JWT
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+
+            // ✅ Authorization rules
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/simple-status")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated()
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/simple-status").permitAll()
+
+                // ADMIN only
+                .requestMatchers(
+                    "/api/stores/**",
+                    "/api/products/**",
+                    "/api/inventory/**",
+                    "/api/forecasts/**",
+                    "/api/suggestions/**"
+                ).authenticated()
+
                 .anyRequest().permitAll()
             )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
+            // ✅ JWT filter
+            .addFilterBefore(
+                jwtAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter.class
+            );
+
         return http.build();
     }
 }

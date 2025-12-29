@@ -103,17 +103,19 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    // ✅ 256-bit secure key (AUTO GENERATED)
+    // ✅ Secure 256-bit key
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    // 1 day expiration
+    // 1 day
     private final long expirationMillis = 1000 * 60 * 60 * 24;
 
+    // ✅ MAIN TOKEN CREATOR (used by AuthService)
     public String generateToken(Map<String, Object> claims, String username) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -124,8 +126,25 @@ public class JwtUtil {
                 .compact();
     }
 
+    // ✅ COMPATIBILITY METHOD (AuthServiceImpl expects this)
+    public String generateToken(com.example.demo.entity.UserAccount user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole());
+        return generateToken(claims, user.getEmail());
+    }
+
+    // ✅ COMPATIBILITY METHOD (JwtAuthenticationFilter expects this)
+    public String extractUsername(String token) {
+        return getUsername(token);
+    }
+
     public String getUsername(String token) {
         return getClaims(token).getSubject();
+    }
+
+    // ✅ COMPATIBILITY METHOD (JwtAuthenticationFilter expects this)
+    public boolean validateToken(String token) {
+        return !isTokenExpired(token);
     }
 
     public boolean isTokenValid(String token, String username) {

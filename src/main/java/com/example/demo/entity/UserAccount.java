@@ -31,14 +31,12 @@ public class UserAccount {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // MUST be public – tests call directly
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
-    // MUST be public – tests call directly
     @PreUpdate
     public void preUpdate() {
         updatedAt = LocalDateTime.now();

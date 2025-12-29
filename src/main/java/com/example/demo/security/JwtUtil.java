@@ -103,56 +103,68 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final String SECRET = "VerySecretKeyForJwtGenerationVerySecretKey12345";
+    private final long EXPIRATION_MILLIS = 1000 * 60 * 60; // 1 hour
 
-    private final long expirationMillis = 1000 * 60 * 60 * 24;
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
+    }
 
-    // REQUIRED: Map + username version
+    // =========================================================
+    // REQUIRED BY SERVICES
+    // =========================================================
+    public String generateToken(UserAccount user) {
+        return Jwts.builder()
+                .setSubject(user.getEmail())
+                .claim("userId", user.getId())
+                .claim("role", user.getRole())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MILLIS))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    // =========================================================
+    // REQUIRED BY TEST CASES
+    // =========================================================
     public String generateToken(Map<String, Object> claims, String username) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
-                .signWith(key)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MILLIS))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // REQUIRED: UserAccount version
-    public String generateToken(UserAccount user) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", user.getId());
-        claims.put("role", user.getRole());
-        return generateToken(claims, user.getEmail());
-    }
-
-    // REQUIRED by tests
     public String getUsername(String token) {
-        return getClaims(token).getSubject();
+        return extractAllClaims(token).getSubject();
     }
 
-    // REQUIRED by tests
     public boolean isTokenValid(String token, String username) {
-        return username.equals(getUsername(token)) && !isTokenExpired(token);
+        String extracted = getUsername(token);
+        return extracted.equals(username) && !isTokenExpired(token);
     }
 
     public long getExpirationMillis() {
-        return expirationMillis;
+        return EXPIRATION_MILLIS;
     }
 
+    // =========================================================
+    // INTERNAL HELPERS
+    // =========================================================
     private boolean isTokenExpired(String token) {
-        return getClaims(token).getExpiration().before(new Date());
+        return extractAllClaims(token).getExpiration().before(new Date());
     }
 
-    private Claims getClaims(String token) {
+    private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

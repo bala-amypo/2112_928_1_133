@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "products")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,19 +14,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String sku;
 
-    @Column(nullable = false)
     private String name;
-
     private String category;
-
-    @Column(nullable = false)
-    private Boolean active = true;
-
-    
-    public boolean isActive() {
-        return Boolean.TRUE.equals(active);
-    }
+    private boolean active;
 }

@@ -1,39 +1,24 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.*;
 
 @Entity
-@Table(name = "inventory_levels")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class InventoryLevel {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id", nullable = false)
+
+    @ManyToOne
     private Store store;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+
+    @ManyToOne
     private Product product;
-    
-    @Column(nullable = false)
-    private Integer quantity;
-    
-    private LocalDateTime lastUpdated;
-    
-    @PrePersist
-    @PreUpdate
-    protected void onUpdate() {
-        lastUpdated = LocalDateTime.now();
-    }
+
+    private int quantity;
 }

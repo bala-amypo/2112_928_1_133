@@ -17,47 +17,57 @@ import java.time.LocalDateTime;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-    
+
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
-    
-    public AuthServiceImpl(UserAccountRepository userAccountRepository, 
-                          PasswordEncoder passwordEncoder,
-                          JwtUtil jwtUtil,
-                          AuthenticationManager authenticationManager) {
+
+    public AuthServiceImpl(UserAccountRepository userAccountRepository,
+                           PasswordEncoder passwordEncoder,
+                           JwtUtil jwtUtil,
+                           AuthenticationManager authenticationManager) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
     }
-    
+
     @Override
     public void register(RegisterRequestDto dto) {
+
         if (userAccountRepository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new BadRequestException("Store name already exists");
+            // ❗ message MUST be generic (test expects this)
+            throw new BadRequestException("Email already exists");
         }
-        
+
         UserAccount user = new UserAccount();
         user.setEmail(dto.getEmail());
         user.setFullName(dto.getFullName());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setRole(dto.getRole());
-        
+
         userAccountRepository.save(user);
     }
-    
+
     @Override
     public AuthResponseDto login(AuthRequestDto dto) {
+
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
+                new UsernamePasswordAuthenticationToken(
+                        dto.getEmail(),
+                        dto.getPassword()
+                )
         );
-        
+
         UserAccount user = userAccountRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new BadRequestException("Invalid credentials"));
-        
+
         String token = jwtUtil.generateToken(user);
-        return new AuthResponseDto(token, LocalDateTime.now().plusDays(1));
+
+        return new AuthResponseDto(
+                token,
+                LocalDateTime.now().plusMillis(jwtUtil.getExpirationMillis())
+        );
     }
 }
